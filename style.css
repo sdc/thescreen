@@ -1,0 +1,241 @@
+<?php
+/**
+ * define some nice colours
+ */
+$color_default  = '#fff';   // the normal text colour
+$color_em       = '#fc0';   // emphasis colours
+$color_more     = '#6e5';   // 'more...' type text
+
+// not used any more...
+//$bg_aplha       = 0.33;     // alpha level for transparent background
+
+/**
+ * define some constants, true or false only
+ */
+define('SHADOW_TEXT', true);
+define('BORDER', false);        // for debugging only
+
+//$fig_name1 = $fig_name.$fig_ext;
+//$fig_name2 = $fig_name.'-alt'.$fig_ext;
+?>
+<style type="text/css" media="screen">
+body {
+    padding: 0; margin: 0;
+    background-image: url('<?php echo $dir_bg.get_page_bg(); ?>');
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-color: #235;
+}
+/**
+ * Make the text upside down
+ */
+#wrapper p, #wrapper li, #wrapper marquee {
+    /*-moz-transform: rotate(180deg);*/
+}
+
+#wrapper p, #wrapper li {
+    color: <?php echo $color_default; ?>;
+    font-size: 1.3em;
+    font-family: "Swis721 Md BT";
+    text-shadow: #000 0px 0px 0.3em;
+    margin: 0;
+}
+#wrapper p em, #wrapper li em {
+    color: <?php echo $color_em; ?>;
+}
+#wrapper ul {
+    margin-top: 0;
+    padding-left: 1.5em;
+}
+
+
+#status {
+    width: 455px; height: 175px;
+    border: 1px solid rgba(255,0,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    overflow: hidden;
+    top: 210px;
+    left: 160px;
+    position: absolute;
+}
+#status_img {
+    top: 210px; left: 78px;
+    width: 63px; height: 106px;
+    border: 1px solid rgba(225,255,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    position: absolute;
+    overflow: visible;
+}
+
+#events {
+    width: 540px; height: 175px;
+    border: 1px solid rgba(255,0,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    overflow: hidden;
+
+    top: 210px;
+    left: 670px;
+    position: absolute;
+}
+
+#addresses {
+    width: 545px; height: 170px;
+    border: 1px solid rgba(255,0,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    overflow: hidden;
+
+    top: 458px;
+    left: 70px;
+    position: absolute;
+}
+
+#factoid {
+    width: 265px; height: 135px;
+    border: 1px solid rgba(0,255,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    overflow: hidden;
+
+    top: 465px;
+    left: 747px;
+    position: absolute;
+
+    display: table;
+}
+#factoid_inner {
+    border: 1px dashed rgba(255,127,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+#factoid_inner p {
+    margin: 0; padding: 0 0.5em;
+    text-align: center;
+    color: #35736f;
+    font-size: 1.2em;
+    /*font-family: DigitalStrip;*/
+    text-shadow: rgba(0,0,0,0.2) 2px 2px 0.2em;
+}
+#factoid_inner p.bigger1 {
+    font-size: 190%;
+}
+#factoid_inner p.bigger2 {
+    font-size: 150%;
+}
+
+#factoid_pic {
+    width: 114px; height: 223px;
+    border: 1px solid rgba(0,255,255,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    overflow: visible;
+    top: 405px;
+    left: 1055px;
+    position: absolute;
+}
+
+
+/**
+ * Scroller styles
+ */
+#scroller {
+    width: 1279px; height: 45px;
+    border: 1px solid rgba(255,255,255,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    top: 682px;
+    left: -1px;
+    position: absolute;
+}
+
+#scroller div div {
+    padding: 0; margin: 0;
+    color: <?php echo $color_default; ?>;
+    font-size: 1.8em;
+    /*font-family: "Swis721 Th BT";*/
+    /*font-family: "Swis721 Md BT";*/
+    font-family: "Swiss921 BT";
+    text-shadow: #000 0px 0px 0.3em;
+}
+#scroller div div em {
+    color: <?php echo $color_em; ?>;
+    font-style: normal;
+    font-family: "Swis721 Md BT";
+}
+
+
+/**
+ * Debugging styles
+ */
+#debug {
+    width: 150px;
+    position: fixed;
+    top: 40px; right: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 2px solid #f00;
+    padding: 0.5em;
+    -moz-box-shadow: rgba(255, 0 , 0, 0.5) 3px 3px 15px;
+    -moz-border-radius: 15px;
+}
+#debug p {
+     text-align: center; margin: 0; font-weight: bold;
+}
+
+
+/**
+ * Control styles
+ */
+#controls {
+    width: 200px;
+    position: fixed;
+    top: 0; right: 0;
+}
+#controls p {
+    margin: 0;
+    text-align: left;
+    font-size: 0.7em; font-family: "Swis721 Md BT";
+    padding: 0;
+}
+#controls a, #controls p {
+    color: rgba(255, 255, 255, 0.2);
+}
+#controls a:link, #controls a:visited, #controls a:active {
+    text-decoration: none;
+}
+#controls a:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+
+
+/**
+ *Showstopper stuff
+ */
+#showstopper {
+    width: 685px; height: 265px;
+    border: 1px solid rgba(255,0,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    overflow: visible;
+    top: 256px;
+    left: 297px;
+    position: absolute;
+    display: table;
+}
+#showstopper_inner {
+    border: 1px dashed rgba(255,127,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+#showstopper_inner p {
+    margin: 0; padding: 0;
+    color: #000;
+    font-size: 3em;
+    font-family: "Swiss921 BT";
+    text-align: center;
+    text-transform: uppercase;
+}
+#showstopper_inner p.bigger1 {
+    font-size: 7em;
+}
+#showstopper_inner p.bigger2 {
+    font-size: 4.5em;
+}
+/* used by the characters-left counter */
+#showstopper_textbox_counter {
+    color: #f00;
+}
+
+.error {
+    color: #f00 !important;
+}
+</style>
