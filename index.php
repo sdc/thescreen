@@ -1,26 +1,28 @@
 <?php
 
 /**
- * CSID (Info Display)
+ * The Screen
  * Code:    Paul Vaughan
  * GFX:     Deedles
  * Feb 2010
  */
 
-// do some including
-require_once('functions.php');
+// Do some including.
+require_once( 'functions.inc.php' );
 
 /**
  * Setup variables and all that
  */
-define('DEBUG', false);                 // set debugging as appropriate
+define( 'DEBUG', false );                  // set debugging as appropriate
 $dir_bg     = './bg/';                  // define all the background images
 $dir_dat    = './dat/';                 // dir the data files are in
 $ext        = '.txt';                   // text file extension for loading data from files
 $page       = get_config('page');       // a variable with the current page's name in it
 
 // log it
-adminlog('pageload_'.$page);
+if ( !adminlog( 'pageload_'.$page ) ) {
+    echo 'Error: admin log failed.';
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

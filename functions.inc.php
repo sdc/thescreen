@@ -1,24 +1,37 @@
 <?php
 
-$dir_gfx    = './img/';
-
 /**
  * Database functions (and variables)
  */
+
+// Configuration array.
+$CFG = array();
+
+// include config.inc.php
+if ( !require_once('config.inc.php') ) {
+    die( 'Could not include the configuration file.' );
+}
+
+// Connect to the database.
+$DB = new mysqli( $CFG['db']['host'], $CFG['db']['user'], $CFG['db']['pwd'], $CFG['db']['name'] );
+if ( $mysqli->connect_errno ) {
+    echo "Failed to connect to database: " . $mysqli->connect_error;
+}
+//$res = $mysqli->query("SELECT 'choices to please everybody.' AS _msg FROM DUAL");
+//$row = $res->fetch_assoc();
+//echo $row['_msg'];
+
+
+
+
+
+
+
+
+$dir_gfx    = './img/';
+
 // time, formatted for the database
 $db_time = date("Y-m-d H:i:s", time());
-// database connection details
-$db_host = 'localhost';
-$db_user = 'pfvqhfre';
-$db_pass = 'pfvqcnffjbeq';
-$db_db = 'csid';
-$db_link = mysql_connect($db_host, str_rot13($db_user), str_rot13($db_pass));
-if (!$db_link) {
-    die('Could not connect: ' . mysql_error());
-}
-if (!mysql_select_db($db_db, $db_link)) {
-    die('Could not select: ' . mysql_error());
-}
 
 
 /**
@@ -94,8 +107,8 @@ if(rand(1, 12) == 9) {
  * config functions
  */
 function get_config($item) {
-    global $db_link;
-    $res = mysql_query("SELECT value FROM config WHERE item = '".$item."' LIMIT 1;", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT value FROM config WHERE item = '".$item."' LIMIT 1;", $DB);
     if (mysql_num_rows($res) == 0) {
         return false;
     } else {
@@ -104,7 +117,7 @@ function get_config($item) {
     }
 }
 function set_config($item, $value, $init = false) {
-    global $db_link;
+    global $DB;
     adminlog('set_config|'.$item.'|'.$value);
     $value = mysql_real_escape_string($value);
     if (!$init) {
@@ -116,12 +129,16 @@ function set_config($item, $value, $init = false) {
 }
 
 /**
- * administrative functions
+ * Administrative functions.
  */
-function adminlog($data) {
-    global $db_link, $db_time;
-    $data = mysql_real_escape_string($data);
-    $res = mysql_unbuffered_query("INSERT INTO log (id, date, data) VALUES (null, '".$db_time."', '".$data."');", $db_link);
+function adminlog( $data ) {
+    global $DB, $db_time;
+
+    //$data = mysql_real_escape_string($data);
+    //$res = mysql_unbuffered_query("INSERT INTO log (id, date, data) VALUES (null, '".$db_time."', '".$data."');", $DB);
+    if ( !$res = mysqli_query("INSERT INTO log (date, data) VALUES ('".$db_time."', '".$data."');", $DB) ) {
+        echo 'Error: writing to the log failed.';
+    }
 }
 
 /**
@@ -129,8 +146,8 @@ function adminlog($data) {
  */
 function get_refresh($page) {
     // we need the non-default pages to refresh quicker (they're static anyway) so they go back to normal quicker.
-    global $db_link;
-    $res = mysql_query("SELECT refresh FROM pages WHERE page = '".$page."';", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT refresh FROM pages WHERE page = '".$page."';", $DB);
     if($res) {
         if (mysql_num_rows($res) == 0) {
             return get_config('refresh');
@@ -150,8 +167,8 @@ function get_refresh($page) {
  * array functions
  */
 function get_status_array() {
-    global $db_link;
-    $res = mysql_query("SELECT name FROM status ORDER BY priority ASC;", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT name FROM status ORDER BY priority ASC;", $DB);
     if($res) {
         if (mysql_num_rows($res) == 0) {
             return false;
@@ -167,8 +184,8 @@ function get_status_array() {
     }
 }
 function get_page_array() {
-    global $db_link;
-    $res = mysql_query("SELECT page FROM pages ORDER BY priority ASC;", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT page FROM pages ORDER BY priority ASC;", $DB);
     if (mysql_num_rows($res) == 0) {
         return false;
     } else {
@@ -185,12 +202,12 @@ function get_page_array() {
  * Gets a random 'statoid' from the database
  */
 function get_rnd_statoid() {
-    global $db_link;
+    global $DB;
     $now = time();
     // check the date...
     if (date('n', $now) == 4 && date ('j', $now) == 1) {
         // april 1st...
-        $res = mysql_query("SELECT COUNT(id) FROM aprilfools;", $db_link);
+        $res = mysql_query("SELECT COUNT(id) FROM aprilfools;", $DB);
         if (mysql_num_rows($res) == 0) {
             return '<p class="error">Sorry, no April Fools found.</p>';
         } else {
@@ -201,7 +218,7 @@ function get_rnd_statoid() {
         }
     } else {
         // all other dates and times
-        $res = mysql_query("SELECT COUNT(id) FROM statoids;", $db_link);
+        $res = mysql_query("SELECT COUNT(id) FROM statoids;", $DB);
         if (mysql_num_rows($res) == 0) {
             return '<p class="error">Sorry, no statoids found.</p>';
         } else {
@@ -229,8 +246,8 @@ function make_text_bigger($text, $lbound = 30) {
  * gets a specific statoid based on it's ID
  */
 function get_statoid($id=1) {
-    global $db_link;
-    $res = mysql_query("SELECT text FROM statoids WHERE id = '".$id."';", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT text FROM statoids WHERE id = '".$id."';", $DB);
     if (mysql_num_rows($res) == 0) {
         return '<p class="error">Sorry, no statoids returned.</p>';
     } else {
@@ -242,8 +259,8 @@ function get_statoid($id=1) {
  * A function solely for April 1st, or for any 'fun' facts and that, really.
  */
 function get_aprilfools($id=1) {
-    global $db_link;
-    $res = mysql_query("SELECT text FROM aprilfools WHERE id = '".$id."';", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT text FROM aprilfools WHERE id = '".$id."';", $DB);
     if (mysql_num_rows($res) == 0) {
         return '<p class="error">Sorry, no April Fools returned.</p>';
     } else {
@@ -276,10 +293,10 @@ function get_rnd_figure() {
     global $dir_gfx;
     // could scan the dir for files... but not gonna.
     $figures = array (
-        1 => 'fig-brian', 'fig-chris', 'fig-craig', 'fig-dave', 'fig-dee', 'fig-ian', 'fig-jeff', 'fig-jo', 'fig-jo-alt',
-        'fig-kev', 'fig-mark',  'fig-paul', 'fig-paul-alt', 'fig-roger');
+        1 => 'fig-bobby', 'fig-brian', 'fig-chris', 'fig-dan', 'fig-dave', 'fig-dodders', 'fig-jeff', 'fig-jo',
+        'fig-jo-alt', 'fig-kelly', 'fig-kev', 'fig-leigh', 'fig-mark', 'fig-paul', 'fig-paul-alt', 'fig-tim', 'fig-tobie');
     $figure_num = rand(1, count($figures));
-    $file_loc = $dir_gfx.$figures[$figure_num].'.jpg';
+    $file_loc = $dir_gfx.$figures[$figure_num].'.png';
     if(file_exists($file_loc)) {
         adminlog('img|rnd|'.$figures[$figure_num]);
         return '<img src="'.$file_loc.'" title="'.substr($figures[$figure_num], 4).'" />'."\n";
@@ -298,7 +315,7 @@ function get_special_figure_list() {
     $files_special = array('no');
 
     for($j = 0; $j < count($files); $j++) {
-        if (preg_match('/special/', $files[$j])) {
+        if (preg_match('/special/', $files[$j]) || preg_match('/^fig/', $files[$j])) {
             $files_special[] = $files[$j];
         }
     }
@@ -416,8 +433,8 @@ function make_page_change_menu() {
     return $build;
 }
 function get_page_bg() {
-    global $db_link;
-    $res = mysql_query("SELECT bg FROM pages WHERE page = '".get_config('page')."' LIMIT 1;", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT bg FROM pages WHERE page = '".get_config('page')."' LIMIT 1;", $DB);
     if (mysql_num_rows($res) == 0) {
         return false;
     } else {
@@ -434,8 +451,8 @@ function get_status() {
     return get_config('status');
 }
 function get_status_img() {
-    global $dir_gfx, $db_link;
-    $res = mysql_query("SELECT img FROM status WHERE name = '".get_status()."';", $db_link);
+    global $dir_gfx, $DB;
+    $res = mysql_query("SELECT img FROM status WHERE name = '".get_status()."';", $DB);
     if (mysql_num_rows($res) == 0) {
         return '<p class="error">Sorry, no status img returned.</p>';
     } else {
@@ -444,8 +461,8 @@ function get_status_img() {
     }
 }
 function get_status_txt() {
-    global $db_link;
-    $res = mysql_query("SELECT text FROM status WHERE name = '".get_status()."';", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT text FROM status WHERE name = '".get_status()."';", $DB);
     if (mysql_num_rows($res) == 0) {
         return '<p class="error">Sorry, no status returned.</p>';
     } else {
@@ -456,7 +473,7 @@ function get_status_txt() {
 function set_status($status) {
     // we have the statuses in the $statuses array, so rewrite the next line:
     if ($status == 'ok' || $status == 'login' || $status == 'email' || $status == 'net' || $status == 'server' || $status == 'bad') {
-        global $db_link;
+        global $DB;
         adminlog('set_status|'.$status);
         $res = mysql_unbuffered_query("UPDATE config SET value = '".$status."' WHERE item = 'status' LIMIT 1");
         return $res;
@@ -495,10 +512,10 @@ function make_status_change_menu() {
  * event stuff
  */
 function get_events($num = 3, $edit = false){
-    global $db_link;
+    global $DB;
     $now = time();
     $today = date('Y', $now).'-'.date('m', $now).'-'.date('d', $now);
-    $res = mysql_query("SELECT id, start, text FROM events WHERE start >= '".$today."' AND deleted = 0 ORDER BY start ASC, id ASC LIMIT ".$num.";", $db_link);
+    $res = mysql_query("SELECT id, start, text FROM events WHERE start >= '".$today."' AND deleted = 0 ORDER BY start ASC, id ASC LIMIT ".$num.";", $DB);
     if (mysql_num_rows($res) == 0) {
         return '<p class="error">Sorry, no events returned.</p>';
     } else {
@@ -518,16 +535,16 @@ function get_events($num = 3, $edit = false){
 
 }
 function add_event($date, $text) {
-    global $db_link;
-    $text = mysql_real_escape_string($text, $db_link);
+    global $DB;
+    $text = mysql_real_escape_string($text, $DB);
     adminlog('add_event|'.$text);
-    $res = mysql_unbuffered_query("INSERT INTO events (id, start, text) VALUES (null, '".$date."', '".$text."');", $db_link);
+    $res = mysql_unbuffered_query("INSERT INTO events (id, start, text) VALUES (null, '".$date."', '".$text."');", $DB);
     return $res;
 }
 function del_event($eid) {
-    global $db_link;
+    global $DB;
     adminlog('del_event|'.$eid);
-    $res = mysql_unbuffered_query("UPDATE events SET deleted = 1 WHERE id = ".$eid.";", $db_link);
+    $res = mysql_unbuffered_query("UPDATE events SET deleted = 1 WHERE id = ".$eid.";", $DB);
     return $res;
 }
 
@@ -536,8 +553,8 @@ function del_event($eid) {
  * stats stuff
  */
 function get_stats_form() {
-    global $db_link;
-    $res = mysql_query("SELECT id, text_before, value, text_after, readonly FROM stats ORDER BY id ASC;", $db_link);
+    global $DB;
+    $res = mysql_query("SELECT id, text, value, readonly FROM stats ORDER BY id ASC;", $DB);
     if (mysql_num_rows($res) == 0) {
         return '<p class="error">Sorry, no events returned.</p>';
     } else {
@@ -545,7 +562,7 @@ function get_stats_form() {
         while ($row = mysql_fetch_assoc($res)) {
             $build .= '<form action="stats_edit.php" method="get">'."\n";
             $build .= '    <tr>'."\n";
-            $build .= '        <td>'.$row['text_before'].'</td>'."\n";
+            $build .= '        <td>'.$row['text'].'</td>'."\n";
             $build .= '        <td class="thin"> '."\n";
             $build .= '            <input type="text" value="'.$row['value'].'" name="value" size="5" maxlength="7" ';
             if($row['readonly'] == 1) {
@@ -553,7 +570,7 @@ function get_stats_form() {
                 $build .= ' disabled="disabled"';
             }
             $build .= '/></td>'."\n";
-            $build .= '        <td>'.$row['text_after'].'</td>'."\n";
+            //$build .= '        <td>'.$row['text_after'].'</td>'."\n";
             $build .= '        <td><input type="hidden" name="key" value="'.$row['id'].'">'."\n";
             $build .= '            <button type="submit"';
             if($row['readonly'] == 1) {
@@ -568,10 +585,10 @@ function get_stats_form() {
     }
 }
 function edit_stat($key, $value) {
-    global $db_link;
-    $text = mysql_real_escape_string($text, $db_link);
+    global $DB;
+    $text = mysql_real_escape_string($text, $DB);
     adminlog('edit_stat|'.$key.'|'.$value);
-    $res = mysql_unbuffered_query("UPDATE stats SET value = '".$value."' WHERE id = '".$key."';", $db_link);
+    $res = mysql_unbuffered_query("UPDATE stats SET value = '".$value."' WHERE id = '".$key."';", $DB);
     return $res;
 }
 
@@ -580,17 +597,21 @@ function edit_stat($key, $value) {
 /**
  * function for getting last n log entries
  */
-function get_last_log($no=10) {
-    global $db_link;
+function get_last_log( $no = 10) {
+    global $DB;
 
-    $res = mysql_query("SELECT * FROM log ORDER BY id DESC LIMIT ".$no.";", $db_link);
-    $build = "<ul>\n";
-    while ($row = mysql_fetch_assoc($res)) {
-        $build .= '<li>';
-        //$build .= $row['id'].': ';
-        $build .= $row['date'].': '.$row['data'].'</li>'."\n";
+    $res = mysql_query("SELECT * FROM log ORDER BY id DESC LIMIT " . $no . ";", $DB);
+    if ( $res ) {
+        $build = "<ul>\n";
+        while ($row = mysql_fetch_assoc($res)) {
+            $build .= '<li>';
+            $build .= $row['date'].': '.$row['data'].'</li>'."\n";
+        }
+        $build .= "</ul>\n";
+
+    } else {
+        $build = '<p>Sorry, no logs.</p>';
     }
-    $build .= "</ul>\n";
 
     return $build;
 }
@@ -601,7 +622,7 @@ function get_last_log($no=10) {
  * new combined factoid/stats function.
  */
 function make_statoids() {
-    global $db_link, $db_time;
+    global $DB, $db_time;
 
     // change the update time in the config
 #    set_config('statoids_upd', $db_time);
@@ -614,19 +635,19 @@ function make_statoids() {
 #    update_online_apps();
 
     // truncate the table
-#    $res = mysql_query("TRUNCATE TABLE statoids;", $db_link);
+#    $res = mysql_query("TRUNCATE TABLE statoids;", $DB);
     // insert data from factoids
-#    $res2 = mysql_query("INSERT INTO statoids (`text`) SELECT text FROM factoids;", $db_link);
+#    $res2 = mysql_query("INSERT INTO statoids (`text`) SELECT text FROM factoids;", $DB);
     // insert data from stats, formatted
-#    $res3 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, FORMAT(value, 0), text_after) FROM stats WHERE readonly = '1';", $db_link);
+#    $res3 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, FORMAT(value, 0), text_after) FROM stats WHERE readonly = '1';", $DB);
     // insert data from stats, UNformatted
-#    $res4 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, value, text_after) FROM stats WHERE readonly = '0';", $db_link);
+#    $res4 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, value, text_after) FROM stats WHERE readonly = '0';", $DB);
 }
 /**
  * Get Moodle database statistics
  */
 function update_moodle_stats() {
-    global $db_link;
+    global $DB;
 
     $mdl_lnk = mysql_connect('172.20.1.52', str_rot13('pfvq'), str_rot13('53k15g'));
     if (!$mdl_lnk) {
@@ -644,7 +665,7 @@ function update_moodle_stats() {
             } else {
                 $ins = 999999;
             }
-            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_usr';", $db_link);
+            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_usr';", $DB);
 
             // unset all prev. used vars
             unset($res, $row, $res2, $ins);
@@ -657,7 +678,7 @@ function update_moodle_stats() {
             } else {
                 $ins = 999999;
             }
-            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_crs';", $db_link);
+            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_crs';", $DB);
 
             // unset all prev. used vars
             unset($res, $row, $res2, $ins);
@@ -670,7 +691,7 @@ function update_moodle_stats() {
             } else {
                 $ins = 999999;
             }
-            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_usr_td';", $db_link);
+            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_usr_td';", $DB);
 
             // unset all prev. used vars
             unset($res, $row, $res2, $ins);
@@ -683,12 +704,12 @@ function update_moodle_stats() {
             } else {
                 $ins = 999999;
             }
-            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_hit';", $db_link);
+            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'mdl_hit';", $DB);
         }
     }
 }
 function update_joomla_stats() {
-    global $db_link;
+    global $DB;
 
     $mdl_lnk = mysql_connect('172.20.1.52', str_rot13('pfvq'), str_rot13('53k15g'));
     if (!$mdl_lnk) {
@@ -706,12 +727,12 @@ function update_joomla_stats() {
             } else {
                 $ins = 999999;
             }
-            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'web_views';", $db_link);
+            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'web_views';", $DB);
         }
     }
 }
 function update_website_stats() {
-    global $db_link;
+    global $DB;
 
     define('ga_email','cnhyinhtuna@fbhguqriba.np.hx');
     define('ga_password','53k15g53k15g');
@@ -729,14 +750,14 @@ function update_website_stats() {
 
     // insert into stats
     if($pageviews > 0) {
-        $res1 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$pageviews."' WHERE id = 'web_views';", $db_link);
+        $res1 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$pageviews."' WHERE id = 'web_views';", $DB);
     }
     if($visits > 0) {
-        $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$visits."' WHERE id = 'web_visit';", $db_link);
+        $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$visits."' WHERE id = 'web_visit';", $DB);
     }
 }
 function update_online_apps() {
-    global $db_link;
+    global $DB;
 
     $cln_lnk = mysql_connect('172.20.1.52', str_rot13('pfvq'), str_rot13('53k15g'));
     if (!$cln_lnk) {
@@ -754,7 +775,7 @@ function update_online_apps() {
             } else {
                 $ins = 999999;
             }
-            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'onl_app';", $db_link);
+            $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$ins."' WHERE id = 'onl_app';", $DB);
         }
     }
 }
