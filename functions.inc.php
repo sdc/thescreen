@@ -7,13 +7,15 @@
 // Configuration array and some settings.
 $CFG = array();
 
-$CFG['dir']['gfx']  = './img/';
-$CFG['dir']['data'] = './data/';  // define all the background images
-$CFG['dir']['bg']   = './bg/';  // define all the background images
+$CFG['dir']['graphics'] = 'graphics/';
+$CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';
+$CFG['dir']['status']   = $CFG['dir']['graphics'] . 'status/';
+$CFG['dir']['bg']       = $CFG['dir']['graphics'] . 'backgrounds/';
+//$CFG['dir']['data']     = './data/';  
 
-$CFG['db']['time']  = date( "Y-m-d H:i:s", time()) ;
+$CFG['db']['time']      = date( "Y-m-d H:i:s", time()) ;
 
-$CFG['ext']         = '.txt';   // text file extension for loading data from files
+$CFG['ext']             = '.txt';   // text file extension for loading data from files
 
 // Include config.inc.php
 if ( !require_once('config.inc.php') ) {
@@ -45,10 +47,11 @@ if ( !get_config( 'page' ) ) {
     }
 }
 
-if (!get_config('status')) {
-    // there is no status, so add a default
-    if(!set_config('status', 'ok', true)) {
-        die('<p>Could not add in a default status.</p>');
+if ( !get_config( 'status' ) ) {
+    // There is no status, so add a default.
+    if( !set_config( 'status', 'ok', true ) ) {
+        error( '<p>Could not add in a default status.</p>' );
+        exit(1);
     }
 }
 if (!get_config('refresh')) {
@@ -304,14 +307,17 @@ function get_aprilfools($id=1) {
         return $fool[0];
     }
 }
-/**
- * gets a named 'figure' then returns it, or a random one on fail.
- */
+
+// Gets a named 'figure' then returns it, or a random one on fail.
 function get_figure() {
     global $CFG;
 
-    $img = get_config('specific_fig');
-    if ($img != 'no') {
+    $img = get_config( 'specific_fig' );
+
+    if ( $img == 'no' ) {
+        return get_rnd_figure();
+
+    } else {
         $file_loc = $CFG['dir']['gfx'].$img;
         if(file_exists($file_loc)) {
             adminlog('img|set|'.$img);
@@ -319,20 +325,32 @@ function get_figure() {
         } else {
             return get_rnd_figure();
         }
-    } else {
-        return get_rnd_figure();
+        
     }
 }
-/**
- * gets a random figure
- */
+
+// Gets a random figure from those available on disk.
 function get_rnd_figure() {
     global $CFG;
 
     // could scan the dir for files... but not gonna.
-    $figures = array (
-        1 => 'fig-bobby', 'fig-brian', 'fig-chris', 'fig-dan', 'fig-dave', 'fig-dodders', 'fig-jeff', 'fig-jo',
-        'fig-jo-alt', 'fig-kelly', 'fig-kev', 'fig-leigh', 'fig-mark', 'fig-paul', 'fig-paul-alt', 'fig-tim', 'fig-tobie');
+    //$figures = array (
+    //    1 => 'fig-bobby', 'fig-brian', 'fig-chris', 'fig-dan', 'fig-dave', 'fig-dodders', 'fig-jeff', 'fig-jo',
+    //    'fig-jo-alt', 'fig-kelly', 'fig-kev', 'fig-leigh', 'fig-mark', 'fig-paul', 'fig-paul-alt', 'fig-tim', 'fig-tobie');
+
+    // Scan the folder for appropriate images.
+    $files = array();
+    if ( $fh = opendir( $CFG['dir']['ppl'] ) ) {
+        while ( false !== ( $entry = readdir( $fh ) ) ) {
+            echo substr( 3, $entry );
+            if ( $entry != '.' && $entry != '..' ) {
+                echo "$entry\n";
+                $files[] = $entry;
+            }
+        }
+        closedir( $fh );
+    }
+
     $figure_num = rand(1, count($figures));
     $file_loc = $CFG['dir']['gfx'].$figures[$figure_num].'.png';
     if(file_exists($file_loc)) {
@@ -510,7 +528,7 @@ function get_status_img() {
 
     } else {
         $row = $res->fetch_assoc();
-        return '<img src="' . $CFG['dir']['gfx'] . 'status-' . $row['img'] . '.png" width="60">' . "\n";
+        return '<img src="' . $CFG['dir']['status'] . 'status-' . $row['img'] . '.png" width="60">' . "\n";
     }
 }
 

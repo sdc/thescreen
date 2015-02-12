@@ -21,7 +21,7 @@
 require_once( 'functions.inc.php' );
 
 // Setup variables and all that
-define( 'DEBUG', true );       // set debugging as appropriate
+define( 'DEBUG', false );       // set debugging as appropriate
 
 
 $CFG['page'] = get_config('page');     // a variable with the current page's name in it
@@ -95,6 +95,9 @@ if ( file_exists( $pagename ) ) {
       $("#news3").newsticker(8000);
   });
   </script>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
 </body>
 </html>
