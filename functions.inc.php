@@ -342,8 +342,7 @@ function get_rnd_figure() {
     $files = array();
     if ( $fh = opendir( $CFG['dir']['ppl'] ) ) {
         while ( false !== ( $entry = readdir( $fh ) ) ) {
-            echo substr( 3, $entry );
-            if ( $entry != '.' && $entry != '..' ) {
+            if ( $entry != '.' && $entry != '..' && ( substr( $entry, 0, 3 ) == 'fig' || substr( $entry, 0, 7 ) == 'special' ) ) {
                 echo "$entry\n";
                 $files[] = $entry;
             }
