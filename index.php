@@ -21,7 +21,8 @@
 require_once( 'functions.inc.php' );
 
 // Setup variables and all that
-define( 'DEBUG', false );       // set debugging as appropriate
+define( 'DEBUG', true );       // set debugging as appropriate
+
 
 $CFG['page'] = get_config('page');     // a variable with the current page's name in it
 
@@ -37,7 +38,16 @@ adminlog( 'pageload_' . $CFG['page'] );
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
-
+<?php
+if ( DEBUG ) {
+  echo '  <meta http-equiv="Cache-Control" content="no-store">';
+  echo '  <meta http-equiv="cache-control" content="max-age=0">';
+  echo '  <meta http-equiv="cache-control" content="no-cache">';
+  echo '  <meta http-equiv="expires" content="0">';
+  echo '  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">';
+  echo '  <meta http-equiv="pragma" content="no-cache">';
+}
+?>
   <title>If you can read this, something is not entirely right. Go fullscreen! (F12)</title>
 
   <meta http-equiv="refresh" content="<?php echo get_refresh( $CFG['page'] ); ?>">
@@ -64,6 +74,10 @@ if (DEBUG) {
 $pagename = 'page_' . strtolower( $CFG['page'] ) . '.php';
 if ( file_exists( $pagename ) ) {
   require_once( $pagename );
+} else {
+  $error = 'Page not found: ' . $pagename . ' [' . $CFG['page'] . ']';
+  error( $error );
+  adminlog( $error );
 }
 
 ?>

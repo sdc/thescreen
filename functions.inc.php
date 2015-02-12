@@ -15,15 +15,17 @@ $CFG['db']['time']  = date( "Y-m-d H:i:s", time()) ;
 
 $CFG['ext']         = '.txt';   // text file extension for loading data from files
 
-// include config.inc.php
+// Include config.inc.php
 if ( !require_once('config.inc.php') ) {
-    die( 'Could not include the configuration file.' );
+    error( 'Could not include the configuration file.' ); 
+    exit(1);
 }
 
 // Connect to the database.
 !$DB = new mysqli( $CFG['db']['host'], $CFG['db']['user'], $CFG['db']['pwd'], $CFG['db']['name'] );
 if ( $DB->connect_errno ) {
-    echo "Failed to connect to database: " . $DB->connect_error;
+    error( 'Failed to connect to database: ' . $DB->connect_error . ' [' . $DB->connect_errno . ']');
+    exit(1);
 }
 //$res = $mysqli->query("SELECT 'choices to please everybody.' AS _msg FROM DUAL");
 //$row = $res->fetch_assoc();
