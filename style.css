@@ -21,7 +21,7 @@ define('BORDER', false);        // for debugging only
 <style type="text/css" media="screen">
 body {
     padding: 0; margin: 0;
-    background-image: url('<?php echo $dir_bg.get_page_bg(); ?>');
+    background-image: url('<?php echo $CFG['dir']['bg'].get_page_bg(); ?>');
     background-position: top left;
     background-repeat: no-repeat;
     background-color: #235;

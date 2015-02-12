@@ -1,14 +1,43 @@
 <?php
-require_once('functions.php');
+
+/**
+ * The Screen - Admin 
+ * Code:    Paul Vaughan
+ * Feb 2010 to Feb 2015, with minimal development in between.
+ */
+
+require_once( 'functions.inc.php' );
+session_name( 'sdc-thescreen' );
+session_start();
+
+// Secure this page a little bit.
+if ( !isset( $_SESSION['loggedin'] ) ) {
+    header( 'location: login.php' );
+    exit(0);
+
+} else {
+    echo date( 'c', $_SESSION['loggedin.time'] );
+}
+
 adminlog('manage');
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-    <head>
-        <title>Manage the CSID</title>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="jquery-ui-1.7.2.custom.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="jquery.jgrowl.css" media="screen" />
+
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A content presentation system for SDC Computer Services.">
+  <meta name="author" content="Mostly Paul Vaughan.">
+
+  <title>Manage The Screen</title>
+
+  <meta http-equiv="refresh" content="300">
+
+  <link rel="stylesheet" type="text/css" href="jquery-ui-1.7.2.custom.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="jquery.jgrowl.css" media="screen">
+
         <style type="text/css">
         body {
             background-color: #fff;
@@ -74,50 +103,10 @@ adminlog('manage');
             height: 250px;
         }
         </style>
-        <script type="text/javascript" src="jquery-1.4.2.js"></script>
-        <script type="text/javascript" src="jquery-ui-1.7.2.custom.min.js"></script>
-        <script type="text/javascript" src="jquery.jgrowl.js"></script>
-        <script type="text/javascript" src="jquery.counter-1.0.js"></script>
-        <script type="text/javascript">
-        $(document).ready(function(){
-            $('#datepicker').datepicker({ 
-                dateFormat: 'yy-mm-dd', 
-                firstDay: 1, 
-                yearRange: '2010:2011', 
-                numberOfMonths: 2
-            });
-            $("#showstopper_textbox").counter();
-<?php
-if (!isset($_GET['msg'])) {
-    echo '$.jGrowl("Remember that this is LIVE.", { life: 2000 });';
-} else {
-    if ($_GET['msg'] == 'event_add_success' ) { $msg='Successfully added an event.'; }
-    else if ($_GET['msg'] == 'event_add_fail' ) { $msg='Failed to add an event.'; }
-    else if ($_GET['msg'] == 'event_del_success' ) { $msg='Successfully deleted an event.'; }
-    else if ($_GET['msg'] == 'event_del_fail' ) { $msg='Failed to delete an event.'; }
-    else if ($_GET['msg'] == 'refresh_edit_success' ) { $msg='Successfully edited the refresh period.'; }
-    else if ($_GET['msg'] == 'refresh_edit_fail' ) { $msg='Failed to edit the refresh period.'; }
-    else if ($_GET['msg'] == 'status_edit_success' ) { $msg='Successfully changed the status.'; }
-    else if ($_GET['msg'] == 'status_edit_fail' ) { $msg='Failed to change the status.'; }
-    else if ($_GET['msg'] == 'rssfeed_edit_success' ) { $msg='Successfully changed the RSS feed.'; }
-    else if ($_GET['msg'] == 'rssfeed_edit_fail' ) { $msg='Failed to change the RSS feed.'; }
-    else if ($_GET['msg'] == 'showstopper_edit_success' ) { $msg='Successfully changed the Showstopper text.'; }
-    else if ($_GET['msg'] == 'showstopper_edit_fail' ) { $msg='Failed to change the Showstopper text.'; }
-    else if ($_GET['msg'] == 'stat_edit_success' ) { $msg='Successfully changed the stat text.'; }
-    else if ($_GET['msg'] == 'stat_edit_fail' ) { $msg='Failed to change the stat text.'; }
-    else if ($_GET['msg'] == 'statoids_make' ) { $msg='Made combined stats/factiods (statoids) table.'; }
-    else if ($_GET['msg'] == 'page_edit_success' ) { $msg='Successfully changed the page.'; }
-    else if ($_GET['msg'] == 'page_edit_fail' ) { $msg='Failed to change the page.'; }
-    else if ($_GET['msg'] == 'figure_edit_success' ) { $msg='Successfully changed the specific figure.'; }
-    else if ($_GET['msg'] == 'figure_edit_fail' ) { $msg='Failed to change the specific figure.'; }
 
-    if ($msg != '') { echo '$.jGrowl("'.$msg.'", { life: 4000 });'."\n"; }
-}
-?>
-        });
-        </script>
     </head>
     <body>
+
         <h1>Manage the CSID</h1>
         <h2><a href="manage.php">Click to refresh this page</a>.</h2>
         <table>
@@ -155,10 +144,10 @@ echo make_status_change_menu();
                     <h3>Add new event:</h3>
                     <form action="event_add.php" method="get">
                         Date:
-                        <input type="text" name="date" id="datepicker" />
-                        <br /> Details:
-                        <input type="text" name="text" size="50" maxlength="255" />
-                        <input type="submit" value="Add event" />
+                        <input type="text" name="date" id="datepicker">
+                        <br> Details:
+                        <input type="text" name="text" size="50" maxlength="255">
+                        <input type="submit" value="Add event">
                     </form>
                 </td>
             </tr>
@@ -170,8 +159,8 @@ echo make_status_change_menu();
                     <p>Number of seconds between page refreshes.</p>
                     <form action="refresh_edit.php" method="get">
                         Seconds:
-                        <input type="text" value="<?php echo get_config('refresh'); ?>" name="seconds" size="4" maxlength="4" />
-                        <input type="submit" value="Set" />
+                        <input type="text" value="<?php echo get_config('refresh'); ?>" name="seconds" size="4" maxlength="4">
+                        <input type="submit" value="Set">
                     </form>
                     <ul>
                         <li>(Testing: <a href="refresh_edit.php?seconds=1">1</a> 
@@ -194,8 +183,8 @@ echo make_status_change_menu();
                     <p>Location (URL) of the RSS feed for the scroller.</p>
                     <form action="rssfeed_edit.php" method="get">
                         RSS Feed location (URL):
-                        <input type="text" value="<?php echo get_config('rssfeed'); ?>" name="rssfeed" size="50" maxlength="100" />
-                        <input type="submit" value="Set" />
+                        <input type="text" value="<?php echo get_config('rssfeed'); ?>" name="rssfeed" size="50" maxlength="100">
+                        <input type="submit" value="Set">
                     </form>
                     <ul>
                         <li><a href="rssfeed_edit.php?rssfeed=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (Default)</li>
@@ -222,7 +211,7 @@ echo make_status_change_menu();
                     <p>Text required for the 'showstopper' screen. Don't use any formatting. Will appear in UPPERCASE. You have *about* 170 characters maximum.</p>
                     <form action="showstopper_edit.php" method="get">
                         <textarea id="showstopper_textbox" name="showstopper" cols="50" rows="4"><?php echo get_config('showstopper'); ?></textarea>
-                        <input type="submit" value="Change" />
+                        <input type="submit" value="Change">
                     </form>
                 </td>
             </tr>
@@ -245,7 +234,7 @@ echo make_status_change_menu();
                             get_special_figure_list();
                             ?>
                         </select>
-                        <input type="submit" value="Set" />
+                        <input type="submit" value="Set">
                     </form>
                 </td>
                 <!-- blank -->
@@ -253,5 +242,76 @@ echo make_status_change_menu();
                 </td>
             </tr>
         </table>
-    </body>
+
+  <script type="text/javascript" src="jquery-1.4.2.js"></script>
+  <script type="text/javascript" src="jquery-ui-1.7.2.custom.min.js"></script>
+  <script type="text/javascript" src="jquery.jgrowl.js"></script>
+  <script type="text/javascript" src="jquery.counter-1.0.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $('#datepicker').datepicker({ 
+      dateFormat: 'yy-mm-dd', 
+      firstDay: 1, 
+      yearRange: '2010:2011', 
+      numberOfMonths: 2
+    });
+    $("#showstopper_textbox").counter();
+
+<?php
+
+if ( !isset( $_GET['msg'] ) ) {
+  echo '$.jGrowl("Remember: this is live!", { life: 2000 });';
+
+} else {
+  if ($_GET['msg'] == 'event_add_success' ) {
+    $msg='Successfully added an event.';
+  } else if ($_GET['msg'] == 'event_add_fail' ) { 
+    $msg='Failed to add an event.';
+  } else if ($_GET['msg'] == 'event_del_success' ) {
+    $msg='Successfully deleted an event.'; 
+  } else if ($_GET['msg'] == 'event_del_fail' ) { 
+    $msg='Failed to delete an event.';
+  } else if ($_GET['msg'] == 'refresh_edit_success' ) { 
+    $msg='Successfully edited the refresh period.';
+  } else if ($_GET['msg'] == 'refresh_edit_fail' ) { 
+    $msg='Failed to edit the refresh period.';
+  } else if ($_GET['msg'] == 'status_edit_success' ) { 
+    $msg='Successfully changed the status.';
+  } else if ($_GET['msg'] == 'status_edit_fail' ) { 
+    $msg='Failed to change the status.';
+  } else if ($_GET['msg'] == 'rssfeed_edit_success' ) { 
+    $msg='Successfully changed the RSS feed.';
+  } else if ($_GET['msg'] == 'rssfeed_edit_fail' ) { 
+    $msg='Failed to change the RSS feed.';
+  } else if ($_GET['msg'] == 'showstopper_edit_success' ) { 
+    $msg='Successfully changed the Showstopper text.';
+  } else if ($_GET['msg'] == 'showstopper_edit_fail' ) { 
+    $msg='Failed to change the Showstopper text.';
+  } else if ($_GET['msg'] == 'stat_edit_success' ) { 
+    $msg='Successfully changed the stat text.';
+  } else if ($_GET['msg'] == 'stat_edit_fail' ) { 
+    $msg='Failed to change the stat text.';
+  } else if ($_GET['msg'] == 'statoids_make' ) { 
+    $msg='Made combined stats/factiods (statoids) table.';
+  } else if ($_GET['msg'] == 'page_edit_success' ) { 
+    $msg='Successfully changed the page.';
+  } else if ($_GET['msg'] == 'page_edit_fail' ) { 
+    $msg='Failed to change the page.';
+  } else if ($_GET['msg'] == 'figure_edit_success' ) { 
+    $msg='Successfully changed the specific figure.';
+  } else if ($_GET['msg'] == 'figure_edit_fail' ) { 
+    $msg='Failed to change the specific figure.';
+  }
+
+  if ($msg != '') { 
+    echo '$.jGrowl("'.$msg.'", { life: 4000 });'."\n";
+  }
+}
+
+?>
+
+  });
+  </script>
+
+</body>
 </html>

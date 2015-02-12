@@ -1,1 +1,3 @@
-<?php header('location: ../manage.php'); ?>
+<?php
+
+header( 'location: ../manage.php' );
