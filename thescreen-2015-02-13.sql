@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2015 at 03:07 PM
+-- Generation Time: Feb 13, 2015 at 11:49 AM
 -- Server version: 5.5.41-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.5
 
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `config` (
 
 INSERT INTO `config` (`item`, `value`) VALUES
 ('apply_date', '2009-11-01'),
-('page', 'Default'),
+('page', 'CommunityDay2015'),
 ('refresh', '300'),
 ('rssfeed', 'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml'),
 ('showstopper', 'Stone Engineer we are here come to back door -further down corridor. x'),
@@ -466,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `date` datetime NOT NULL,
   `data` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=394 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=426 ;
 
 --
 -- Dumping data for table `log`
@@ -865,7 +865,39 @@ INSERT INTO `log` (`id`, `date`, `data`) VALUES
 (390, '2015-02-12 15:04:17', 'manage'),
 (391, '2015-02-12 15:05:53', 'set_config|statoids_upd[DENIED]|2015-02-12 15:05:53'),
 (392, '2015-02-12 15:05:53', 'pageload_Default'),
-(393, '2015-02-12 15:05:53', 'img|rnd|fig-mark');
+(393, '2015-02-12 15:05:53', 'img|rnd|fig-mark'),
+(394, '2015-02-13 11:43:12', 'manage'),
+(395, '2015-02-13 11:43:15', 'pageload_Default'),
+(396, '2015-02-13 11:43:15', 'img|rnd|fig-paul-alt.png'),
+(397, '2015-02-13 11:43:21', 'manage'),
+(398, '2015-02-13 11:43:27', 'set_config|page|Community Day'),
+(399, '2015-02-13 11:43:28', 'manage'),
+(400, '2015-02-13 11:43:30', 'pageload_Community Day'),
+(401, '2015-02-13 11:43:30', '11:43:30: Page not found: page_community day.php [Community Day]'),
+(402, '2015-02-13 11:43:30', 'Page not found: page_community day.php [Community Day]'),
+(403, '2015-02-13 11:44:38', 'pageload_Community Day'),
+(404, '2015-02-13 11:44:38', '11:44:38: Error: writing to the log failed.'),
+(405, '2015-02-13 11:44:38', '11:44:38: Page not found: page_community day.php [Community Day]'),
+(406, '2015-02-13 11:44:38', 'Page not found: page_community day.php [Community Day]'),
+(407, '2015-02-13 11:45:22', 'pageload_Community Day'),
+(408, '2015-02-13 11:45:22', '11:45:22: Error: writing to the log failed.'),
+(409, '2015-02-13 11:45:22', '11:45:22: Page not found: page_community day.php [Community Day]'),
+(410, '2015-02-13 11:45:22', 'Page not found: page_community day.php [Community Day]'),
+(411, '2015-02-13 11:45:49', 'pageload_Community Day'),
+(412, '2015-02-13 11:45:49', '11:45:49: Error: writing to the log failed.'),
+(413, '2015-02-13 11:45:49', '11:45:49: Page not found: page_community day.php [Community Day]'),
+(414, '2015-02-13 11:45:49', 'Page not found: page_community day.php [Community Day]'),
+(415, '2015-02-13 11:46:00', 'set_config|page|Xmas'),
+(416, '2015-02-13 11:46:01', 'manage'),
+(417, '2015-02-13 11:46:01', 'set_config|page|CommunityDay2014'),
+(418, '2015-02-13 11:46:02', 'manage'),
+(419, '2015-02-13 11:46:04', 'pageload_CommunityDay2014'),
+(420, '2015-02-13 11:47:11', 'manage'),
+(421, '2015-02-13 11:47:13', 'set_config|page|CommunityDay2015'),
+(422, '2015-02-13 11:47:14', 'manage'),
+(423, '2015-02-13 11:47:19', 'pageload_CommunityDay2015'),
+(424, '2015-02-13 11:47:49', 'pageload_CommunityDay2015'),
+(425, '2015-02-13 11:48:42', 'pageload_CommunityDay2015');
 
 -- --------------------------------------------------------
 
@@ -874,7 +906,7 @@ INSERT INTO `log` (`id`, `date`, `data`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `pages` (
-  `page` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `page` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `bg` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `refresh` smallint(4) unsigned NOT NULL DEFAULT '0',
   `priority` tinyint(2) unsigned NOT NULL,
@@ -888,7 +920,8 @@ CREATE TABLE IF NOT EXISTS `pages` (
 
 INSERT INTO `pages` (`page`, `bg`, `refresh`, `priority`, `description`) VALUES
 ('ByeJoy', 'byejoy.png', 60, 6, ''),
-('Community Day', 'communityday.png', 120, 20, 'Community day poster.'),
+('CommunityDay2014', 'communityday.png', 120, 20, 'Community day poster.'),
+('CommunityDay2015', 'default_blue.png', 120, 20, 'Community day 2015 flyer.'),
 ('Default', 'default_blue.png', 0, 1, ''),
 ('Meeting', 'meeting_general.png', 15, 7, 'We''re away at a meeting and will be back soon.'),
 ('MeetingFri3pm', 'meeting_fri3pm.png', 60, 2, 'We''re attending our regular Friday 3pm meeting and will be back about 4pm.'),
