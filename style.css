@@ -1,17 +1,17 @@
 <?php
 
 /**
- * This file gets pre-precessed with PHP, and was initially written before Less or pre-processing was a thing.
+ * This file gets pre-precessed with PHP, and was initially written before Less or
+ * pre-processing was a thing. So, it's pretty poor.
  */
 
 // Define some nice colours.
-$color_default  = '#fff';   // the normal text colour
-$color_em       = '#fc0';   // emphasis colours
-$color_more     = '#6e5';   // 'more...' type text
+$color_default  = '#fff';   // The normal text colour (white).
+$color_em       = '#fc0';   // Emphasis colours (yellow).
 
 // Define some constants, true or false only
-define('SHADOW_TEXT', true);
-define('BORDER', false);        // for debugging only
+define('SHADOW_TEXT', false);   // Not actually used anywhere, but should be.
+define('BORDER', false);        // For debugging only.
 
 ?>
 <style type="text/css" media="screen">
@@ -26,14 +26,13 @@ body {
     background-color: #235;
 }
 
-// Make the text upside down...
+/* Make the text upside down... */
 #wrapper p, #wrapper li, #wrapper marquee {
     /*-moz-transform: rotate(180deg);*/
 }
 #wrapper p, #wrapper li {
     color: <?php echo $color_default; ?>;
     font-size: 1.3em;
-    /*font-family: "Swis721 Md BT";*/
     font-family: 'Roboto', sans-serif;
     text-shadow: #000 0px 0px 0.3em;
     margin: 0;
@@ -199,7 +198,7 @@ body {
 
 
 /**
- *Showstopper stuff
+ * Showstopper.
  */
 #showstopper {
     width: 685px; height: 265px;
@@ -231,12 +230,33 @@ body {
 #showstopper_inner p.bigger2 {
     font-size: 4.5em;
 }
-/* used by the characters-left counter */
+
+
+/* Used by the characters-left counter. */
 #showstopper_textbox_counter {
     color: #f00;
 }
 
+
 .error {
     color: #f00 !important;
+}
+
+
+#event {
+    width: 557px; height: 454px;
+    top: 168px; left: 655px;
+
+    border: 1px solid rgba(255,0,0,<?php if (BORDER) { echo '1'; } else { echo '0'; } ?>);
+
+    overflow: visible;
+    position: absolute;
+    display: table;
+}
+
+#event img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
 }
 </style>

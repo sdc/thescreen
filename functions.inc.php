@@ -18,7 +18,7 @@ $CFG['db']['time']      = date( "Y-m-d H:i:s", time()) ;
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
 // Include config.inc.php
-if ( !require_once('config.inc.php') ) {
+if ( !require_once( 'config.inc.php' ) ) {
     error( 'Could not include the configuration file.' ); 
     exit(1);
 }
@@ -26,7 +26,7 @@ if ( !require_once('config.inc.php') ) {
 // Connect to the database.
 !$DB = new mysqli( $CFG['db']['host'], $CFG['db']['user'], $CFG['db']['pwd'], $CFG['db']['name'] );
 if ( $DB->connect_errno ) {
-    error( 'Failed to connect to database: ' . $DB->connect_error . ' [' . $DB->connect_errno . ']');
+    error( 'Failed to connect to database: ' . $DB->connect_error . ' [' . $DB->connect_errno . ']' );
     exit(1);
 }
 
@@ -60,7 +60,7 @@ if ( !get_config( 'refresh' ) ) {
 if ( !get_config( 'rssfeed' ) ) {
     // There is no rss feed, so add a default.
     if ( !set_config( 'rssfeed', 'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml', true )  ) {
-        error('<p>Could not add in a default rss feed.</p>');
+        error( '<p>Could not add in a default rss feed.</p>' );
         exit(1);
     }
 }
@@ -124,7 +124,7 @@ function get_config( $item ) {
     global $DB;
 
     $res = $DB->query( "SELECT value FROM config WHERE item = '" . $item . "' LIMIT 1;" );
-    if ($res->num_rows == 0) {
+    if ( $res->num_rows == 0 ) {
         return false;
     } else {
         $row = $res->fetch_assoc();
@@ -230,7 +230,7 @@ function get_page_array() {
 
     } else {
         $value = array();
-        while ($row = $res->fetch_assoc() ) {
+        while ( $row = $res->fetch_assoc() ) {
             $value[] = $row['page'];
         }
         return $value;
@@ -245,7 +245,7 @@ function get_rnd_statoid() {
 
     $now = time();
     // check the date...
-    if (date('n', $now) == 4 && date ('j', $now) == 1) {
+    if ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) {
         // April 1st.
         $sql = "SELECT COUNT(id) FROM aprilfools;";
         $res = $DB->query( $sql );
@@ -345,7 +345,7 @@ function get_figure() {
 
         if ( file_exists( $file_loc ) ) {
             adminlog( 'img|set|' . $img );
-            return '<img src="' . $file_loc . '" title="' . $img.'">' . "\n";
+            return '<img src="' . $file_loc . '" title="' . $img . '">' . "\n";
 
         } else {
             return get_rnd_figure();
@@ -434,7 +434,7 @@ function get_special_figure_list() {
 // DONE
 function get_scroller() {
 
-    require_once('simplepie.inc');
+    require_once( 'simplepie.inc' );
 
     // We'll process this feed with all of the default options.
     $feed = new SimplePie( get_config( 'rssfeed' ) );
@@ -446,7 +446,7 @@ function get_scroller() {
     $build = '<marquee scrollamount="3" height="45" width="1278">';
 
     // Add a news-service image to the start of the feed.
-    $testfeed = get_config('rssfeed');
+    $testfeed = get_config( 'rssfeed' );
     if ( preg_match( '/newsrss.bbc.co.uk/', $testfeed ) ) {
         $build .= '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.83.4/orb/4/img/bbc-blocks-light.png" height="25" style="vertical-align: middle;"> ';
 
@@ -460,7 +460,7 @@ function get_scroller() {
             $build .= $item->get_title() . ': <em>' . $item->get_description() . '</em> &rarr; ' . "\n";
         }
     }
-    $build .= '</marquee>'."\n";
+    $build .= "</marquee>\n";
     return $build;
 }
 
@@ -474,10 +474,10 @@ function get_data_from_file( $file, $type = '' ) {
     global $CFG;
 
     // Get the file or get it with $CFG['ext'] on the end.
-    if( file_exists( $CFG['dir']['data'] . $file ) ) {
+    if ( file_exists( $CFG['dir']['data'] . $file ) ) {
         $fh = fopen( $CFG['dir']['data'] . $file, 'r' );
 
-    } else if( file_exists( $CFG['dir']['data'] . $file . $CFG['ext'] )) {
+    } else if ( file_exists( $CFG['dir']['data'] . $file . $CFG['ext'] )) {
         $fh = fopen( $CFG['dir']['data'] . $file . $CFG['ext'], 'r' );
 
     } else {
@@ -488,16 +488,16 @@ function get_data_from_file( $file, $type = '' ) {
     $data = trim( fgets( $fh ) );
     fclose( $fh );
 
-    if( $type == '' ) {
+    if ( $type == '' ) {
         // normal data
-        if( is_numeric( $data ) ) {
+        if ( is_numeric( $data ) ) {
             // format the number to add thousands separators
             $data = number_format( $data );
         }
 
-    } else if($type = 'status') {
+    } else if ( $type = 'status' ) {
         // print a corresponding face
-        $data = '<img src="'.$CFG['dir']['img'].$data.'.png" width="16" height="16" alt="'.$type.' '.$data.'" />';
+        $data = '<img src="' . $CFG['dir']['img'] . $data . '.png" width="16" height="16" alt="' . $type . ' ' . $data . '">';
     }
 
     return $data;
@@ -588,7 +588,7 @@ function get_status_txt() {
 
     global $DB;
 
-    $sql = "SELECT text FROM status WHERE name = '".get_status()."';";
+    $sql = "SELECT text FROM status WHERE name = '" . get_status() . "';";
     $res = $DB->query( $sql);
 
     if ( $res->num_rows == 0 ) {
@@ -599,18 +599,6 @@ function get_status_txt() {
         return '<p>' . $row[0] . '</p>' . "\n";
     }
 }
-
-/*
-function set_status($status) {
-    // we have the statuses in the $statuses array, so rewrite the next line:
-    if ($status == 'ok' || $status == 'login' || $status == 'email' || $status == 'net' || $status == 'server' || $status == 'bad') {
-        global $DB;
-        adminlog('set_status|'.$status);
-        $res = mysql_unbuffered_query("UPDATE config SET value = '".$status."' WHERE item = 'status' LIMIT 1");
-        return $res;
-    }
-}
-*/
 
 // Makes the status change menu.
 // DONE
@@ -673,7 +661,7 @@ function get_events( $num = 3, $edit = false ) {
 
         while ( $row = $res->fetch_assoc() ) {
             $db_date = $row['start'];
-            $disp_date = date("jS M", mktime(0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
+            $disp_date = date( 'jS M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
             $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . '</em>';
 
             if ( $edit == true ) {
@@ -683,7 +671,7 @@ function get_events( $num = 3, $edit = false ) {
             $build .= "</li>\n";
         }
 
-        $build .= '</ul>'."\n";
+        $build .= "</ul>\n";
         return $build;
     }
 
@@ -745,8 +733,8 @@ function get_stats_form() {
                 $build .= ' disabled="disabled"';
             }
 
-            $build .= '/></td>' . "\n";
-            //$build .= '        <td>'.$row['text_after'].'</td>'."\n";
+            $build .= '></td>' . "\n";
+            //$build .= '        <td>' . $row['text_after'] . "</td>\n";
             $build .= '        <td><input type="hidden" name="key" value="' . $row['id'] . '">' . "\n";
             $build .= '            <button type="submit"';
 
@@ -939,17 +927,17 @@ function update_website_stats() {
 
     $ga = new gapi(str_rot13(ga_email),str_rot13(ga_password));
 
-    $filter = 'date == '.date('Y').date('m').(date('d')-1);
+    $filter = 'date == ' . date('Y') . date('m') . (date('d') -1 );
     $ga->requestReportData(ga_profile_id,array('day'),array('pageviews','visits'),'-visits',$filter);
 
     $pageviews  = $ga->getPageviews();
     $visits     = $ga->getVisits();
 
     // insert into stats
-    if($pageviews > 0) {
+    if ( $pageviews > 0) {
         $res1 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$pageviews."' WHERE id = 'web_views';", $DB);
     }
-    if($visits > 0) {
+    if ( $visits > 0) {
         $res2 = mysql_unbuffered_query("UPDATE csid.stats SET value = '".$visits."' WHERE id = 'web_visit';", $DB);
     }
 }
@@ -986,6 +974,6 @@ function update_online_apps() {
 /*
 function update_foursquare() {
     $img_str = 'http://foursquare.com/img/headerLogo.png';
-    $build = '<img src="'.$img_str.'" /><br />';
+    $build = '<img src="' . $img_str . '"><br>';
 }
 */

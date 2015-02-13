@@ -30,8 +30,8 @@
 
   </div>
 
-  <div id="communityday2015" style="top: 175px; left: 800px; position: absolute;">
-    <img src="images/2015-communityday-a5.jpg" style="width: 310px;"> 
+  <div id="event">
+    <img src="images/2015-communityday-a5.jpg" style="height: 100%">
   </div>
 
 </div>
