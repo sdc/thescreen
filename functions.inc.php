@@ -7,19 +7,23 @@
 // Configuration array and some settings.
 $CFG = array();
 
+$CFG['version'] = '2015021300';
+
 $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';
 $CFG['dir']['status']   = $CFG['dir']['graphics'] . 'status/';
 $CFG['dir']['bg']       = $CFG['dir']['graphics'] . 'backgrounds/';
-//$CFG['dir']['data']     = './data/';  
+//$CFG['dir']['data']     = './data/';
 
 $CFG['db']['time']      = date( "Y-m-d H:i:s", time()) ;
 
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
+$CFG['lang']['title']   = 'The Screen&trade; Management';
+
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
-    error( 'Could not include the configuration file.' ); 
+    error( 'Could not include the configuration file.' );
     exit(1);
 }
 

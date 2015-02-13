@@ -14,9 +14,6 @@ session_start();
 if ( !isset( $_SESSION['loggedin'] ) ) {
     header( 'location: login.php' );
     exit(0);
-
-} else {
-    echo date( 'c', $_SESSION['loggedin.time'] );
 }
 
 adminlog('manage');
@@ -31,94 +28,174 @@ adminlog('manage');
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
 
-  <title>Manage The Screen</title>
+  <title><?php echo $CFG['lang']['title']; ?></title>
 
   <meta http-equiv="refresh" content="300">
 
-  <link rel="stylesheet" type="text/css" href="jquery-ui-1.7.2.custom.css" media="screen">
-  <link rel="stylesheet" type="text/css" href="jquery.jgrowl.css" media="screen">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <style type="text/css">
+  body {
+    padding-top: 70px;
+  }
+  </style>
 
-        <style type="text/css">
-        body {
-            background-color: #fff;
-        }
-        table {
-            border: 1px solid #bbb;
-            margin-top: 10px;
-        }
-        h2, h3, p, li, td, input, button, textarea, select {
-            font-family: "Swis721 Md BT"; 
-        }
-        h1 {
-            display: inline;
-            text-shadow: rgba(0,0,0,0.4) 3px 2px 0.3em;
-            font-family: "Swiss921 BT";
-            font-weight: normal;
-        }
-        h1 + h2 {
-            font-size: 1em;
-            display: inline;
-            text-shadow: rgba(0,0,0,0.4) 2px 1px 0.3em;
-            margin-left: 50px;
-        }
-        td h2 {
-            margin-top: 0;
-            text-align: center;
-            /*text-shadow: rgba(0,0,0,0.4) 3px 2px 0.3em;*/
-        }
-        td {
-            border: 1px solid #ddd;
-            width: 350px;
-            vertical-align: top;
-        }
-        td#events {
-            width: 600px;
-        }
-        li em {
-            font-style: normal;
-        }
-        a {
-            color: #00f;
-        }
-        a:link, a:visited, a:active {
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        table#stats {
-            padding: 0; margin: 0; 
-            border: 0;
-        }
-        table#stats td {
-            padding: 0; margin: 0; 
-            border: 0;
-            border-bottom: 1px solid #000;
-        }
-        table#stats td.thin {
-            width: 10px;
-            white-space: nowrap;
-        }
-        td#showstopper {
-            height: 250px;
-        }
-        </style>
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-    </head>
-    <body>
+  <link href="jquery-ui-1.7.2.custom.css" rel="stylesheet">
+  <link href="jquery.jgrowl.css" rel="stylesheet">
 
-        <h1>Manage the CSID</h1>
-        <h2><a href="manage.php">Click to refresh this page</a>.</h2>
-        <table>
-            <tr>
-                <!-- screen type -->
-                <td>
-                    <h2>Page Type</h2>
-                    <p>Chage the page type:</p>
+  <!-- link rel="stylesheet" type="text/css" href="css/style-admin.css" media="screen" -->
+
+</head>
+<body>
+
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><?php echo $CFG['lang']['title']; ?></a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="manage.php">Refresh <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
+          <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
+          <li class="active"><a href="logout.php">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav><!-- END fixed navbar. -->
+
+  <div class="container">
+
+    <!-- Any alerts we have will pop up here. -->
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>Dental Plan!</strong> Lisa needs braces.
+    </div>
+
+    <div class="jumbotron">
+      <h1><?php echo $CFG['lang']['title']; ?></h1>
+      <p>Rocket science, this ain't.</p>
+      <!-- p>
+        <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+      </p -->
+    </div><!-- END jumbotron. -->
+
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Last Logged In</h1>
+        <p>You last logged in at <?php echo date( 'c', $_SESSION['loggedin.time'] ); ?>.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+
+    <!-- Row two. -->
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Page Type</h2>
+        <p>Change the page type:</p>
 <?php
 echo make_page_change_menu();
 ?>
-                </td>
+      </div>
+      <div class="col-md-4">
+        <h2>Current status</h2>
+        <p>Only valid if the page is set to <strong>Default</strong>. Change status to:</p>
+<?php
+echo make_status_change_menu();
+?>
+      </div>
+      <div class="col-md-4">
+        <h2>Events</h2>
+        <p>All future events: (events which have passed are not shown)</p>
+<?php echo get_events( 10, true ); ?>
+        <hr>
+        <h4>Add new event:</h4>
+        <form action="event_add.php" method="get">
+          Date:
+          <input type="text" name="date" id="datepicker">
+          <br> Details:
+          <input type="text" name="text" size="50" maxlength="255">
+          <input type="submit" value="Add event">
+        </form>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div> <!-- /container -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <table>
+            <tr>
                 <!-- refresh statoids -->
                 <td>
                     <h2>Refresh Stats</h2>
@@ -129,26 +206,10 @@ echo make_page_change_menu();
             <tr>
                 <!-- status stuff -->
                 <td id="status">
-                    <h2>Current status</h2>
-                    <p>Change status to:</p>
-<?php
-echo make_status_change_menu();
-?>
                 </td>
 
                 <!-- event stuff -->
                 <td id="events">
-                    <h2>Events</h2>
-                    <p>All future events: (events which have passed are not shown)</p>
-                    <?php echo get_events(20, true); ?>
-                    <h3>Add new event:</h3>
-                    <form action="event_add.php" method="get">
-                        Date:
-                        <input type="text" name="date" id="datepicker">
-                        <br> Details:
-                        <input type="text" name="text" size="50" maxlength="255">
-                        <input type="submit" value="Add event">
-                    </form>
                 </td>
             </tr>
             <tr>
@@ -243,22 +304,25 @@ echo make_status_change_menu();
             </tr>
         </table>
 
-  <script type="text/javascript" src="jquery-1.4.2.js"></script>
-  <script type="text/javascript" src="jquery-ui-1.7.2.custom.min.js"></script>
-  <script type="text/javascript" src="jquery.jgrowl.js"></script>
+  <!-- script type="text/javascript" src="jquery-1.4.2.js"></script -->
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+  <!-- script type="text/javascript" src="jquery-ui-1.7.2.custom.min.js"></script -->
+  <!-- script type="text/javascript" src="jquery.jgrowl.js"></script -->
   <script type="text/javascript" src="jquery.counter-1.0.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
-    $('#datepicker').datepicker({ 
-      dateFormat: 'yy-mm-dd', 
-      firstDay: 1, 
-      yearRange: '2010:2011', 
-      numberOfMonths: 2
-    });
+  //  $('#datepicker').datepicker({ 
+  //    dateFormat: 'yy-mm-dd', 
+  //    firstDay: 1, 
+  //    yearRange: '2010:2011', 
+  //    numberOfMonths: 2
+  //  });
     $("#showstopper_textbox").counter();
 
 <?php
-
+/*
 if ( !isset( $_GET['msg'] ) ) {
   echo '$.jGrowl("Remember: this is live!", { life: 2000 });';
 
@@ -307,11 +371,14 @@ if ( !isset( $_GET['msg'] ) ) {
     echo '$.jGrowl("'.$msg.'", { life: 4000 });'."\n";
   }
 }
-
+*/
 ?>
 
   });
   </script>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="js/ie10-viewport-bug-workaround.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,63 @@
+body {
+    background-color: #fff;
+}
+table {
+    border: 1px solid #bbb;
+    margin-top: 10px;
+}
+h2, h3, p, li, td, input, button, textarea, select {
+    font-family: "Swis721 Md BT"; 
+}
+h1 {
+    display: inline;
+    text-shadow: rgba(0,0,0,0.4) 3px 2px 0.3em;
+    font-family: "Swiss921 BT";
+    font-weight: normal;
+}
+h1 + h2 {
+    font-size: 1em;
+    display: inline;
+    text-shadow: rgba(0,0,0,0.4) 2px 1px 0.3em;
+    margin-left: 50px;
+}
+td h2 {
+    margin-top: 0;
+    text-align: center;
+    /*text-shadow: rgba(0,0,0,0.4) 3px 2px 0.3em;*/
+}
+td {
+    border: 1px solid #ddd;
+    width: 350px;
+    vertical-align: top;
+}
+td#events {
+    width: 600px;
+}
+li em {
+    font-style: normal;
+}
+a {
+    color: #00f;
+}
+a:link, a:visited, a:active {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+table#stats {
+    padding: 0; margin: 0; 
+    border: 0;
+}
+table#stats td {
+    padding: 0; margin: 0; 
+    border: 0;
+    border-bottom: 1px solid #000;
+}
+table#stats td.thin {
+    width: 10px;
+    white-space: nowrap;
+}
+td#showstopper {
+    height: 250px;
+}
