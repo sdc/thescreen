@@ -1,24 +1,23 @@
 <?php
+
 /**
- * define some nice colours
+ * This file gets pre-precessed with PHP, and was initially written before Less or pre-processing was a thing.
  */
+
+// Define some nice colours.
 $color_default  = '#fff';   // the normal text colour
 $color_em       = '#fc0';   // emphasis colours
 $color_more     = '#6e5';   // 'more...' type text
 
-// not used any more...
-//$bg_aplha       = 0.33;     // alpha level for transparent background
-
-/**
- * define some constants, true or false only
- */
+// Define some constants, true or false only
 define('SHADOW_TEXT', true);
 define('BORDER', false);        // for debugging only
 
-//$fig_name1 = $fig_name.$fig_ext;
-//$fig_name2 = $fig_name.'-alt'.$fig_ext;
 ?>
 <style type="text/css" media="screen">
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:500,900italic,900,400italic,100,700italic,300,700,500italic,100italic,300italic,400|Roboto+Condensed:300italic,400italic,700italic,400,300,700);
+
 body {
     padding: 0; margin: 0;
     background-image: url('<?php echo $CFG['dir']['bg'].get_page_bg(); ?>');
@@ -26,17 +25,16 @@ body {
     background-repeat: no-repeat;
     background-color: #235;
 }
-/**
- * Make the text upside down
- */
+
+// Make the text upside down...
 #wrapper p, #wrapper li, #wrapper marquee {
     /*-moz-transform: rotate(180deg);*/
 }
-
 #wrapper p, #wrapper li {
     color: <?php echo $color_default; ?>;
     font-size: 1.3em;
-    font-family: "Swis721 Md BT";
+    /*font-family: "Swis721 Md BT";*/
+    font-family: 'Roboto', sans-serif;
     text-shadow: #000 0px 0px 0.3em;
     margin: 0;
 }
@@ -142,15 +140,15 @@ body {
     padding: 0; margin: 0;
     color: <?php echo $color_default; ?>;
     font-size: 1.8em;
-    /*font-family: "Swis721 Th BT";*/
-    /*font-family: "Swis721 Md BT";*/
-    font-family: "Swiss921 BT";
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
     text-shadow: #000 0px 0px 0.3em;
 }
 #scroller div div em {
     color: <?php echo $color_em; ?>;
     font-style: normal;
-    font-family: "Swis721 Md BT";
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 400;
 }
 
 
@@ -183,7 +181,9 @@ body {
 #controls p {
     margin: 0;
     text-align: left;
-    font-size: 0.7em; font-family: "Swis721 Md BT";
+    font-size: 0.7em; 
+    /*font-family: "Swis721 Md BT";*/
+    font-family: 'Roboto', sans-serif;
     padding: 0;
 }
 #controls a, #controls p {
@@ -220,7 +220,8 @@ body {
     margin: 0; padding: 0;
     color: #000;
     font-size: 3em;
-    font-family: "Swiss921 BT";
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
     text-align: center;
     text-transform: uppercase;
 }
