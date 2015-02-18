@@ -1,5 +1,7 @@
 <?php
 
+//phpinfo();
+
 /**
  * The Screen - Admin 
  * Code:    Paul Vaughan
@@ -7,6 +9,8 @@
  */
 
 require_once( 'functions.inc.php' );
+require_once( 'functions-admin.inc.php' );
+
 session_name( 'sdc-thescreen' );
 session_start();
 
@@ -15,6 +19,33 @@ if ( !isset( $_SESSION['loggedin'] ) ) {
     header( 'location: login.php' );
     exit(0);
 }
+
+/**
+ * Before loading the page proper, check to see if any $_POST is set, and deal with it.
+ */
+
+// Adding a new event.
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_POST['date'] ) && !empty( $_POST['date'] ) && isset( $_POST['text'] ) && !empty( $_POST['text'] ) ) {
+  if ( add_event( $_POST['date'], $_POST['text'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The event &ldquo;' . $_POST['text'] . '&rdquo; was created successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'error' => 'The event &ldquo;' . $_POST['text'] . '&rdquo; was not added for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+  if ( del_event( $_GET['event_id'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was deleted.' );
+  } else {
+    $_SESSION['alerts'] = array( 'error' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
 
 adminlog('manage');
 
@@ -99,18 +130,32 @@ adminlog('manage');
   <div class="container">
 
     <!-- Any alerts we have will pop up here. -->
-    <div class="alert alert-success alert-dismissible" role="alert">
+    <!-- div class="alert alert-success alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>Dental Plan!</strong> Lisa needs braces.
-    </div>
+    </div -->
+<?php
 
+if ( isset( $_SESSION['alerts'] ) ) {
+  foreach ( $_SESSION['alerts'] as $alert => $text ) {
+    echo '    <div class="alert alert-' . $alert . ' alert-dismissible" role="alert">' . "\n";
+    echo '      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . "\n";
+    echo '      ' . $text . "\n";
+    echo '    </div>' . "\n";
+  }
+  unset( $_SESSION['alerts'] );
+}
+
+?>
+
+    <!--
     <div class="jumbotron">
       <h1><?php echo $CFG['lang']['title']; ?></h1>
       <p>Rocket science, this ain't.</p>
-      <!-- p>
+      <p>
         <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-      </p -->
-    </div><!-- END jumbotron. -->
+      </p>
+    </div --><!-- END jumbotron. -->
 
     <div class="row">
       <div class="col-md-12">
@@ -145,10 +190,13 @@ echo make_status_change_menu();
         <h2>Events</h2>
         <p>All future events (events which have passed are not shown).</p>
         <p>Delete an event by clicking the red cross. The event will become greyed out, and can be un-deleted by clicking the green tick.</p>
-<?php echo get_events( 10, true ); ?>
+<?php
+echo make_events_menu();
+?>
         <hr>
         <h4>Add new event:</h4>
-        <form action="event_add.php" method="get">
+        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+          <input type="hidden" name="action" value="event_add">
           Date:
           <input type="text" name="date" id="datepicker">
           <br> Details:
