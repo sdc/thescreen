@@ -186,10 +186,17 @@ function adminlog( $data ) {
 
 // Gets the page's proper name from an id.
 // DONE
-function get_page_name( $id ) {
+function get_name( $type, $id ) {
   global $DB;
 
-  $sql = "SELECT name FROM pages WHERE id = '" . $id . "' LIMIT 1;";
+  // $type can be 'pages' or 'status' at the moment.
+  if ( empty( $type ) ) {
+    return false;
+  }
+
+  $type = $DB->real_escape_string( $type );
+
+  $sql = "SELECT name FROM " . $type . " WHERE id = '" . $id . "' LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {
@@ -227,14 +234,20 @@ function get_title( $type, $id ) {
 
 }
 
-// Gets the page's id from a proper name.
+// Gets the page or status id from a proper name.
 // DONE
-function get_page_id( $name ) {
+function get_id( $type, $name ) {
   global $DB;
 
+  // $type can be 'pages' or 'status' at the moment.
+  if ( empty( $type ) ) {
+    return false;
+  }
+
+  $type = $DB->real_escape_string( $type );
   $name = $DB->real_escape_string( $name );
 
-  $sql = "SELECT id FROM pages WHERE name = '" . $name . "' LIMIT 1;";
+  $sql = "SELECT id FROM " . $type . " WHERE name = '" . $name . "' LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {

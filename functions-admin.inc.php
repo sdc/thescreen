@@ -393,9 +393,9 @@ function default_page_warning_page() {
   global $CFG;
 
   $out = '';
-  if ( get_page_name( $CFG['page'] ) != 'default' ) {
+  if ( get_name( 'pages', $CFG['page'] ) != 'default' ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default page is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=1" class="alert-link">Click here to reset the page to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default page is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'default' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
     $out .=  "</div>\n";
   }
 
@@ -408,9 +408,9 @@ function default_page_warning_status() {
   global $CFG;
 
   $out = '';
-  if ( get_page_name( $CFG['page'] ) != 'default' ) {
+  if ( get_name( 'pages', $CFG['page'] ) != 'default' ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> These options only change the <strong>default</strong> page, which is not currently set. <!-- <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=1" class="alert-link">Click here to reset the page to default</a>. -->' . "\n";
+    $out .= '  <strong>Note!</strong> These options only change the <strong>default</strong> page, which is not currently set. <!-- <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'default' ) . '" class="alert-link">Click here to reset the page to default</a>. -->' . "\n";
     $out .= "</div>\n";
   }
 
@@ -422,9 +422,9 @@ function default_status_warning() {
   global $CFG;
 
   $out = '';
-  if ( $CFG['status'] != 'ok' ) {
+  if ( get_name( 'status', $CFG['status'] ) != 'ok' ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default status of &ldquo;ok&rdquo; is not set for some reason, which may be intentional. <a href="status_edit.php?status=ok" class="alert-link">Click here to reset the status to &ldquo;ok&rdquo;</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default status <strong>okay</strong> is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . get_id( 'status', 'ok' ) . '" class="alert-link">Click here to reset the status to &ldquo;okay&rdquo;</a>.' . "\n";
     $out .= "</div>\n";
   }
 
@@ -436,13 +436,13 @@ function showstopper_page_warning() {
   global $CFG;
 
   $out = '';
-  if ( get_page_name( $CFG['page'] ) != 'showstopper' ) {
+  if ( get_name( 'pages', $CFG['page'] ) != 'showstopper' ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_page_id( 'showstopper' ) . '" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
+    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'showstopper' ) . '" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
     $out .= "</div>\n";
   } else {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_page_id( 'default' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default page.' . "\n";
+    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'default' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default page.' . "\n";
     $out .= "</div>\n";
   }
 
