@@ -67,12 +67,22 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_restore' && isset( $_
 }
 
 // Changing the page.
-// TODO: This setting can be set to anything, regardless of whether or not that page exists!
-if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GET['page'] ) && !empty( $_GET['page'] ) ) {
-  if ( set_page( $_GET['page'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The page called &ldquo;' . $_GET['page'] . '&rdquo; was set successfully.' );
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GET['page'] ) && !empty( $_GET['page'] ) && is_numeric( $_GET['page'] ) ) {
+  if ( update_check( 'pages', $_GET['page'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was set successfully.' );
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The page called &ldquo;' . $_GET['page'] . '&rdquo; was not set for some reason.' );
+    $_SESSION['alerts'] = array( 'danger' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was not set for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Changing the status.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'status_change' && isset( $_GET['status'] ) && !empty( $_GET['status'] ) && is_numeric( $_GET['status'] ) ) {
+  if ( update_check( 'status', $_GET['status'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was set successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was not set for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -100,7 +110,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isse
   exit(0);
 }
 
-// Updating the RSS feed URL.
+// Updating the RSS feed URL from a preset.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $_GET['rssfeed_preset_url'] ) && !empty( $_GET['rssfeed_preset_url'] ) ) {
   if ( set_config( 'rssfeed', $_GET['rssfeed_preset_url'] ) ) {
     $_SESSION['alerts'] = array( 'success' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was updated successfully.' );

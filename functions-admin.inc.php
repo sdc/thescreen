@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Database functions (and variables) for the administrative side of things.
+ * Page functions.
  */
-
 
 // Makes the page change menu.
 // TODO: Check to see if $pages is valid before using it (same as make_status_change_menu()).
 function make_page_change_menu() {
+
   global $CFG, $DB;
 
-  $sql = "SELECT * FROM pages ORDER BY priority ASC;";
+  $sql = "SELECT * FROM pages ORDER BY priority ASC, name ASC;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {
@@ -23,11 +23,11 @@ function make_page_change_menu() {
 
       $build .= '<li>';
 
-      if ( $row['page'] == $CFG['page'] ) {
-        $build .= '<strong>' . $row['pagename'] . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+      if ( $row['id'] == $CFG['page'] ) {
+        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
 
       } else {
-        $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . $row['page'] . '">' . $row['pagename'] . '</a>';
+        $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>';
       }
 
       $build .= "</li>\n";
@@ -39,63 +39,97 @@ function make_page_change_menu() {
   }
 }
 
-// Get a list of pages as an array.
+// Checks if the $type id being updated actually exists in the pages table, and save it if so.
 // DONE
-function get_page_array() {
-
-    global $DB;
-
-    $sql = "SELECT page FROM pages ORDER BY priority ASC;";
-    $res = $DB->query( $sql );
-
-    if ( $res->num_rows == 0 ) {
-        return false;
-
-    } else {
-        $value = array();
-        while ( $row = $res->fetch_assoc() ) {
-            $value[] = $row['page'];
-        }
-        return $value;
-    }
-}
-
-// TODO: This function will set a new page ONLY if exists in the pages table. Eventually.
-function set_page( $page ) {
+function update_check( $type, $id ) {
   global $DB;
 
-  $page = $DB->real_escape_string( $page );
+  // $type can be 'pages' or 'status' at the moment.
+  if ( empty( $type ) ) {
+    return 'unknown';
+  }
 
-  $sql = "SELECT * FROM pages WHERE page = '" . $page . "' LIMIT 1;";
+  $type = $DB->real_escape_string( $type );
+
+  $sql = "SELECT * FROM " . $type . " WHERE id = '" . $id . "' LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {
     return false;
+
   } else {
-    return set_config( 'page', $page );
+    // $type may be 'pages' but the config option is singular.
+    $type = ( $type == 'pages' ) ? 'page' : $type;
+    return set_config( $type, $id );
   }
+
 }
 
-// Get statuses as an array.
+
+
+/**
+ * Status functions.
+ */
+
+// Makes the status change menu.
 // DONE
-function get_status_array() {
+function make_status_change_menu() {
 
-    global $DB;
+  global $CFG, $DB;
 
-    $sql = "SELECT name FROM status ORDER BY priority ASC;";
-    $res = $DB->query( $sql );
+  $sql = "SELECT * FROM status ORDER BY priority ASC, name ASC;";
+  $res = $DB->query( $sql );
 
-    if ( $res->num_rows == 0 ) {
-        return false;
+  if ( $res->num_rows == 0 ) {
+    return false;
 
-    } else {
-        $value = array();
-        while ( $row = $res->fetch_assoc() ) {
-            $value[] = $row['name'];
-        }
-        return $value;
+  } else {
+    /*$value = array();
+    while ( $row = $res->fetch_assoc() ) {
+      $value[] = $row['name'];
+    }*/
+
+    //$curr_status = get_config( 'status' );
+
+    $build = '<ul>';
+    while ( $row = $res->fetch_assoc() ) {
+
+      $build .= '<li>';
+
+      if ( $row['id'] == $CFG['status'] ) {
+        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+
+      } else {
+        $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>';
+      }
+
+      $build .= "</li>\n";
     }
+
+    $build .= "</ul>\n";
+    return $build;
+
+  }
+
 }
+
+// A function to check if the status id being set actually exists in the status table.
+// DONE
+/*function set_status( $id ) {
+  global $DB;
+
+  $sql = "SELECT * FROM status WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+
+  } else {
+    return set_config( 'status', $id );
+  }
+
+}*/
+
 
 
 // Gets a list of figures with 'fig' or 'special' in the name.
@@ -178,36 +212,6 @@ function get_data_from_file( $file, $type = '' ) {
 */
 
 
-// Makes the status change menu.
-// DONE
-function make_status_change_menu() {
-
-    $statuses = get_status_array();
-
-    if ( $statuses ) {
-        $curr_status = get_config( 'status' );
-
-        $build = '<ul>';
-        foreach ($statuses as $status) {
-
-            $build .= '<li>';
-
-            if ($status == $curr_status) {
-                $build .= '<strong>' . ucfirst($status) . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
-            } else {
-                $build .= '<a href="status_edit.php?status=' . $status . '">' . ucfirst($status) . '</a>';
-            }
-
-            $build .= "</li>\n";
-        }
-
-        $build .= "</ul>\n";
-        return $build;
-
-    } else {
-        return '<p class="error">Sorry, no statuses.</p>';
-    }
-}
 
 // Get 'n' next events.
 // DONE
@@ -284,7 +288,8 @@ function del_event( $eid ) {
 }
 
 
-// Un-deletes an event.
+// Restores an event.
+// TODO: Check the event exists before restoring.
 function restore_event( $id ) {
 
     global $DB;
@@ -383,13 +388,14 @@ function get_last_log( $no = 10) {
 }
 
 // Checks to see if this is the default page (on the page menu), and if not, a little warning.
+// TODO: We're making an assumption that there is a page called 'default'!
 function default_page_warning_page() {
   global $CFG;
 
   $out = '';
-  if ( $CFG['page'] != 'default' ) {
+  if ( get_page_name( $CFG['page'] ) != 'default' ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default page is not set for some reason, which may be intentional. <a href="page_edit.php?page=default" class="alert-link">Click here to reset the page to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default page is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=1" class="alert-link">Click here to reset the page to default</a>.' . "\n";
     $out .=  "</div>\n";
   }
 
@@ -397,13 +403,14 @@ function default_page_warning_page() {
 }
 
 // Checks to see if this is the default page (on the status menu), and if not, a little warning.
+// TODO: We're making an assumption that there is a page called 'default'!
 function default_page_warning_status() {
   global $CFG;
 
   $out = '';
-  if ( $CFG['page'] != 'default' ) {
+  if ( get_page_name( $CFG['page'] ) != 'default' ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> These options only change the <strong>default</strong> page, which is not currently set. <!-- <a href="page_edit.php?page=default" class="alert-link">Click here to reset the page to default</a>. -->' . "\n";
+    $out .= '  <strong>Note!</strong> These options only change the <strong>default</strong> page, which is not currently set. <!-- <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=1" class="alert-link">Click here to reset the page to default</a>. -->' . "\n";
     $out .= "</div>\n";
   }
 
@@ -429,13 +436,13 @@ function showstopper_page_warning() {
   global $CFG;
 
   $out = '';
-  if ( $CFG['page'] != 'showstopper' ) {
+  if ( get_page_name( $CFG['page'] ) != 'showstopper' ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="page_edit.php?page=showstopper" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
+    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_page_id( 'showstopper' ) . '" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
     $out .= "</div>\n";
   } else {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="page_edit.php?page=default" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default page.' . "\n";
+    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_page_id( 'default' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default page.' . "\n";
     $out .= "</div>\n";
   }
 

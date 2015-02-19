@@ -13,6 +13,8 @@ $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';
 $CFG['dir']['status']   = $CFG['dir']['graphics'] . 'status/';
 $CFG['dir']['bg']       = $CFG['dir']['graphics'] . 'backgrounds/';
+$CFG['dir']['pages']    = 'pages/';
+
 //$CFG['dir']['data']     = './data/';
 
 $CFG['db']['time']      = date( "Y-m-d H:i:s", time()) ;
@@ -113,8 +115,9 @@ if ( rand( 1, 12 ) == 9 ) {
 }
 
 
+
 /**
- * Functions from here down.
+ * General functions.
  */
 
 // Just a bit of formatting for errors.
@@ -174,6 +177,77 @@ function adminlog( $data ) {
         return false;
     }
 }
+
+
+
+/**
+ * Page functions.
+ */
+
+// Gets the page's proper name from an id.
+// DONE
+function get_page_name( $id ) {
+  global $DB;
+
+  $sql = "SELECT name FROM pages WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+
+  } else {
+    $row = $res->fetch_assoc(); 
+    return $row['name'];
+  }
+
+}
+
+// Gets the page's or status' title from an id.
+// DONE
+function get_title( $type, $id ) {
+  global $DB;
+
+  // $type can be 'pages' or 'status' at the moment.
+  if ( empty( $type ) ) {
+    return 'unknown';
+  }
+
+  $type = $DB->real_escape_string( $type );
+
+  $sql = "SELECT title FROM " . $type . " WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+
+  } else {
+    $row = $res->fetch_assoc(); 
+    return $row['title'];
+  }
+
+}
+
+// Gets the page's id from a proper name.
+// DONE
+function get_page_id( $name ) {
+  global $DB;
+
+  $name = $DB->real_escape_string( $name );
+
+  $sql = "SELECT id FROM pages WHERE name = '" . $name . "' LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+
+  } else {
+    $row = $res->fetch_assoc(); 
+    return $row['id'];
+  }
+
+}
+
+
 
 // Get the refresh number stored in the config table, unless the page has one specified in the pages table.
 // DONE
@@ -398,7 +472,7 @@ function get_page_background_image() {
 
     global $CFG, $DB;
 
-    $sql = "SELECT background FROM pages WHERE page = '" . $CFG['page'] . "' LIMIT 1;";
+    $sql = "SELECT background FROM pages WHERE id = '" . $CFG['page'] . "' LIMIT 1;";
     $res = $DB->query( $sql );
 
     if ( $res->num_rows == 0 ) {
@@ -418,7 +492,7 @@ function get_status_img() {
 
     global $CFG, $DB;
 
-    $sql = "SELECT img FROM status WHERE name = '" . $CFG['status'] . "';";
+    $sql = "SELECT image FROM status WHERE id = '" . $CFG['status'] . "' LIMIT 1;";
     $res = $DB->query( $sql );
 
     if ( $res->num_rows == 0 ) {
@@ -426,7 +500,7 @@ function get_status_img() {
 
     } else {
         $row = $res->fetch_assoc();
-        return '<img src="' . $CFG['dir']['status'] . 'status-' . $row['img'] . '.png" width="60">' . "\n";
+        return '<img src="' . $CFG['dir']['status'] . $row['image'] . '.png" width="60">' . "\n";
     }
 }
 
@@ -436,7 +510,7 @@ function get_status_txt() {
 
     global $CFG, $DB;
 
-    $sql = "SELECT text FROM status WHERE name = '" . $CFG['status'] . "';";
+    $sql = "SELECT description FROM status WHERE id = '" . $CFG['status'] . "';";
     $res = $DB->query( $sql);
 
     if ( $res->num_rows == 0 ) {

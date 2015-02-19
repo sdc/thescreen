@@ -61,16 +61,18 @@ if ( DEBUG ) {
 
 <?php
 
-if (DEBUG) {
+if ( DEBUG ) {
   echo '<div id="debug">';
   echo '<p>Debugging Info</p>';
   echo 'Page now: '.$page.'.<br>Page next: '.$page_next.'.<br>Def. refresh: '.$def_refresh.'.<br>Next refresh: '.$page_next_refresh.".\n";
   echo '</div>';
 }
 
-$pagename = 'page_' . strtolower( $CFG['page'] ) . '.php';
+
+$pagename = $CFG['dir']['pages'] . get_page_name( $CFG['page'] ) . '/index.php';
 if ( file_exists( $pagename ) ) {
   require_once( $pagename );
+
 } else {
   $error = 'Page not found: ' . $pagename . ' [' . $CFG['page'] . ']';
   error( $error );
