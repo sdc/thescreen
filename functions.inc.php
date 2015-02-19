@@ -435,32 +435,30 @@ function get_rnd_figure() {
 // DONE
 function get_scroller() {
 
+  $feedurl = get_config( 'rssfeed' );
+
   require_once( 'simplepie_1.3.1.mini.php' );
 
   $feed = new SimplePie();
-  $feed->set_feed_url( get_config( 'rssfeed' ) );
+  $feed->set_feed_url( $feedurl );
+  $feed->enable_cache();
   $feed->init();
-  //$feed->handle_content_type();
 
   // The HEIGHT and the WIDTH should match the same details in style.css/#scroller
   // TODO: We're still using a marquee tag? In 2015??
   $build = '<marquee scrollamount="3" height="45" width="1278">';
 
   // Add an image to the start of the feed.
-  $testfeed = get_config( 'rssfeed' );
-  if ( preg_match( '/newsrss.bbc.co.uk/', $testfeed ) ) {
+  if ( preg_match( '/newsrss.bbc.co.uk/', $feedurl ) ) {
       $build .= '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.83.4/orb/4/img/bbc-blocks-light.png" height="25" style="vertical-align: middle;"> ';
 
-  } else if ( preg_match( '/slashdot/', $testfeed ) ) {
+  } else if ( preg_match( '/slashdot/', $feedurl ) ) {
       $build .= '<img src="http://farm3.static.flickr.com/2302/2454530894_f2ca265bde_o.jpg" height="30" style="vertical-align: middle;"> ';
   }
 
-  // Testing.
-  //$build .= $feed->get_title();
-
   foreach ( $feed->get_items() as $item ) {
     // Check for non-empty descriptions.
-    if ( !empty( $item->get_description() ) ) {
+    if ( $item->get_description() != '' ) {
       $build .= $item->get_title() . ': <em>' . $item->get_description() . '</em> &rarr; ' . "\n";
     }
   }
