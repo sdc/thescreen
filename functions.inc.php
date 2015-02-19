@@ -435,34 +435,38 @@ function get_rnd_figure() {
 // DONE
 function get_scroller() {
 
-    require_once( 'simplepie.inc' );
+  require_once( 'simplepie_1.3.1.mini.php' );
 
-    // We'll process this feed with all of the default options.
-    $feed = new SimplePie( get_config( 'rssfeed' ) );
+  $feed = new SimplePie();
+  $feed->set_feed_url( get_config( 'rssfeed' ) );
+  $feed->init();
+  //$feed->handle_content_type();
 
-    // This makes sure that the content is sent to the browser as text/html and the UTF-8 character set (since we didn't change it).
-    $feed->handle_content_type();
+  // The HEIGHT and the WIDTH should match the same details in style.css/#scroller
+  // TODO: We're still using a marquee tag? In 2015??
+  $build = '<marquee scrollamount="3" height="45" width="1278">';
 
-    // The HEIGHT and the WIDTH should match the same details in style.css/#scroller
-    $build = '<marquee scrollamount="3" height="45" width="1278">';
+  // Add an image to the start of the feed.
+  $testfeed = get_config( 'rssfeed' );
+  if ( preg_match( '/newsrss.bbc.co.uk/', $testfeed ) ) {
+      $build .= '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.83.4/orb/4/img/bbc-blocks-light.png" height="25" style="vertical-align: middle;"> ';
 
-    // Add a news-service image to the start of the feed.
-    $testfeed = get_config( 'rssfeed' );
-    if ( preg_match( '/newsrss.bbc.co.uk/', $testfeed ) ) {
-        $build .= '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.83.4/orb/4/img/bbc-blocks-light.png" height="25" style="vertical-align: middle;"> ';
+  } else if ( preg_match( '/slashdot/', $testfeed ) ) {
+      $build .= '<img src="http://farm3.static.flickr.com/2302/2454530894_f2ca265bde_o.jpg" height="30" style="vertical-align: middle;"> ';
+  }
 
-    } else if ( preg_match( '/slashdot/', $testfeed ) ) {
-        $build .= '<img src="http://farm3.static.flickr.com/2302/2454530894_f2ca265bde_o.jpg" height="30" style="vertical-align: middle;"> ';
+  // Testing.
+  //$build .= $feed->get_title();
+
+  foreach ( $feed->get_items() as $item ) {
+    // Check for non-empty descriptions.
+    if ( !empty( $item->get_description() ) ) {
+      $build .= $item->get_title() . ': <em>' . $item->get_description() . '</em> &rarr; ' . "\n";
     }
+  }
 
-    foreach ( $feed->get_items() as $item ) {
-        if ( $item->get_description() != '' ) {
-            // quick check to ensure there's a non-empty description
-            $build .= $item->get_title() . ': <em>' . $item->get_description() . '</em> &rarr; ' . "\n";
-        }
-    }
-    $build .= "</marquee>\n";
-    return $build;
+  $build .= "</marquee>\n";
+  return $build;
 }
 
 
