@@ -55,6 +55,29 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET[
   exit(0);
 }
 
+// Restoring a deleted event.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_restore' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+  if ( restore_event( $_GET['event_id'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was restored successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not restored for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Changing the page.
+// TODO: This setting can be set to anything, regardless of whether or not that page exists!
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GET['page'] ) && !empty( $_GET['page'] ) ) {
+  if ( set_page( $_GET['page'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The page called &ldquo;' . $_GET['page'] . '&rdquo; was set successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'The page called &ldquo;' . $_GET['page'] . '&rdquo; was not set for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
 // Updating the showstopper text.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isset( $_POST['showstopper'] ) && !empty( $_POST['showstopper'] ) ) {
   if ( set_config( 'showstopper', $_POST['showstopper'] ) ) {
@@ -122,8 +145,6 @@ adminlog('manage');
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link href="jquery.jgrowl.css" rel="stylesheet">
-
   <!-- link rel="stylesheet" type="text/css" href="css/style-admin.css" media="screen" -->
 
 </head>
@@ -159,11 +180,11 @@ adminlog('manage');
             </ul>
           </li>
         </ul>
-        <button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button>
+        <!-- button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button -->
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="manage.php">Refresh <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
+          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>">Refresh <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
           <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
-          <!-- li class="active"><a href="logout.php">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li -->
+          <li><a href="logout.php">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>

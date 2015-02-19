@@ -398,7 +398,7 @@ function get_page_background_image() {
 
     global $CFG, $DB;
 
-    $sql = "SELECT bg FROM pages WHERE page = '" . $CFG['page'] . "' LIMIT 1;";
+    $sql = "SELECT background FROM pages WHERE page = '" . $CFG['page'] . "' LIMIT 1;";
     $res = $DB->query( $sql );
 
     if ( $res->num_rows == 0 ) {
@@ -407,7 +407,7 @@ function get_page_background_image() {
 
     } else {
         $row = $res->fetch_assoc();
-        return $row['bg'];
+        return $row['background'];
     }
 }
 

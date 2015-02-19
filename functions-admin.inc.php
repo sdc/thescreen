@@ -8,27 +8,35 @@
 // Makes the page change menu.
 // TODO: Check to see if $pages is valid before using it (same as make_status_change_menu()).
 function make_page_change_menu() {
-  global $CFG;
+  global $CFG, $DB;
 
-  $pages = get_page_array();
+  $sql = "SELECT * FROM pages ORDER BY priority ASC;";
+  $res = $DB->query( $sql );
 
-  $build = '<ul>';
-  foreach ( $pages as $page ) {
+  if ( $res->num_rows == 0 ) {
+      return false;
 
-    $build .= '<li>';
+  } else {
 
-    if ( strtolower( $page ) == $CFG['page'] ) {
-      $build .= '<strong>' . $page . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+    $build = '<ul>';
+    while ( $row = $res->fetch_assoc() ) {
 
-    } else {
-      $build .= '<a href="page_edit.php?page=' . strtolower( $page ) . '">' . $page . '</a>';
+      $build .= '<li>';
+
+      if ( $row['page'] == $CFG['page'] ) {
+        $build .= '<strong>' . $row['pagename'] . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+
+      } else {
+        $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . $row['page'] . '">' . $row['pagename'] . '</a>';
+      }
+
+      $build .= "</li>\n";
     }
 
-    $build .= "</li>\n";
-  }
+    $build .= "</ul>\n";
+    return $build;
 
-  $build .= "</ul>\n";
-  return $build;
+  }
 }
 
 // Get a list of pages as an array.
@@ -52,6 +60,21 @@ function get_page_array() {
     }
 }
 
+// TODO: This function will set a new page ONLY if exists in the pages table. Eventually.
+function set_page( $page ) {
+  global $DB;
+
+  $page = $DB->real_escape_string( $page );
+
+  $sql = "SELECT * FROM pages WHERE page = '" . $page . "' LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+  } else {
+    return set_config( 'page', $page );
+  }
+}
 
 // Get statuses as an array.
 // DONE
@@ -214,7 +237,7 @@ function make_events_menu( $num = 10 ) {
             if ( $row['deleted'] == 0 ) {
                 $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $_SERVER["PHP_SELF"] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
             } else {
-                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="event_undel.php?eid=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $_SERVER["PHP_SELF"] . '?action=event_restore&event_id=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
             }
 
             // Editing button.
@@ -260,6 +283,19 @@ function del_event( $eid ) {
     return $res;
 }
 
+
+// Un-deletes an event.
+function restore_event( $id ) {
+
+    global $DB;
+
+    adminlog( 'restore_event|' . $id );
+
+    $sql = "UPDATE events SET deleted = 0, modified = '" . time() . "' WHERE id = " . $id . ";";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
 
 // Make the form for adding in statistics.
 // DONE
