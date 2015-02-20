@@ -436,7 +436,7 @@ function restore_event( $id ) {
 
 // Make the form for adding in statistics.
 // DONE
-function get_stats_form() {
+/*function get_stats_form() {
 
     global $DB;
 
@@ -476,7 +476,7 @@ function get_stats_form() {
 
         return $build;
     }
-}
+}*/
 
 
 // Edits a stat - but this has been deprecated for a while.

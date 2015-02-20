@@ -163,9 +163,9 @@ adminlog('manage');
     padding-top: 70px;
   }
   .tick { color: #0b0; }
-  .cross { color: #d00; }
-  .edit { color: #337ab7; }
-  .default { color: #777; }
+  .cross, .factoid-delete { color: #d00; }
+  .edit, .factoid-edit { color: #337ab7; }
+  .default, .factoid-hide, .factoid-show, { color: #777; }
   #showstopper_counter { display: inline; }
   </style>
 
@@ -434,9 +434,24 @@ echo get_figures_thumbnails();
       </div>
     </div>
 
+    <!-- Row five. -->
+    <div class="row">
+      <div class="col-md-8">
+        <h2>Factoids</h2>
+        <p>Yeah, the previous one was too complicated. This is not. So far. Hopefully.</p>
+        <p>We need edit <span class="glyphicon glyphicon-pencil factoid-edit" aria-hidden="true"></span> hide <span class="glyphicon glyphicon-eye-close factoid-hide" aria-hidden="true"></span> show <span class="glyphicon glyphicon-eye-open factoid-show" aria-hidden="true"></span> and delete <span class="glyphicon glyphicon-remove factoid-delete" aria-hidden="true"></span> icons, with appropriate colours.</p>
+      </div>
+      <div class="col-md-4">
+        <h2>Refresh Rate (possibly)</h2>
+        <p>Click on the person whose face you want to show, or choose 'random' for a random person each time.</p>
+      </div>
+    </div>
 
-
-
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
 
 
 
@@ -563,10 +578,7 @@ echo get_figures_thumbnails();
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
-
   <script type="text/javascript" src="js/holder.min.js"></script>
-
-  <!-- script type="text/javascript" src="jquery.jgrowl.js"></script -->
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -583,65 +595,12 @@ echo get_figures_thumbnails();
       target: '#showstopper_help'
     });
 
-  //  $('#datepicker').datepicker({ 
-  //    dateFormat: 'yy-mm-dd', 
-  //    firstDay: 1, 
-  //    yearRange: '2010:2011', 
-  //    numberOfMonths: 2
-  //  });
-
-<?php
-/*
-if ( !isset( $_GET['msg'] ) ) {
-  echo '$.jGrowl("Remember: this is live!", { life: 2000 });';
-
-} else {
-  if ($_GET['msg'] == 'event_add_success' ) {
-    $msg='Successfully added an event.';
-  } else if ($_GET['msg'] == 'event_add_fail' ) { 
-    $msg='Failed to add an event.';
-  } else if ($_GET['msg'] == 'event_del_success' ) {
-    $msg='Successfully deleted an event.'; 
-  } else if ($_GET['msg'] == 'event_del_fail' ) { 
-    $msg='Failed to delete an event.';
-  } else if ($_GET['msg'] == 'refresh_edit_success' ) { 
-    $msg='Successfully edited the refresh period.';
-  } else if ($_GET['msg'] == 'refresh_edit_fail' ) { 
-    $msg='Failed to edit the refresh period.';
-  } else if ($_GET['msg'] == 'status_edit_success' ) { 
-    $msg='Successfully changed the status.';
-  } else if ($_GET['msg'] == 'status_edit_fail' ) { 
-    $msg='Failed to change the status.';
-  } else if ($_GET['msg'] == 'rssfeed_edit_success' ) { 
-    $msg='Successfully changed the RSS feed.';
-  } else if ($_GET['msg'] == 'rssfeed_edit_fail' ) { 
-    $msg='Failed to change the RSS feed.';
-  } else if ($_GET['msg'] == 'showstopper_edit_success' ) { 
-    $msg='Successfully changed the Showstopper text.';
-  } else if ($_GET['msg'] == 'showstopper_edit_fail' ) { 
-    $msg='Failed to change the Showstopper text.';
-  } else if ($_GET['msg'] == 'stat_edit_success' ) { 
-    $msg='Successfully changed the stat text.';
-  } else if ($_GET['msg'] == 'stat_edit_fail' ) { 
-    $msg='Failed to change the stat text.';
-  } else if ($_GET['msg'] == 'statoids_make' ) { 
-    $msg='Made combined stats/factiods (statoids) table.';
-  } else if ($_GET['msg'] == 'page_edit_success' ) { 
-    $msg='Successfully changed the page.';
-  } else if ($_GET['msg'] == 'page_edit_fail' ) { 
-    $msg='Failed to change the page.';
-  } else if ($_GET['msg'] == 'figure_edit_success' ) { 
-    $msg='Successfully changed the specific figure.';
-  } else if ($_GET['msg'] == 'figure_edit_fail' ) { 
-    $msg='Failed to change the specific figure.';
-  }
-
-  if ($msg != '') { 
-    echo '$.jGrowl("'.$msg.'", { life: 4000 });'."\n";
-  }
-}
-*/
-?>
+//    $('#datepicker').datepicker({ 
+//      dateFormat: 'yy-mm-dd', 
+//      firstDay: 1, 
+//      yearRange: '2010:2011', 
+//      numberOfMonths: 2
+//    });
 
   });
   </script>
