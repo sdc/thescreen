@@ -30,52 +30,24 @@ if ( isset( $_POST ) && !empty( $_POST ) ) {
 if ( isset( $_GET ) && !empty( $_GET ) ) {
   echo '<p>GET:</p><pre>'; var_dump( $_GET ); echo '</pre>';
 }
+//if ( isset( $_SESSION['alerts'] ) && !empty( $_SESSION['alerts'] ) ) {
+//  echo '<p>SESSION[\'alerts\']:</p><pre>'; var_dump( $_SESSION['alerts'] ); echo '</pre>';
+//}
 
 
 /**
  * Before loading the page proper, check to see if any $_POST or $_GET are set, and deal with it.
  */
 
-// Adding a new event.
-if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_POST['event_date'] ) && !empty( $_POST['event_date'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
-  if ( add_event( $_POST['event_date'], $_POST['event_description'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was created successfully.' );
-  } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was not added for some reason.' );
-  }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
-  exit(0);
-}
-
-// Deleting an event.
-if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
-  if ( del_event( $_GET['event_id'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was deleted.' );
-  } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
-  }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
-  exit(0);
-}
-
-// Restoring a deleted event.
-if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_restore' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
-  if ( restore_event( $_GET['event_id'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was restored successfully.' );
-  } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not restored for some reason.' );
-  }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
-  exit(0);
-}
-
 // Changing the page.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GET['page'] ) && !empty( $_GET['page'] ) && is_numeric( $_GET['page'] ) ) {
   if ( update_check( 'pages', $_GET['page'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was set successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was set successfully.' );
+    // TODO: Proposed change: 
+    //$_SESSION['alerts'][] = array( 'type' => 'success', 'text' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was set successfully.', 'timeout' => 3000 );
     set_change();
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was not set for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was not set for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -84,13 +56,46 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GE
 // Changing the status.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'status_change' && isset( $_GET['status'] ) && !empty( $_GET['status'] ) && is_numeric( $_GET['status'] ) ) {
   if ( update_check( 'status', $_GET['status'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was set successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was set successfully.' );
     // If the showstopper page is set when the showstopper text is changed, update the page.
     if ( get_config( 'page' ) == get_id( 'pages', 'standard' ) ) {
       set_change();
     }
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was not set for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was not set for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Adding a new event.
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_POST['event_date'] ) && !empty( $_POST['event_date'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
+  if ( add_event( $_POST['event_date'], $_POST['event_description'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was created successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was not added for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Deleting an event.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+  if ( del_event( $_GET['event_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was deleted.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Restoring a deleted event.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_restore' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+  if ( restore_event( $_GET['event_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was restored successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not restored for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -99,13 +104,13 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'status_change' && isset( $_
 // Updating the showstopper text.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isset( $_POST['showstopper'] ) && !empty( $_POST['showstopper'] ) ) {
   if ( set_config( 'showstopper', $_POST['showstopper'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was updated successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was updated successfully.' );
     // If the showstopper page is set when the showstopper text is changed, update the page.
     if ( get_config( 'page' ) == get_id( 'pages', 'showstopper' ) ) {
       set_change();
     }
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was not updated for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was not updated for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -114,14 +119,14 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isse
 // Updating the RSS feed URL.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isset( $_POST['rssfeed_url'] ) && !empty( $_POST['rssfeed_url'] ) ) {
   if ( set_config( 'rssfeed', $_POST['rssfeed_url'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was updated successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was updated successfully.' );
     // If the default page is set when the rss feed URL is changed, update the page.
     //if ( get_config( 'page' ) == get_default( 'pages' ) ) {
     if ( get_config( 'page' ) == get_id( 'pages', 'standard' ) ) {
       set_change();
     }
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was not updated for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was not updated for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -130,13 +135,13 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isse
 // Updating the RSS feed URL from a preset.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $_GET['rssfeed_preset_url'] ) && !empty( $_GET['rssfeed_preset_url'] ) ) {
   if ( set_config( 'rssfeed', $_GET['rssfeed_preset_url'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was updated successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was updated successfully.' );
     // If the default page is set when the rss feed URL preset is changed, update the page.
     if ( get_config( 'page' ) == get_default( 'pages' ) ) {
       set_change();
     }
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was not updated for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was not updated for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -145,10 +150,10 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $
 // Updating the random / specific figure.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'figure_change' && isset( $_GET['figure_filename'] ) && !empty( $_GET['figure_filename'] ) && isset( $_GET['figure_name'] ) && !empty( $_GET['figure_name'] ) ) {
   if ( set_config( 'specific_fig', $_GET['figure_filename'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; was updated successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; was updated successfully.' );
     set_change();
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; (' . $_GET['figure_filename'] . ') was not updated for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; (' . $_GET['figure_filename'] . ') was not updated for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -157,9 +162,21 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'figure_change' && isset( $_
 // Forcing a page refresh.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'refresh_main' ) {
   if ( set_change() ) {
-    $_SESSION['alerts'] = array( 'success' => 'The main page will refresh now.' );
+    $_SESSION['alerts'][] = array( 'success' => 'The main page will refresh now.' );
   } else {
-    $_SESSION['alerts'] = array( 'danger' => 'The main page could not be set to refresh for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'The main page could not be set to refresh for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Forcing the defaults into the database (a 'full reset').
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'full_reset' ) {
+  if ( $tmp = force_default() ) {
+    $_SESSION['alerts'][] = array( 'success' => $tmp );
+    set_change();
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The full reset didn\'t work for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
@@ -196,9 +213,9 @@ adminlog('manage');
   /* Green. */
   .tick { color: #0b0; }
   /* Red. */
-  .cross, .factoid-delete { color: #d00; }
+  .cross, .factoid-delete, .ts-warning { color: #d00; }
   /* Light blue. */
-  .edit, .factoid-edit { color: #337ab7; }
+  .edit, .factoid-edit, .ts-info { color: #38b; }
   /* Grey. */
   .default { color: #777; }
   /* Light grey. */
@@ -235,21 +252,23 @@ adminlog('manage');
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <!-- li class="active"><a href="#">Home</a></li -->
-          <li><a href="#about">About</a></li>
+          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
+              <li><a href="#">About (modal)</a></li>
               <li class="divider"></li>
-              <li class="dropdown-header">Nav header</li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li>
+              <li class="dropdown-header">Development stuff</li>
+              <li><a target="_blank" href="http://getbootstrap.com/css/">Get Bootstrap</a></li>
+              <li><a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome icons</a></li>
+              <li class="divider"></li>
+              <li class="dropdown-header">Site Operations</li>
+              <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=full_reset">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
           </li>
         </ul>
         <!-- button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button -->
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>">Reload this page <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
           <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
           <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=refresh_main">Refresh main screen <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
           <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=logout">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
@@ -260,19 +279,16 @@ adminlog('manage');
 
   <div class="container">
 
-    <!-- Any alerts we have will pop up here. -->
-    <!-- div class="alert alert-success alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <strong>Dental Plan!</strong> Lisa needs braces.
-    </div -->
 <?php
 
 if ( isset( $_SESSION['alerts'] ) ) {
-  foreach ( $_SESSION['alerts'] as $alert => $text ) {
-    echo '    <div class="alert alert-' . $alert . ' alert-dismissible" role="alert">' . "\n";
-    echo '      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . "\n";
-    echo '      ' . $text . "\n";
-    echo '    </div>' . "\n";
+  foreach ( $_SESSION['alerts'] as $alert ) {
+    foreach ( $alert as $alert_type => $alert_text ) {
+      echo '    <div class="alert alert-' . $alert_type . ' alert-dismissible alert-' . $alert_type . '-fade" role="alert">' . "\n";
+      echo '      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . "\n";
+      echo '      ' . $alert_text . "\n";
+      echo '    </div>' . "\n";
+    }
   }
   unset( $_SESSION['alerts'] );
 }
@@ -305,7 +321,7 @@ if ( isset( $_SESSION['alerts'] ) ) {
     <!-- Row two. -->
     <div class="row">
       <div class="col-md-4">
-        <h2>Page Type</h2>
+        <h2>Page Type <small><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-question-circle"></i></a></small></h2>
 
 <?php
 
@@ -326,7 +342,7 @@ echo make_page_change_menu();
 ?>
       </div>
       <div class="col-md-4">
-        <h2>Current Status</h2>
+        <h2>Current Status <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
 <?php
 
 echo default_page_warning_status();
@@ -343,7 +359,7 @@ echo make_status_change_menu();
       </div>
 
       <div class="col-md-4">
-        <h2>Events</h2>
+        <h2>Events <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
         <p>All future events (events which have passed are not shown).</p>
         <p>Delete an event by clicking the <span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span>. 
         The event will become greyed out, and can be un-deleted by clicking the <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>. 
@@ -569,7 +585,11 @@ echo get_figures_thumbnails();
 
   </div> <!-- /container -->
 
+<?php
 
+echo help_modals();
+
+?>
 
 
 
@@ -631,8 +651,12 @@ echo get_figures_thumbnails();
   $(document).ready(function(){
 
     window.setTimeout(function() { 
-      $(".alert-success").fadeTo(800, 0).slideUp(500);
+      $(".alert-success-fade").fadeTo(800, 0).slideUp(500);
     }, 5000);
+
+    window.setTimeout(function() { 
+      $(".alert-info-fade").fadeTo(800, 0).slideUp(500);
+    }, 2000);
 
     $("#showstopper").counter({
       count:  'down',

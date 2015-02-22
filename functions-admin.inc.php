@@ -601,10 +601,48 @@ function logout() {
   exit(0);
 }
 
+function force_default() {
+  global $CFG;
+
+  $out = 'Full reset performed: <ul>';
+  foreach ( $CFG['defaults'] as $setting => $value ) {
+    if ( set_config( $setting, $value ) ) {
+      $out .= '<li>Set <strong>' . $setting . '</strong> to <strong>' . $value . '</strong>.</li>';
+    } else {
+      $out .= '<li>Could not set <strong>' . $setting . '</strong> to <strong>' . $value . '</strong> for some reason.</li>';
+    }
+  }
+  $out .= '</ul>';
+
+  return $out;
+}
+
 // Set the config settings 'changes' to yes.
 function set_change() {
-  $_SESSION['alerts'][] = array( 'success' => 'The main page will refresh in a moment.' );
+  $_SESSION['alerts'][] = array( 'info' => 'The main page will refresh in a moment.' );
   return set_config( 'changes', 'yes' );
+}
+
+function help_modals() {
+?>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          <p>Stuff! and Things!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">Got it!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
 }
 
 /**
