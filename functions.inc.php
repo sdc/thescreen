@@ -511,6 +511,7 @@ function get_data_from_file( $file, $type = '' ) {
 
 // Makes the page change menu.
 // DONE
+// TODO: Check to see if $pages is valid before using it (same as make_status_change_menu()).
 function make_page_change_menu() {
 
     $pages = get_page_array();
@@ -522,20 +523,13 @@ function make_page_change_menu() {
         $build .= '<li>';
 
         if ( $page == $curr_page ) {
-            $build .= '<strong>';
+            $build .= '<strong>' . ucfirst($page) . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+
         } else {
-            $build .= '<a href="page_edit.php?page=' . $page . '">';
+            $build .= '<a href="page_edit.php?page=' . $page . '">' . ucfirst($page) . '</a>';
         }
 
-        $build .= ucfirst($page);
-
-        if ( $page == $curr_page ) {
-            $build .= '</strong> (Current)';
-        } else {
-            $build .= '</a>';
-        }
-
-        $build .= '</li>';
+        $build .= "</li>\n";
     }
 
     $build .= "</ul>\n";
@@ -619,20 +613,12 @@ function make_status_change_menu() {
             $build .= '<li>';
 
             if ($status == $curr_status) {
-                $build .= '<strong>';
+                $build .= '<strong>' . ucfirst($status) . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
             } else {
-                $build .= '<a href="status_edit.php?status=' . $status . '">';
+                $build .= '<a href="status_edit.php?status=' . $status . '">' . ucfirst($status) . '</a>';
             }
 
-            $build .= ucfirst($status);
-
-            if ($status == $curr_status) {
-                $build .= '</strong> (Current)';
-            } else {
-                $build .= '</a>';
-            }
-
-            $build .= '</li>';
+            $build .= "</li>\n";
         }
 
         $build .= "</ul>\n";
@@ -653,7 +639,7 @@ function get_events( $num = 3, $edit = false ) {
     $now = time();
     $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
 
-    $sql = "SELECT id, start, text FROM events WHERE start >= '" . $today . "' AND deleted = 0 ORDER BY start ASC, id ASC LIMIT " . $num . ";";
+    $sql = "SELECT id, start, text, deleted FROM events WHERE start >= '" . $today . "' ORDER BY start ASC, id ASC LIMIT " . $num . ";";
     $res = $DB->query( $sql );
 
     if ( $res->num_rows == 0) {
@@ -665,11 +651,21 @@ function get_events( $num = 3, $edit = false ) {
 
         while ( $row = $res->fetch_assoc() ) {
             $db_date = $row['start'];
-            $disp_date = date( 'jS M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
-            $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . '</em>';
+            $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
+            
+            // Extra styling for deleted events
+            if ( $row['deleted'] == 0 ) {
+                $build .= '<li>' . $disp_date . ': ' . $row['text'];
+            } else {
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del>';
+            }
 
             if ( $edit == true ) {
-                $build .= ' [ <a href="event_del.php?eid=' . $row['id'] . '">del</a> ]';
+                if ( $row['deleted'] == 0 ) {
+                    $build .= ' <a href="event_del.php?eid=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
+                } else {
+                    $build .= ' <a href="event_undel.php?eid=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
+                }
             }
 
             $build .= "</li>\n";

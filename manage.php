@@ -38,6 +38,8 @@ adminlog('manage');
   body {
     padding-top: 70px;
   }
+  .tick { color: #0b0; }
+  .cross { color: #d00; }
   </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -55,7 +57,7 @@ adminlog('manage');
 <body>
 
   <!-- Fixed navbar -->
-  <nav class="navbar navbar-default navbar-fixed-top">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -84,10 +86,11 @@ adminlog('manage');
             </ul>
           </li>
         </ul>
+        <button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="manage.php">Refresh <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
           <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
-          <li class="active"><a href="logout.php">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+          <!-- li class="active"><a href="logout.php">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li -->
         </ul>
       </div><!--/.nav-collapse -->
     </div>
@@ -140,7 +143,8 @@ echo make_status_change_menu();
       </div>
       <div class="col-md-4">
         <h2>Events</h2>
-        <p>All future events: (events which have passed are not shown)</p>
+        <p>All future events (events which have passed are not shown).</p>
+        <p>Delete an event by clicking the red cross. The event will become greyed out, and can be un-deleted by clicking the green tick.</p>
 <?php echo get_events( 10, true ); ?>
         <hr>
         <h4>Add new event:</h4>
@@ -313,6 +317,12 @@ echo make_status_change_menu();
   <script type="text/javascript" src="jquery.counter-1.0.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
+
+    window.setTimeout(function() { 
+      //$(".alert-success").alert('close'); 
+      $(".alert-success").fadeTo(800, 0).slideUp(500);
+    }, 5000);
+
   //  $('#datepicker').datepicker({ 
   //    dateFormat: 'yy-mm-dd', 
   //    firstDay: 1, 
