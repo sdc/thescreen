@@ -434,7 +434,7 @@ function get_status_img() {
 // DONE
 function get_status_txt() {
 
-    global $DB;
+    global $CFG, $DB;
 
     $sql = "SELECT text FROM status WHERE name = '" . $CFG['status'] . "';";
     $res = $DB->query( $sql);
