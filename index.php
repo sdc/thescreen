@@ -23,9 +23,6 @@ require_once( 'functions.inc.php' );
 // Setup variables and all that
 define( 'DEBUG', false );       // set debugging as appropriate
 
-
-$CFG['page'] = get_config('page');     // a variable with the current page's name in it
-
 // log it
 adminlog( 'pageload_' . $CFG['page'] );
 

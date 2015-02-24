@@ -19,7 +19,8 @@ $CFG['db']['time']      = date( "Y-m-d H:i:s", time()) ;
 
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
-$CFG['lang']['title']   = 'The Screen&trade; Management';
+// App's name.
+$CFG['lang']['title']   = 'The Screen&trade; Admin';
 
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
@@ -99,6 +100,9 @@ if ( !get_config( 'specific_fig' ) ) {
     }
 }
 
+// The current page's name.
+$CFG['page']    = get_config( 'page' );
+$CFG['status']  = get_config( 'status' );
 
 /**
  * Refresh (recreate) the statoids table approx 1 in every 12 page reloads.
@@ -139,16 +143,15 @@ function get_config( $item ) {
 // Sets the configuration.
 // DONE
 function set_config( $item, $value, $init = false ) {
-
     global $DB;
 
     adminlog( 'set_config|' . $item . '|' . $value );
     $value = $DB->real_escape_string( $value );
 
     if ( $init ) {
-        $sql = "INSERT INTO config (item, value) VALUES ('" . $item . "', '" . $value . "');";
+        $sql = "INSERT INTO config (item, value, created, modified) VALUES ('" . $item . "', '" . $value . "', '" . time() . "', '" . time() . "');";
     } else {
-        $sql = "UPDATE config SET value = '" . $value . "' WHERE item = '" . $item . "' LIMIT 1;";
+        $sql = "UPDATE config SET value = '" . $value . "', modified = '" . time() . "' WHERE item = '" . $item . "' LIMIT 1;";
     }
 
     $res = $DB->query( $sql );
@@ -391,7 +394,7 @@ function get_scroller() {
 
 // Get this page's background image.
 // DONE
-function get_page_bg() {
+function get_page_background_image() {
 
     global $CFG, $DB;
 
@@ -409,19 +412,13 @@ function get_page_bg() {
 }
 
 
-// Get the current status from the database.
-// DONE
-function get_status() {
-    return get_config( 'status' );
-}
-
 // Get this status' image, depending on what the current status is.
 // DONE
 function get_status_img() {
 
     global $CFG, $DB;
 
-    $sql = "SELECT img FROM status WHERE name = '" . get_status() . "';";
+    $sql = "SELECT img FROM status WHERE name = '" . $CFG['status'] . "';";
     $res = $DB->query( $sql );
 
     if ( $res->num_rows == 0 ) {
@@ -439,7 +436,7 @@ function get_status_txt() {
 
     global $DB;
 
-    $sql = "SELECT text FROM status WHERE name = '" . get_status() . "';";
+    $sql = "SELECT text FROM status WHERE name = '" . $CFG['status'] . "';";
     $res = $DB->query( $sql);
 
     if ( $res->num_rows == 0 ) {

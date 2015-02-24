@@ -20,7 +20,7 @@ define('BORDER', false);        // For debugging only.
 
 body {
     padding: 0; margin: 0;
-    background-image: url('<?php echo $CFG['dir']['bg'].get_page_bg(); ?>');
+    background-image: url('<?php echo $CFG['dir']['bg'].get_page_background_image(); ?>');
     background-position: top left;
     background-repeat: no-repeat;
     background-color: #235;

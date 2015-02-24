@@ -4,25 +4,31 @@
  * Database functions (and variables) for the administrative side of things.
  */
 
-// Get statuses as an array.
-// DONE
-function get_status_array() {
 
-    global $DB;
+// Makes the page change menu.
+// TODO: Check to see if $pages is valid before using it (same as make_status_change_menu()).
+function make_page_change_menu() {
+  global $CFG;
 
-    $sql = "SELECT name FROM status ORDER BY priority ASC;";
-    $res = $DB->query( $sql );
+  $pages = get_page_array();
 
-    if ( $res->num_rows == 0 ) {
-        return false;
+  $build = '<ul>';
+  foreach ( $pages as $page ) {
+
+    $build .= '<li>';
+
+    if ( strtolower( $page ) == $CFG['page'] ) {
+      $build .= '<strong>' . $page . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
 
     } else {
-        $value = array();
-        while ( $row = $res->fetch_assoc() ) {
-            $value[] = $row['name'];
-        }
-        return $value;
+      $build .= '<a href="page_edit.php?page=' . strtolower( $page ) . '">' . $page . '</a>';
     }
+
+    $build .= "</li>\n";
+  }
+
+  $build .= "</ul>\n";
+  return $build;
 }
 
 // Get a list of pages as an array.
@@ -41,6 +47,28 @@ function get_page_array() {
         $value = array();
         while ( $row = $res->fetch_assoc() ) {
             $value[] = $row['page'];
+        }
+        return $value;
+    }
+}
+
+
+// Get statuses as an array.
+// DONE
+function get_status_array() {
+
+    global $DB;
+
+    $sql = "SELECT name FROM status ORDER BY priority ASC;";
+    $res = $DB->query( $sql );
+
+    if ( $res->num_rows == 0 ) {
+        return false;
+
+    } else {
+        $value = array();
+        while ( $row = $res->fetch_assoc() ) {
+            $value[] = $row['name'];
         }
         return $value;
     }
@@ -127,35 +155,6 @@ function get_data_from_file( $file, $type = '' ) {
 */
 
 
-// Makes the page change menu.
-// DONE
-// TODO: Check to see if $pages is valid before using it (same as make_status_change_menu()).
-function make_page_change_menu() {
-
-    $pages = get_page_array();
-    $curr_page = get_config( 'page' );
-
-    $build = '<ul>';
-    foreach ( $pages as $page ) {
-
-        $build .= '<li>';
-
-        if ( $page == $curr_page ) {
-            $build .= '<strong>' . ucfirst($page) . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
-
-        } else {
-            $build .= '<a href="page_edit.php?page=' . $page . '">' . ucfirst($page) . '</a>';
-        }
-
-        $build .= "</li>\n";
-    }
-
-    $build .= "</ul>\n";
-    return $build;
-}
-
-
-
 // Makes the status change menu.
 // DONE
 function make_status_change_menu() {
@@ -213,16 +212,13 @@ function make_events_menu( $num = 10 ) {
             
             // Extra styling for deleted events
             if ( $row['deleted'] == 0 ) {
-                $build .= '<li>' . $disp_date . ': ' . $row['text'];
+                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $_SERVER["PHP_SELF"] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
             } else {
-                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del>';
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="event_undel.php?eid=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
             }
 
-            if ( $row['deleted'] == 0 ) {
-                $build .= ' <a href="' . $_SERVER["PHP_SELF"] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
-            } else {
-                $build .= ' <a href="event_undel.php?eid=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
-            }
+            // Editing button.
+            $build .= ' <a href="' . $_SERVER["PHP_SELF"] . '?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
 
             $build .= "</li>\n";
         }
@@ -258,7 +254,7 @@ function del_event( $eid ) {
 
     adminlog( 'del_event|' . $eid );
 
-    $sql = "UPDATE events SET deleted = 1 WHERE id = " . $eid . ";";
+    $sql = "UPDATE events SET deleted = 1, modified = '" . time() . "' WHERE id = " . $eid . ";";
     $res = $DB->query( $sql );
 
     return $res;
@@ -349,6 +345,67 @@ function get_last_log( $no = 10) {
 
     return $build;
 }
+
+// Checks to see if this is the default page (on the page menu), and if not, a little warning.
+function default_page_warning_page() {
+  global $CFG;
+
+  $out = '';
+  if ( $CFG['page'] != 'default' ) {
+    $out .= '<div class="alert alert-info" role="alert">' . "\n";
+    $out .= '  <strong>Info:</strong> The default page is not set for some reason, which may be intentional. <a href="page_edit.php?page=default" class="alert-link">Click here to reset the page to default</a>.' . "\n";
+    $out .=  "</div>\n";
+  }
+
+  return $out;
+}
+
+// Checks to see if this is the default page (on the status menu), and if not, a little warning.
+function default_page_warning_status() {
+  global $CFG;
+
+  $out = '';
+  if ( $CFG['page'] != 'default' ) {
+    $out .= '<div class="alert alert-warning" role="alert">' . "\n";
+    $out .= '  <strong>Note!</strong> These options only change the <strong>default</strong> page, which is not currently set. <!-- <a href="page_edit.php?page=default" class="alert-link">Click here to reset the page to default</a>. -->' . "\n";
+    $out .= "</div>\n";
+  }
+
+  return $out;
+}
+
+// Checks to see if this is the default page (on the status menu), and if not, a little warning.
+function default_status_warning() {
+  global $CFG;
+
+  $out = '';
+  if ( $CFG['status'] != 'ok' ) {
+    $out .= '<div class="alert alert-info" role="alert">' . "\n";
+    $out .= '  <strong>Info:</strong> The default status of &ldquo;ok&rdquo; is not set for some reason, which may be intentional. <a href="status_edit.php?status=ok" class="alert-link">Click here to reset the status to &ldquo;ok&rdquo;</a>.' . "\n";
+    $out .= "</div>\n";
+  }
+
+  return $out;
+}
+
+// Checks to see if this is the default page (on the status menu), and if not, a little warning.
+function showstopper_page_warning() {
+  global $CFG;
+
+  $out = '';
+  if ( $CFG['page'] != 'showstopper' ) {
+    $out .= '<div class="alert alert-warning" role="alert">' . "\n";
+    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="page_edit.php?page=showstopper" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
+    $out .= "</div>\n";
+  } else {
+    $out .= '<div class="alert alert-info" role="alert">' . "\n";
+    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="page_edit.php?page=default" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default page.' . "\n";
+    $out .= "</div>\n";
+  }
+
+  return $out;
+}
+
 
 
 /**

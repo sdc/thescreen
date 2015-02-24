@@ -20,32 +20,73 @@ if ( !isset( $_SESSION['loggedin'] ) ) {
     exit(0);
 }
 
+// Debugging.
+if ( isset( $_POST ) && !empty( $_POST ) ) {
+  echo '<p>POST:</p><pre>'; var_dump( $_POST ); echo '</pre>';
+}
+if ( isset( $_GET ) && !empty( $_GET ) ) {
+  echo '<p>GET:</p><pre>'; var_dump( $_GET ); echo '</pre>';
+}
+
+
 /**
- * Before loading the page proper, check to see if any $_POST is set, and deal with it.
+ * Before loading the page proper, check to see if any $_POST or $_GET are set, and deal with it.
  */
 
 // Adding a new event.
-if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_POST['date'] ) && !empty( $_POST['date'] ) && isset( $_POST['text'] ) && !empty( $_POST['text'] ) ) {
-  if ( add_event( $_POST['date'], $_POST['text'] ) ) {
-    $_SESSION['alerts'] = array( 'success' => 'The event &ldquo;' . $_POST['text'] . '&rdquo; was created successfully.' );
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_POST['event_date'] ) && !empty( $_POST['event_date'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
+  if ( add_event( $_POST['event_date'], $_POST['event_description'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was created successfully.' );
   } else {
-    $_SESSION['alerts'] = array( 'error' => 'The event &ldquo;' . $_POST['text'] . '&rdquo; was not added for some reason.' );
+    $_SESSION['alerts'] = array( 'danger' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was not added for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
 }
 
-
+// Deleting an event.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
   if ( del_event( $_GET['event_id'] ) ) {
     $_SESSION['alerts'] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was deleted.' );
   } else {
-    $_SESSION['alerts'] = array( 'error' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
+    $_SESSION['alerts'] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
   }
   header( 'location: ' . $_SERVER["PHP_SELF"] );
   exit(0);
 }
 
+// Updating the showstopper text.
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isset( $_POST['showstopper'] ) && !empty( $_POST['showstopper'] ) ) {
+  if ( set_config( 'showstopper', $_POST['showstopper'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was updated successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was not updated for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Updating the RSS feed URL.
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isset( $_POST['rssfeed_url'] ) && !empty( $_POST['rssfeed_url'] ) ) {
+  if ( set_config( 'rssfeed', $_POST['rssfeed_url'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was updated successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was not updated for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
+// Updating the RSS feed URL.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $_GET['rssfeed_preset_url'] ) && !empty( $_GET['rssfeed_preset_url'] ) ) {
+  if ( set_config( 'rssfeed', $_GET['rssfeed_preset_url'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was updated successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was not updated for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
 
 adminlog('manage');
 
@@ -71,6 +112,8 @@ adminlog('manage');
   }
   .tick { color: #0b0; }
   .cross { color: #d00; }
+  .edit { color: #337ab7; }
+  #showstopper_counter { display: inline; }
   </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -79,7 +122,6 @@ adminlog('manage');
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link href="jquery-ui-1.7.2.custom.css" rel="stylesheet">
   <link href="jquery.jgrowl.css" rel="stylesheet">
 
   <!-- link rel="stylesheet" type="text/css" href="css/style-admin.css" media="screen" -->
@@ -157,6 +199,7 @@ if ( isset( $_SESSION['alerts'] ) ) {
       </p>
     </div --><!-- END jumbotron. -->
 
+    <!-- Row one. -->
     <div class="row">
       <div class="col-md-12">
         <h1>Last Logged In</h1>
@@ -174,35 +217,75 @@ if ( isset( $_SESSION['alerts'] ) ) {
     <div class="row">
       <div class="col-md-4">
         <h2>Page Type</h2>
-        <p>Change the page type:</p>
+
 <?php
+
+echo default_page_warning_page();
+
+?>
+          <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+              <p><img src="<?php echo $CFG['dir']['bg'] . '/' . get_page_background_image(); ?>" alt="Current page in use" class="img-thumbnail"></p>
+            </div>
+          </div>
+
+          <p>Change the page type:</p>
+<?php
+
 echo make_page_change_menu();
+
 ?>
       </div>
       <div class="col-md-4">
-        <h2>Current status</h2>
-        <p>Only valid if the page is set to <strong>Default</strong>. Change status to:</p>
+        <h2>Current Status</h2>
 <?php
+
+echo default_page_warning_status();
+
+echo default_status_warning();
+
+?>
+        <p>Change status to:</p>
+<?php
+
 echo make_status_change_menu();
+
 ?>
       </div>
+
       <div class="col-md-4">
         <h2>Events</h2>
         <p>All future events (events which have passed are not shown).</p>
-        <p>Delete an event by clicking the red cross. The event will become greyed out, and can be un-deleted by clicking the green tick.</p>
+        <p>Delete an event by clicking the <span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span>. 
+        The event will become greyed out, and can be un-deleted by clicking the <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>. 
+        Edit an event by clicking the <span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span>.</p>
 <?php
+
 echo make_events_menu();
+
 ?>
         <hr>
-        <h4>Add new event:</h4>
+        <h3>Add a new event</h3>
+        <p>Use the basic form, below, to specify an date and description for a new event.</p>
+
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
           <input type="hidden" name="action" value="event_add">
-          Date:
-          <input type="text" name="date" id="datepicker">
-          <br> Details:
-          <input type="text" name="text" size="50" maxlength="255">
-          <input type="submit" value="Add event">
+
+          <div class="form-group">
+            <label for="event_date">Event date</label>
+            <input type="date" class="form-control" id="event_date" name="event_date" placeholder="Enter date" aria-describedby="event_date_help">
+            <span id="event_date_help" class="help-block">Use the 'date picker' tools to the right (when you hover over the text box).</span>
+          </div>
+
+          <div class="form-group">
+            <label for="event_description">Event description</label>
+            <input type="text" class="form-control" id="event_description" name="event_description" placeholder="Enter event details" aria-describedby="event_description_help">
+            <span id="event_description_help" class="help-block">Be concise! We don't have much space to work with.</span>
+          </div>
+
+          <button type="submit" class="btn btn-info">Submit</button>
         </form>
+
       </div>
 
     </div>
@@ -212,6 +295,76 @@ echo make_events_menu();
         <hr>
       </div>
     </div>
+
+    <!-- Row three. -->
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Showstopper Text</h2>
+
+<?php
+
+echo showstopper_page_warning();
+
+?>
+
+        <p>Text for the Showstopper page. You have *about* 170 characters maximum.</p>
+
+        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+          <input type="hidden" name="action" value="showstopper_edit">
+
+          <div class="form-group">
+            <label for="showstopper">Showstopper text</label>
+            <textarea id="showstopper" name="showstopper" class="form-control" rows="3" aria-describedby="showstopper_help"><?php echo get_config('showstopper'); ?></textarea>
+            <span id="showstopper_help" class="help-block">Don't use any formatting. Will appear in UPPERCASE.</span>
+          </div>
+
+          <button type="submit" class="btn btn-info">Update</button>
+        </form>
+
+      </div>
+
+      <div class="col-md-6">
+        <h2>RSS Feed</h2>
+
+        <p>URL of the RSS feed for the scroller.</p>
+
+        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+          <input type="hidden" name="action" value="rssfeed_url_edit">
+
+          <div class="form-group">
+            <label for="rssfeed_url">RSS feed URL</label>
+            <input type="text" class="form-control" id="rssfeed_url" name="rssfeed_url" value="<?php echo get_config('rssfeed'); ?>"placeholder="Enter RSS feed URL..." aria-describedby="rssfeed_url_help">
+            <span id="rssfeed_url_help" class="help-block">Enter the full URL of the RSS feed you want to show.</span>
+          </div>
+
+          <button type="submit" class="btn btn-info">Submit</button>
+        </form>
+
+        <h3>Choose a preset</h3>
+        <ul>
+            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
+            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
+            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
+            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
+            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
+            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+
+
+
+
+
+
 
 
 
@@ -230,6 +383,13 @@ echo make_events_menu();
 
 
   </div> <!-- /container -->
+
+
+
+
+
+
+
 
 
 
@@ -290,24 +450,6 @@ echo make_events_menu();
                     </ul>
                 </td>
 
-                <!-- RSS feed stuff -->
-                <td>
-                    <h2>RSS Feed</h2>
-                    <p>Location (URL) of the RSS feed for the scroller.</p>
-                    <form action="rssfeed_edit.php" method="get">
-                        RSS Feed location (URL):
-                        <input type="text" value="<?php echo get_config('rssfeed'); ?>" name="rssfeed" size="50" maxlength="100">
-                        <input type="submit" value="Set">
-                    </form>
-                    <ul>
-                        <li><a href="rssfeed_edit.php?rssfeed=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (Default)</li>
-                        <li><a href="rssfeed_edit.php?rssfeed=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
-                        <li><a href="rssfeed_edit.php?rssfeed=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
-                        <li><a href="rssfeed_edit.php?rssfeed=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
-                        <li><a href="rssfeed_edit.php?rssfeed=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
-                        <li><a href="rssfeed_edit.php?rssfeed=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
-                    </ul>
-                </td>
             </tr>
             <tr>
                 <!-- stats -->
@@ -317,15 +459,6 @@ echo make_events_menu();
                     <table id="stats">
                         <?php echo get_stats_form(); ?>
                     </table>
-                </td>
-                <!-- showstopper -->
-                <td id="showstopper">
-                    <h2>Showstopper Text</h2>
-                    <p>Text required for the 'showstopper' screen. Don't use any formatting. Will appear in UPPERCASE. You have *about* 170 characters maximum.</p>
-                    <form action="showstopper_edit.php" method="get">
-                        <textarea id="showstopper_textbox" name="showstopper" cols="50" rows="4"><?php echo get_config('showstopper'); ?></textarea>
-                        <input type="submit" value="Change">
-                    </form>
                 </td>
             </tr>
             <tr>
@@ -356,13 +489,13 @@ echo make_events_menu();
             </tr>
         </table>
 
-  <!-- script type="text/javascript" src="jquery-1.4.2.js"></script -->
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
-  <!-- script type="text/javascript" src="jquery-ui-1.7.2.custom.min.js"></script -->
+  <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
+
   <!-- script type="text/javascript" src="jquery.jgrowl.js"></script -->
-  <script type="text/javascript" src="jquery.counter-1.0.js"></script>
+
   <script type="text/javascript">
   $(document).ready(function(){
 
@@ -371,13 +504,20 @@ echo make_events_menu();
       $(".alert-success").fadeTo(800, 0).slideUp(500);
     }, 5000);
 
+    $("#showstopper").counter({
+      count:  'down',
+      goal:   170,
+      msg:    'characters left. ',
+      append: false,
+      target: '#showstopper_help'
+    });
+
   //  $('#datepicker').datepicker({ 
   //    dateFormat: 'yy-mm-dd', 
   //    firstDay: 1, 
   //    yearRange: '2010:2011', 
   //    numberOfMonths: 2
   //  });
-    $("#showstopper_textbox").counter();
 
 <?php
 /*
