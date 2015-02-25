@@ -124,6 +124,11 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $
   exit(0);
 }
 
+// Logging out.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'logout' ) {
+  logout();
+}
+
 adminlog('manage');
 
 ?><!DOCTYPE html>
@@ -200,7 +205,7 @@ adminlog('manage');
         <ul class="nav navbar-nav navbar-right">
           <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>">Refresh <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
           <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
-          <li><a href="logout.php">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=logout">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
