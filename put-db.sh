@@ -4,9 +4,6 @@ DB="thescreen"
 
 echo -e "\e[1mImporting SQL dump\e[0m"
 
-# Fun!
-#for i in {16..21} {21..16} ; do echo -en "\e[48;5;${i}m \e[0m" ; done ; echo
-
 if [ -r "$1" ]; then
 
   if grep -iq 'DROP DATABASE IF EXISTS' "$1"; then
@@ -14,7 +11,6 @@ if [ -r "$1" ]; then
     echo -e "\e[36;21m$1\e[39m seems legit. Importing into '$DB'..."
 
     echo
-    #echo -e "\e[49;31mThis will destroy your database!! Be \e[47msure\e[49m you want to do this.\e[0m"
     echo -e "\e[49;31mThis will destroy your database!! Be \e[41;30msure\e[49;31m you want to do this.\e[0m"
 
     echo

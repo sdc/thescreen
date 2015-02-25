@@ -124,6 +124,17 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $
   exit(0);
 }
 
+// Updating the random / specific figure.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'figure_change' && isset( $_GET['figure_filename'] ) && !empty( $_GET['figure_filename'] ) && isset( $_GET['figure_name'] ) && !empty( $_GET['figure_name'] ) ) {
+  if ( set_config( 'specific_fig', $_GET['figure_filename'] ) ) {
+    $_SESSION['alerts'] = array( 'success' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; was updated successfully.' );
+  } else {
+    $_SESSION['alerts'] = array( 'danger' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; (' . $_GET['figure_filename'] . ') was not updated for some reason.' );
+  }
+  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  exit(0);
+}
+
 // Logging out.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'logout' ) {
   logout();
@@ -402,9 +413,26 @@ echo showstopper_page_warning();
       </div>
     </div>
 
+    <!-- Row four. -->
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Specific Person</h2>
+        <p>Click on the person whose face you want to show, or choose 'random' for a random person each time.</p>
+      </div>
+    </div>
+    <div class="row">
+<?php
 
+echo get_figures_thumbnails();
 
+?>
+    </div>
 
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
 
 
 
@@ -519,7 +547,7 @@ echo showstopper_page_warning();
                     <form action="specific_fig_edit.php" method="get">
                         <select name="figure">
                             <?php
-                            get_special_figure_list();
+                            //get_special_figure_list();
                             ?>
                         </select>
                         <input type="submit" value="Set">
@@ -536,13 +564,14 @@ echo showstopper_page_warning();
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
 
+  <script type="text/javascript" src="js/holder.min.js"></script>
+
   <!-- script type="text/javascript" src="jquery.jgrowl.js"></script -->
 
   <script type="text/javascript">
   $(document).ready(function(){
 
     window.setTimeout(function() { 
-      //$(".alert-success").alert('close'); 
       $(".alert-success").fadeTo(800, 0).slideUp(500);
     }, 5000);
 

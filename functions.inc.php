@@ -387,7 +387,7 @@ function get_figure() {
 
     $img = get_config( 'specific_fig' );
 
-    if ( $img == 'no' ) {
+    if ( $img == 'aaa-random.png' ) {
         return get_rnd_figure();
 
     } else {
@@ -423,6 +423,7 @@ function get_rnd_figure() {
     if ( $figures ) {
 
         asort( $figures );
+
         $figure_num = rand( 0, count( $figures ) - 1 );
         $file_loc = $CFG['dir']['ppl'] . $figures[ $figure_num ];
 

@@ -199,7 +199,7 @@ function make_status_change_menu() {
 
 // Gets a list of figures with 'fig' or 'special' in the name.
 // DONE
-function get_special_figure_list() {
+/*function get_special_figure_list() {
 
     global $CFG;
 
@@ -233,7 +233,74 @@ function get_special_figure_list() {
         return '<p class="error">Couldn\'t find any images.</p>' . "\n";
     }
 
+}*/
+
+
+// Gets a list of figures with 'aaa', 'fig' or 'special' in the name.
+// TODO: This is better than it was, but it needs fairly serious refactoring for reasons of sanity.
+function get_figures_thumbnails() {
+
+  global $CFG;
+
+  // Scan the folder for appropriate images; store filenames and make a user-friendly name also.
+  $figures = array(
+    'filename'  => array(),
+    'name'      => array()
+  );
+
+  if ( $fh = opendir( $CFG['dir']['ppl'] ) ) {
+    while ( false !== ( $entry = readdir( $fh ) ) ) {
+      if ( $entry != '.' && $entry != '..' && ( substr( $entry, 0, 3 ) == 'aaa' || substr( $entry, 0, 3 ) == 'fig' || substr( $entry, 0, 7 ) == 'special' ) ) {
+        $figures['filename'][] = $entry;
+      }
+    }
+    closedir( $fh );
+  }
+
+  if ( $figures ) {
+
+    sort( $figures['filename'] );
+
+    for( $j = 0; $j < count( $figures['filename'] ); $j++ ) {
+      $tmp = $figures['filename'][$j];
+      $tmp = ucfirst( str_replace( array( 'aaa-', 'fig-', 'special-', '.jpg', '.jpeg', '.png' ), '', $tmp ) );
+      $tmp = ucfirst( str_replace( array( '-alt' ), ' 2', $tmp ) );
+      $figures['name'][$j] = $tmp;
+    }
+
+    $build = '';
+    for( $j = 0; $j < count( $figures['filename'] ); $j++ ) {
+
+      $build .= '      <div class="col-xs-4 col-md-2">' . "\n";
+      $build .= '        <div class="thumbnail">' . "\n";
+      //$build .= '          <img data-src="holder.js/100x100">' . "\n";
+      $build .= '          <div class="caption">' . "\n";
+      $build .= '            <h4 class="text-center">' . $figures['name'][$j] . '</h4>' . "\n";
+      $build .= '          </div>' . "\n";
+      $build .= '          <img class="img-thumbnail" src="' . $CFG['dir']['ppl'] . $figures['filename'][$j] . '" >' . "\n";
+      $build .= '          <div class="caption">' . "\n";
+      
+      if ( $figures['filename'][$j] == get_config( 'specific_fig' ) ) {
+        $build .= '            <p><a class="btn btn-success btn-block" disabled="disabled" role="button">Chosen!</a></p>' . "\n";
+      } else {
+        $build .= '            <p><a href="' . $_SERVER["PHP_SELF"] . '?action=figure_change&figure_filename=' . $figures['filename'][$j] . '&figure_name=' . $figures['name'][$j] . '" class="btn btn-info btn-block" role="button">Select ' . $figures['name'][$j] . '</a></p>' . "\n";
+      }
+
+      $build .= '          </div>' . "\n";
+      $build .= '        </div>' . "\n";
+      $build .= '      </div>' . "\n";
+
+    }
+
+    return $build;
+
+  } else {
+    adminlog( 'img|err|' . $CFG['dir']['ppl'] );
+    return '<div class="col-md-12"><p class="error">Couldn\'t find any images.</p></div>';
+  }
+
 }
+
 
 
 
