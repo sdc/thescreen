@@ -24,10 +24,15 @@ function make_page_change_menu() {
       $build .= '<li>';
 
       if ( $row['id'] == $CFG['page'] ) {
-        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" title="This option is active." aria-hidden="true"></span>';
 
       } else {
         $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>';
+      }
+
+      // Add in a flag for default if it's the default choice.
+      if ( $row['defaultpage'] ) {
+        $build .= ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
       }
 
       $build .= "</li>\n";
@@ -65,6 +70,67 @@ function update_check( $type, $id ) {
 
 }
 
+function default_check( $type, $id ) {
+  global $DB;
+
+  // $type can be 'pages' or 'status' at the moment.
+  if ( empty( $type ) ) {
+    return false;
+  }
+
+  $type = $DB->real_escape_string( $type );
+
+  // 'default' is a MySQL reserved keyword so we changed the column name in the db, but now we need to work to get it.
+  $fieldname = ( $type == 'pages' ) ? 'defaultpage' : 'default' . $type;
+
+  $sql = "SELECT " . $fieldname . " FROM " . $type . " WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+
+  } else {
+
+    $row = $res->fetch_assoc();
+    if ( $row[$fieldname] ) {
+      return true;
+    } else {
+
+      return false;
+    }
+  }
+
+}
+
+
+// Gets the default page's or status' id.
+// DONE
+function get_default( $type ) {
+  global $DB;
+
+  // $type can be 'pages' or 'status' at the moment.
+  if ( empty( $type ) ) {
+    return false;
+  }
+
+  $type = $DB->real_escape_string( $type );
+
+  // 'default' is a MySQL reserved keyword so we changed the column name in the db, but now we need to work to get it.
+  $fieldname = ( $type == 'pages' ) ? 'defaultpage' : 'default' . $type;
+
+  $sql = "SELECT id FROM " . $type . " WHERE " . $fieldname . " = 1 LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+
+  } else {
+    $row = $res->fetch_assoc();
+    return $row['id'];
+  }
+
+}
+
 
 
 /**
@@ -84,12 +150,6 @@ function make_status_change_menu() {
     return false;
 
   } else {
-    /*$value = array();
-    while ( $row = $res->fetch_assoc() ) {
-      $value[] = $row['name'];
-    }*/
-
-    //$curr_status = get_config( 'status' );
 
     $build = '<ul>';
     while ( $row = $res->fetch_assoc() ) {
@@ -97,10 +157,15 @@ function make_status_change_menu() {
       $build .= '<li>';
 
       if ( $row['id'] == $CFG['status'] ) {
-        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>';
+        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" title="This option is active." aria-hidden="true"></span>';
 
       } else {
         $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>';
+      }
+
+      // Add in a flag for default if it's the default choice.
+      if ( $row['defaultstatus'] ) {
+        $build .= ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
       }
 
       $build .= "</li>\n";
@@ -393,9 +458,9 @@ function default_page_warning_page() {
   global $CFG;
 
   $out = '';
-  if ( get_name( 'pages', $CFG['page'] ) != 'default' ) {
+  if ( !default_check( 'pages', $CFG['page'] ) ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default page is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'default' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default page <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
     $out .=  "</div>\n";
   }
 
@@ -408,9 +473,9 @@ function default_page_warning_status() {
   global $CFG;
 
   $out = '';
-  if ( get_name( 'pages', $CFG['page'] ) != 'default' ) {
+  if ( !default_check( 'pages', $CFG['page'] ) ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> These options only change the <strong>default</strong> page, which is not currently set. <!-- <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'default' ) . '" class="alert-link">Click here to reset the page to default</a>. -->' . "\n";
+    $out .= '  <strong>Note!</strong> These status options are only shown on the default page <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> which is not currently set.' . "\n";
     $out .= "</div>\n";
   }
 
@@ -422,9 +487,9 @@ function default_status_warning() {
   global $CFG;
 
   $out = '';
-  if ( get_name( 'status', $CFG['status'] ) != 'ok' ) {
+  if ( !default_check( 'status', $CFG['status'] ) ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default status <strong>okay</strong> is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . get_id( 'status', 'ok' ) . '" class="alert-link">Click here to reset the status to &ldquo;okay&rdquo;</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default status <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . get_default( 'status' ) . '" class="alert-link">Click here to reset the status to default</a>.' . "\n";
     $out .= "</div>\n";
   }
 

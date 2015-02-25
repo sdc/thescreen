@@ -8,6 +8,9 @@
  * Feb 2010 to Feb 2015, with minimal development in between.
  */
 
+// TODO: check to ensure there is precisely one row in 'pages' and 'status' tables and complain if otherwise.
+
+
 require_once( 'functions.inc.php' );
 require_once( 'functions-admin.inc.php' );
 
@@ -146,6 +149,7 @@ adminlog('manage');
   .tick { color: #0b0; }
   .cross { color: #d00; }
   .edit { color: #337ab7; }
+  .default { color: #777; }
   #showstopper_counter { display: inline; }
   </style>
 
@@ -156,6 +160,8 @@ adminlog('manage');
   <![endif]-->
 
   <!-- link rel="stylesheet" type="text/css" href="css/style-admin.css" media="screen" -->
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <body>

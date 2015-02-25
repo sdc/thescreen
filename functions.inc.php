@@ -184,7 +184,7 @@ function adminlog( $data ) {
  * Page functions.
  */
 
-// Gets the page's proper name from an id.
+// Gets the page's or status' proper name from an id.
 // DONE
 function get_name( $type, $id ) {
   global $DB;
