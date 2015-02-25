@@ -31,7 +31,7 @@
   </div>
 
   <div id="event">
-    <img src="images/2015-communityday-a5.jpg" style="height: 100%">
+    <img src="<?php echo $CFG['dir']['pageroot']; ?>2015-communityday-a5.jpg" style="height: 100%">
   </div>
 
 </div>

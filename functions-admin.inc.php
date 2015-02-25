@@ -507,7 +507,7 @@ function showstopper_page_warning() {
     $out .= "</div>\n";
   } else {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'default' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default page.' . "\n";
+    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> page.' . "\n";
     $out .= "</div>\n";
   }
 

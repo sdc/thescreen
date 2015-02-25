@@ -264,29 +264,27 @@ function get_id( $type, $name ) {
 
 // Get the refresh number stored in the config table, unless the page has one specified in the pages table.
 // DONE
-function get_refresh( $page ) {
+function get_refresh( $id ) {
 
-    // We need the non-default pages to refresh quicker (they're static anyway) so they go back to normal quicker on a setting change.
-    global $DB;
+  global $DB;
 
-    $sql = "SELECT refresh FROM pages WHERE page = '" . $page . "';";
-    $res = $DB->query( $sql );
+  $sql = "SELECT refresh FROM pages WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
 
-    if ( $res ) {
-        if ( $res->num_rows == 0) {
-            return get_config( 'refresh' );
+  if ( $res->num_rows == 0) {
+    return get_config( 'refresh' );
 
-        } else {
-            $row = $res->fetch_assoc();
-            if ( $row['refresh'] == 0 ) {
-                // If refresh = 0, use whatever's in the config table.
-                return get_config( 'refresh' );
+  } else {
+    $row = $res->fetch_assoc();
+    if ( $row['refresh'] == 0 ) {
+      // If refresh = 0, use whatever's in the config table.
+      return get_config( 'refresh' );
 
-            } else {
-                return $row['refresh'];
-            }
-        }
+    } else {
+      return $row['refresh'];
     }
+  }
+
 }
 
 // Get a random 'statoid' from the database.

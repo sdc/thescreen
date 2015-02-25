@@ -20,6 +20,9 @@
 // Do some including.
 require_once( 'functions.inc.php' );
 
+// The 'root' folder for this page. This folder may or may not exist!
+$CFG['dir']['pageroot'] = $CFG['dir']['pages'] . get_name( 'pages', $CFG['page'] ) . '/';
+
 // Setup variables and all that
 define( 'DEBUG', false );       // set debugging as appropriate
 
@@ -68,15 +71,14 @@ if ( DEBUG ) {
   echo '</div>';
 }
 
+$pagename = $CFG['dir']['pageroot'] . 'index.php';
 
-$pagename = $CFG['dir']['pages'] . get_page_name( $CFG['page'] ) . '/index.php';
 if ( file_exists( $pagename ) ) {
   require_once( $pagename );
-
-} else {
-  $error = 'Page not found: ' . $pagename . ' [' . $CFG['page'] . ']';
-  error( $error );
-  adminlog( $error );
+//} else {
+//  $error = 'Page not found: ' . $pagename . ' [' . $CFG['page'] . ']';
+//  error( $error );
+//  adminlog( $error );
 }
 
 ?>
