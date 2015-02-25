@@ -83,7 +83,7 @@ if ( file_exists( $pagename ) ) {
 
 ?>
 
-  <script type="text/javascript" src="jquery-1.4.2.js"></script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="jquery.newsticker.js"></script>
   <script type="text/javascript" src="jquery.marquee.js"></script>
 
