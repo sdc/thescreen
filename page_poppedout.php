@@ -1,2 +1,0 @@
-<div id="poppedout">
-</div>
