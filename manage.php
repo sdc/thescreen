@@ -158,6 +158,7 @@ adminlog('manage');
 
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="css/bs-docs.css" rel="stylesheet">
   <style type="text/css">
   body {
     padding-top: 70px;
@@ -467,6 +468,70 @@ echo get_figures_thumbnails();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <h2>Refresh Stats</h2>
+                    <p>Stats last refreshed <?php echo get_config('statoids_upd'); ?>. This happens automatically, randomly, throughout the day. 
+                    <a href="statoids_make.php">Click here</a> to refresh the statistics manually. </p>
+                    <hr>
+
+                    <h2>Refresh</h2>
+                    <p>Number of seconds between page refreshes.</p>
+                    <form action="refresh_edit.php" method="get">
+                        Seconds:
+                        <input type="text" value="<?php echo get_config('refresh'); ?>" name="seconds" size="4" maxlength="4">
+                        <input type="submit" value="Set">
+                    </form>
+                    <ul>
+                        <li>(Testing: <a href="refresh_edit.php?seconds=1">1</a> 
+                        <a href="refresh_edit.php?seconds=5">5</a> 
+                        <a href="refresh_edit.php?seconds=10">10</a> 
+                        <a href="refresh_edit.php?seconds=15">15</a> 
+                        <a href="refresh_edit.php?seconds=30">30</a> 
+                        <a href="refresh_edit.php?seconds=45">45</a> 
+                        <a href="refresh_edit.php?seconds=60">60</a> secs)</li>
+                        <li><a href="refresh_edit.php?seconds=300">5 mins</a> (Default)</li>
+                        <li><a href="refresh_edit.php?seconds=600">10 mins</a></li>
+                        <li><a href="refresh_edit.php?seconds=900">15 mins</a></li>
+                        <li><a href="refresh_edit.php?seconds=1800">30 mins</a></li>
+                    </ul>
+                    <hr>
+
+                    <h2>Stats</h2>
+                    <p>Change the details and click the update button:</p>
+                    <table id="stats">
+                        <?php //echo get_stats_form(); ?>
+                    </table>
+                    <hr>
+
+                    <h2>Logs</h2>
+                    <p>Last few log entries.</p>
+                    <?php echo get_last_log(12); ?>
+                    <hr>
+
+
+
   </div> <!-- /container -->
 
 
@@ -489,90 +554,37 @@ echo get_figures_thumbnails();
 
 
 
+  <footer class="bs-docs-footer" role="contentinfo">
+    <div class="container">
+
+      <p>Designed and built with all the love in the world by <a href="https://twitter.com/mdo" target="_blank">@mdo</a> and <a href="https://twitter.com/fat" target="_blank">@fat</a>.</p>
+      <p>Maintained by the <a href="https://github.com/orgs/twbs/people">core team</a> with the help of <a href="https://github.com/twbs/bootstrap/graphs/contributors">our contributors</a>.</p>
+      <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      <ul class="bs-docs-footer-links text-muted">
+        <li>Currently v3.3.2</li>
+        <li>&middot;</li>
+        <li><a href="https://github.com/twbs/bootstrap">GitHub</a></li>
+        <li>&middot;</li>
+        <li><a href="../getting-started/#examples">Examples</a></li>
+        <li>&middot;</li>
+        <li><a href="../2.3.2/">v2.3.2 docs</a></li>
+        <li>&middot;</li>
+        <li><a href="../about/">About</a></li>
+        <li>&middot;</li>
+        <li><a href="http://expo.getbootstrap.com">Expo</a></li>
+        <li>&middot;</li>
+        <li><a href="http://blog.getbootstrap.com">Blog</a></li>
+        <li>&middot;</li>
+        <li><a href="https://github.com/twbs/bootstrap/issues">Issues</a></li>
+        <li>&middot;</li>
+        <li><a href="https://github.com/twbs/bootstrap/releases">Releases</a></li>
+      </ul>
+    </div>
+  </footer>
 
 
-        <table>
-            <tr>
-                <!-- refresh statoids -->
-                <td>
-                    <h2>Refresh Stats</h2>
-                    <p>Stats last refreshed <?php echo get_config('statoids_upd'); ?>. This happens automatically, randomly, throughout the day. 
-                    <a href="statoids_make.php">Click here</a> to refresh the statistics manually. </p>
-                </td>
-            </tr>
-            <tr>
-                <!-- status stuff -->
-                <td id="status">
-                </td>
 
-                <!-- event stuff -->
-                <td id="events">
-                </td>
-            </tr>
-            <tr>
 
-                <!-- refresh stuff -->
-                <td>
-                    <h2>Refresh</h2>
-                    <p>Number of seconds between page refreshes.</p>
-                    <form action="refresh_edit.php" method="get">
-                        Seconds:
-                        <input type="text" value="<?php echo get_config('refresh'); ?>" name="seconds" size="4" maxlength="4">
-                        <input type="submit" value="Set">
-                    </form>
-                    <ul>
-                        <li>(Testing: <a href="refresh_edit.php?seconds=1">1</a> 
-                        <a href="refresh_edit.php?seconds=5">5</a> 
-                        <a href="refresh_edit.php?seconds=10">10</a> 
-                        <a href="refresh_edit.php?seconds=15">15</a> 
-                        <a href="refresh_edit.php?seconds=30">30</a> 
-                        <a href="refresh_edit.php?seconds=45">45</a> 
-                        <a href="refresh_edit.php?seconds=60">60</a> secs)</li>
-                        <li><a href="refresh_edit.php?seconds=300">5 mins</a> (Default)</li>
-                        <li><a href="refresh_edit.php?seconds=600">10 mins</a></li>
-                        <li><a href="refresh_edit.php?seconds=900">15 mins</a></li>
-                        <li><a href="refresh_edit.php?seconds=1800">30 mins</a></li>
-                    </ul>
-                </td>
-
-            </tr>
-            <tr>
-                <!-- stats -->
-                <td rowspan="2">
-                    <h2>Stats</h2>
-                    <p>Change the details and click the update button:</p>
-                    <table id="stats">
-                        <?php echo get_stats_form(); ?>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <!-- logs -->
-                <td id="showstopper">
-                    <h2>Logs</h2>
-                    <p>Last few log entries.</p>
-                    <?php echo get_last_log(12); ?>
-                </td>
-            </tr>
-            <tr>
-                <!-- specific image -->
-                <td>
-                    <h2>Specific Figure</h2>
-                    <p>Choose a specific figure from the list below, or 'no' for a random figure.</p>
-                    <form action="specific_fig_edit.php" method="get">
-                        <select name="figure">
-                            <?php
-                            //get_special_figure_list();
-                            ?>
-                        </select>
-                        <input type="submit" value="Set">
-                    </form>
-                </td>
-                <!-- blank -->
-                <td>
-                </td>
-            </tr>
-        </table>
 
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>

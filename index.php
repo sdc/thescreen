@@ -94,6 +94,15 @@ if ( file_exists( $pagename ) ) {
       $("#news1").newsticker(8000);
       $("#news2").newsticker(8000);
       $("#news3").newsticker(8000);
+
+      /* Trying to do a database polling thing to change the screen automatically. */
+      function doPoll(){
+        $.post('refresh.php', function(data) {
+          alert(data);
+          setTimeout(doPoll,5000);
+        });
+      }
+
   });
   </script>
 

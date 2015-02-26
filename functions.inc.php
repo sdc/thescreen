@@ -101,6 +101,13 @@ if ( !get_config( 'specific_fig' ) ) {
         exit(1);
     }
 }
+if ( !get_config( 'changes' ) ) {
+    // There is no changes setting, so add one as default.
+    if ( !set_config( 'changes', '0', true ) ) {
+        error( '<p>Could not add in a default changes setting.</p>' );
+        exit(1);
+    }
+}
 
 // The current page's name.
 $CFG['page']    = get_config( 'page' );
