@@ -8,11 +8,14 @@ USE `thescreen`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aprilfools` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fact` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `created` int(11) unsigned NOT NULL,
+  `modified` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `aprilfools` VALUES (1,'Meerkats like the colour purple more than any other colour.'),(2,'Meerkats are the only quadruped mammals who make and sell their own cheese.'),(3,'Meerkats have an odd number of teeth.'),(4,'Meerkats have ears but choose not to wear them.'),(5,'Meerkat fur is a natural source of nylon.'),(6,'Meerkats produce more methane than cows.'),(7,'Meerkats provide car insurance on behalf of weasels.'),(8,'The \'We Buy Any Car .com\' dance routine and club smash-hit was choreographed by meerkats.'),(9,'Meerkats live in all parts of the Calamari Desert in Botswana.'),(10,'Meerkats hold the world record for the longest manned paper aeroplane flight.'),(11,'Meerkats have individual cries for \'taxi\', \'hold the door, please\' and \'Yellow army!\'.'),(12,'A meerkat scored the winning goal in the 1970 World Cup.'),(13,'Aleksandr Orlov from comparethemeerkat.com lives in a riverside mansion in Stoke Gabriel.'),(14,'If you see a meerkat go by, and then another identical meerkat goes by, it\'s a glitch in the Matrix.'),(15,'Meerkats collect things.'),(16,'Meerkats collect irrational numbers.'),(17,'Meerkats know the locations of all the weapons of mass destruction.'),(18,'In the 2014 budget, there was a 10% increase in duty on meerkats.'),(19,'South Devon College owns five and a half meerkats.'),(20,'Meerkats have already found the Higgs Boson in the LHC under Paignton Zoo, but are not telling.'),(21,'Baby Oleg\'s aspiration is to work for confused.com. Alexander is not happy about this.'),(22,'Type \"do a barrel roll\" into Google.'),(23,'Meerkats are bioluminescent, but only on their birthdays.'),(24,'Meerkats despise poor spelling, grammar and punctuation, more than expensive car insurance.'),(25,'Compare The Meerkat has more computational power than the NSA, but use it for good, not evil.');
+INSERT INTO `aprilfools` VALUES (1,'Meerkats like the colour purple more than any other colour.',0,0,0),(2,'Meerkats are the only quadruped mammals who make and sell their own cheese.',0,0,0),(3,'Meerkats have an odd number of teeth.',0,0,0),(4,'Meerkats have ears but choose not to wear them.',0,0,0),(5,'Meerkat fur is a natural source of nylon.',0,0,0),(6,'Meerkats produce more methane than cows.',0,0,0),(7,'Meerkats provide car insurance on behalf of weasels.',0,0,0),(8,'The \'We Buy Any Car .com\' dance routine and club smash-hit was choreographed by meerkats.',0,0,0),(9,'Meerkats live in all parts of the Calamari Desert in Botswana.',0,0,0),(10,'Meerkats hold the world record for the longest manned paper aeroplane flight.',0,0,0),(11,'Meerkats have individual cries for \'taxi\', \'hold the door, please\' and \'Yellow army!\'.',0,0,0),(12,'A meerkat scored the winning goal in the 1970 World Cup.',0,0,0),(13,'Aleksandr Orlov from comparethemeerkat.com lives in a riverside mansion in Stoke Gabriel.',0,0,0),(14,'If you see a meerkat go by, and then another identical meerkat goes by, it\'s a glitch in the Matrix.',0,0,0),(15,'Meerkats collect things.',0,0,0),(16,'Meerkats collect irrational numbers.',0,0,0),(17,'Meerkats know the locations of all the weapons of mass destruction.',0,0,0),(18,'In the 2014 budget, there was a 10% increase in duty on meerkats.',0,0,0),(19,'South Devon College owns five and a half meerkats.',0,0,0),(20,'Meerkats have already found the Higgs Boson in the LHC under Paignton Zoo, but are not telling.',0,0,0),(21,'Baby Oleg\'s aspiration is to work for confused.com. Alexander is not happy about this.',0,0,0),(22,'Type \"do a barrel roll\" into Google.',0,0,0),(23,'Meerkats are bioluminescent, but only on their birthdays.',0,0,0),(24,'Meerkats despise poor spelling, grammar and punctuation, more than expensive car insurance.',0,0,0),(25,'Compare The Meerkat has more computational power than the NSA, but use it for good, not evil.',0,0,0);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `config` (
@@ -23,9 +26,9 @@ CREATE TABLE `config` (
   `modified` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `item` (`item`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `config` VALUES (1,'page','1',1424319228,1424864691),(2,'status','1',1424319228,1424860568),(3,'showstopper','error!',1424319229,1424861237),(4,'specific_fig','aaa-random.png',1424319229,1424875750),(5,'refresh','300',1424319229,1424319229),(6,'rssfeed','http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',1424319229,1424863502),(7,'statoids_upd','initial_configuration',1424319229,1424319229),(8,'apply_date','2009-11-01',1424319229,1424319229),(9,'changes','no',1425044087,1425044087);
+INSERT INTO `config` VALUES (1,'page','1',1425046667,1425046667),(2,'status','1',1425046668,1425046668),(4,'refresh','300',1425046668,1425046668),(5,'rssfeed','http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',1425046668,1425046668),(6,'showstopper','error!',1425046668,1425046668),(7,'specific_fig','aaa-random.png',1425046668,1425047079),(8,'changes','no',1425046669,1425047082);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `events` (
@@ -58,9 +61,9 @@ CREATE TABLE `log` (
   `date` datetime NOT NULL,
   `data` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `log` VALUES (1,'2015-02-27 13:36:08','set_config|statoids_upd[DENIED]|2015-02-27 13:36:08');
+INSERT INTO `log` VALUES (1,'2015-02-27 14:44:44','pageload_1'),(2,'2015-02-27 14:44:44','img|rnd|fig-dave.png');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `old_stats` (

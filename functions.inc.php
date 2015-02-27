@@ -27,105 +27,44 @@ $CFG['lang']['title']   = 'The Screen&trade; Admin';
 // Main page refresh poll time in milliseconds.
 $CFG['poll']            = 3000;
 
+// Initial configuration settings array.
+$CFG['defaults'] = array(
+  'page'          => 1,
+  'status'        => 1,
+  'refresh'       => 300, // May not need this one much longer...
+  'rssfeed'       => 'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',
+  'showstopper'   => 'error!',
+  'specific_fig'  => 'aaa-random.png',
+  //'person'        => 'aaa-random.png',
+  'changes'       => 'no',
+);
+
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
-    error( 'Could not include the configuration file.' );
-    exit(1);
+  error( 'Could not include the configuration file.' );
+  exit(1);
 }
 
 // Connect to the database.
 !$DB = new mysqli( $CFG['db']['host'], $CFG['db']['user'], $CFG['db']['pwd'], $CFG['db']['name'] );
 if ( $DB->connect_errno ) {
-    error( 'Failed to connect to database: ' . $DB->connect_error . ' [' . $DB->connect_errno . ']' );
-    exit(1);
+  error( 'Failed to connect to database: ' . $DB->connect_error . ' [' . $DB->connect_errno . ']' );
+  exit(1);
 }
 
-/**
- * Check the database for defaults and if none found, add them in.
- */
-
-// DONE
-if ( !get_config( 'page' ) ) {
-    // There is no page set, so add a default.
-    if ( !set_config( 'page', 'default', true ) ) {
-        error( 'Could not set a default page.' );
-        exit(1);
+// Check the database for defaults and if none found, add them in.
+foreach ( $CFG['defaults'] as $setting => $value ) {
+  if ( !get_config( $setting ) ) {
+    if ( !set_config( $setting, $value, true ) ) {
+      error( 'Could not set a default "' . $setting . '" of "' . $value . '".' );
+      exit(1);
     }
-}
-
-if ( !get_config( 'status' ) ) {
-    // There is no status, so add a default.
-    if ( !set_config( 'status', 'ok', true ) ) {
-        error( '<p>Could not add in a default status.</p>' );
-        exit(1);
-    }
-}
-if ( !get_config( 'refresh' ) ) {
-    // There is no refresh, so add a default.
-    if ( !set_config( 'refresh', '300', true ) ) {
-        error( '<p>Could not add in a default refresh.</p>' );
-        exit(1);
-    }
-}
-if ( !get_config( 'rssfeed' ) ) {
-    // There is no rss feed, so add a default.
-    if ( !set_config( 'rssfeed', 'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml', true )  ) {
-        error( '<p>Could not add in a default rss feed.</p>' );
-        exit(1);
-    }
-}
-/*
-if ( !get_config( 'apply_date' ) ) {
-    // There is no application date, so add a default.
-    if ( !set_config( 'apply_date', '2009-11-01', true ) ) {
-        error( '<p>Could not add in a default application date.</p>' );
-        exit(1);
-    }
-}
-if ( !get_config( 'statoids_upd' ) ) {
-    // Add in a config item for statoids.
-    if ( !set_config( 'statoids_upd', 'initial_configuration', true ) ) {
-        error( '<p>Could not add in a statoids config item.</p>' );
-        exit(1);
-    }
-    // Make the statoids table.
-    make_statoids();
-}
-*/
-if ( !get_config( 'showstopper' ) ) {
-    // There is no showstopper text, so add some as default.
-    if ( !set_config( 'showstopper', 'error', true ) ) {
-        error( '<p>Could not add in default showstopper text.</p>' );
-        exit(1);
-    }
-}
-// TODO: change 'specific_fig' to 'person'.
-if ( !get_config( 'specific_fig' ) ) {
-    // There is no specific_fig text, so add some as default.
-    if ( !set_config( 'specific_fig', 'no', true ) ) {
-        error( '<p>Could not add in default specific_fig text.</p>' );
-        exit(1);
-    }
-}
-if ( !get_config( 'changes' ) ) {
-    // There is no changes setting, so add one as default.
-    if ( !set_config( 'changes', 'no', true ) ) {
-        error( '<p>Could not add in a default changes setting.</p>' );
-        exit(1);
-    }
+  }
 }
 
 // The current page's name.
 $CFG['page']    = get_config( 'page' );
 $CFG['status']  = get_config( 'status' );
-
-/**
- * Refresh (recreate) the statoids table approx 1 in every 12 page reloads.
- * If 1 refresh every 5 minutes, that's an update once per hour. Approx.
- */
-if ( rand( 1, 12 ) == 9 ) {
-    make_statoids();
-}
 
 
 
@@ -137,58 +76,58 @@ if ( rand( 1, 12 ) == 9 ) {
 // DONE
 function error( $in ) {
 
-    $errortext = date( 'H:i:s', time() ) . ': ' . $in;
-    adminlog( $errortext );
-    echo '<p>' . $errortext . '</p>' ;
+  $errortext = date( 'H:i:s', time() ) . ': ' . $in;
+  adminlog( $errortext );
+  echo '<p>' . $errortext . '</p>' ;
 }
 
 // Gets the configuration.
 // DONE
 function get_config( $item ) {
-    global $DB;
+  global $DB;
 
-    $res = $DB->query( "SELECT value FROM config WHERE item = '" . $item . "' LIMIT 1;" );
-    if ( $res->num_rows == 0 ) {
-        return false;
-    } else {
-        $row = $res->fetch_assoc();
-        return $row['value'];
-    }
+  $res = $DB->query( "SELECT value FROM config WHERE item = '" . $item . "' LIMIT 1;" );
+  if ( $res->num_rows == 0 ) {
+    return false;
+  } else {
+    $row = $res->fetch_assoc();
+    return $row['value'];
+  }
 }
 
 // Sets the configuration.
 // DONE
 function set_config( $item, $value, $init = false ) {
-    global $DB;
+  global $DB;
 
-    adminlog( 'set_config|' . $item . '|' . $value );
-    $value = $DB->real_escape_string( $value );
+  adminlog( 'set_config|' . $item . '|' . $value );
+  $value = $DB->real_escape_string( $value );
 
-    if ( $init ) {
-        $sql = "INSERT INTO config (item, value, created, modified) VALUES ('" . $item . "', '" . $value . "', '" . time() . "', '" . time() . "');";
-    } else {
-        $sql = "UPDATE config SET value = '" . $value . "', modified = '" . time() . "' WHERE item = '" . $item . "' LIMIT 1;";
-    }
+  if ( $init ) {
+    $sql = "INSERT INTO config (item, value, created, modified) VALUES ('" . $item . "', '" . $value . "', '" . time() . "', '" . time() . "');";
+  } else {
+    $sql = "UPDATE config SET value = '" . $value . "', modified = '" . time() . "' WHERE item = '" . $item . "' LIMIT 1;";
+  }
 
-    $res = $DB->query( $sql );
-    return $res;
+  $res = $DB->query( $sql );
+  return $res;
 }
 
 // Log something to the admin log.
 // DONE
 function adminlog( $data ) {
 
-    global $CFG, $DB;
+  global $CFG, $DB;
 
-    $sql = "INSERT INTO log (date, data) VALUES ('" . $CFG['db']['time'] . "', '" . $data . "');"; 
-    $res = $DB->query( $sql );
+  $sql = "INSERT INTO log (date, data) VALUES ('" . $CFG['db']['time'] . "', '" . $data . "');"; 
+  $res = $DB->query( $sql );
 
-    if ( $res ) {
-        return true;
-    } else {
-        error( 'Error: writing to the log failed.' );
-        return false;
-    }
+  if ( $res ) {
+    return true;
+  } else {
+    error( 'Error: writing to the log failed.' );
+    return false;
+  }
 }
 
 
@@ -304,155 +243,155 @@ function get_refresh( $id ) {
 // DONE
 function get_rnd_statoid() {
 
-    global $DB;
+  global $DB;
 
-    $now = time();
-    // check the date...
-    if ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) {
-        // April 1st.
-        $sql = "SELECT COUNT(id) FROM aprilfools;";
-        $res = $DB->query( $sql );
+  $now = time();
+  // check the date...
+  if ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) {
+    // April 1st.
+    $sql = "SELECT COUNT(id) FROM aprilfools LIMIT 1;";
+    $res = $DB->query( $sql );
 
-        if ( $res->num_rows == 0 ) {
-            return '<p class="error">Sorry, no April Fools found.</p>';
-
-        } else {
-            $row = $res->fetch_row();
-            $id = rand( 1, $row[0] );
-
-            $fool = get_aprilfools( $id );
-            return make_text_bigger( $fool );
-        }
+    if ( $res->num_rows == 0 ) {
+      return '<p class="error">Sorry, no April Fools found.</p>';
 
     } else {
-        // All other dates and times.
-        $sql = "SELECT COUNT(id) FROM statoids;";
-        $res = $DB->query( $sql );
+      $row = $res->fetch_row();
+      $id = rand( 0, $row[0] - 1 );
 
-        if ( $res->num_rows == 0 ) {
-            return '<p class="error">Sorry, no statoids found.</p>';
-
-        } else {
-            $row = $res->fetch_row();
-            $id = rand( 1, $row[0] );
-
-            $statoid = get_statoid( $id );
-            return make_text_bigger( $statoid );
-        }
+      $fool = get_aprilfools( $id );
+      return make_text_bigger( $fool );
     }
+
+} else {
+  // All other dates and times.
+  $sql = "SELECT COUNT(id) FROM factoids LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no factoids found.</p>';
+
+  } else {
+    $row = $res->fetch_row();
+    $id = rand( 0, $row[0] - 1 );
+
+    $factoid = get_factoid( $id );
+    return make_text_bigger( $factoid );
+    }
+  }
 }
 
 // Make text bigger or not, depending on how many characters there are.
 // DONE
 function make_text_bigger( $text, $lbound = 30 ) {
 
-    if ( strlen( $text ) <= $lbound) {
-        return '<p class="bigger1">' . $text . '</p>';
+  if ( strlen( $text ) <= $lbound) {
+    return '<p class="bigger1">' . $text . '</p>';
 
-    } else if ( strlen( $text ) > $lbound && strlen( $text ) < ( $lbound * 2 ) ) {
-        return '<p class="bigger2">' . $text . '</p>';
+  } else if ( strlen( $text ) > $lbound && strlen( $text ) < ( $lbound * 2 ) ) {
+    return '<p class="bigger2">' . $text . '</p>';
 
-    } else {
-        return '<p>' . $text . '</p>';
-    }
+  } else {
+    return '<p>' . $text . '</p>';
+  }
 }
 
 // Get a specific statoid based on it's ID.
 // DONE
-function get_statoid( $id = 1 ) {
+function get_factoid( $id = 1 ) {
 
-    global $DB;
+  global $DB;
 
-    $sql = "SELECT text FROM statoids WHERE id = '" . $id . "';";
-    $res = $DB->query( $sql );
+  $sql = "SELECT fact FROM factoids WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
 
-    if ( $res->num_rows == 0 ) {
-        return '<p class="error">Sorry, no statoids.</p>';
+  if ( $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no factoids.</p>';
 
-    } else {
-        $row = $res->fetch_row();
-        return $row[0];
-    }
+  } else {
+    $row = $res->fetch_row();
+    return $row[0];
+  }
 }
 
 // A function solely for April 1st, or for any 'fun' facts and that, really.
 // DONE
 function get_aprilfools( $id = 1 ) {
 
-    global $DB;
+  global $DB;
 
-    $sql = "SELECT text FROM aprilfools WHERE id = '" . $id . "';";
-    $res = $DB->query( $sql );
+  $sql = "SELECT fact FROM aprilfools WHERE id = '" . $id . "' LIMIT 1;";
+  $res = $DB->query( $sql );
 
-    if ( $res->num_rows == 0 ) {
-        return '<p class="error">Sorry, no April Fools.</p>';
+  if ( $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no April Fools.</p>';
 
-    } else {
-        $row = $res->fetch_row();
-        return $row[0];
-    }
+  } else {
+    $row = $res->fetch_row();
+    return $row[0];
+  }
 }
 
 // Gets a named 'figure' then returns it, or a random one on fail.
 // DONE
 function get_figure() {
-    global $CFG;
+  global $CFG;
 
-    $img = get_config( 'specific_fig' );
+  $img = get_config( 'specific_fig' );
 
-    if ( $img == 'aaa-random.png' ) {
-        return get_rnd_figure();
+  if ( $img == 'aaa-random.png' ) {
+    return get_rnd_figure();
+
+  } else {
+    $file_loc = $CFG['dir']['ppl'] . $img;
+
+    if ( file_exists( $file_loc ) ) {
+      adminlog( 'img|set|' . $img );
+      return '<img src="' . $file_loc . '" title="' . $img . '">' . "\n";
 
     } else {
-        $file_loc = $CFG['dir']['ppl'] . $img;
-
-        if ( file_exists( $file_loc ) ) {
-            adminlog( 'img|set|' . $img );
-            return '<img src="' . $file_loc . '" title="' . $img . '">' . "\n";
-
-        } else {
-            return get_rnd_figure();
-        }
-        
+      return get_rnd_figure();
     }
+      
+  }
 }
 
 // Gets a random figure from those available on disk.
 // DONE
 function get_rnd_figure() {
-    global $CFG;
+  global $CFG;
 
-    // Scan the folder for appropriate images.
-    $figures = array();
-    if ( $fh = opendir( $CFG['dir']['ppl'] ) ) {
-        while ( false !== ( $entry = readdir( $fh ) ) ) {
-            if ( $entry != '.' && $entry != '..' && substr( $entry, 0, 3 ) == 'fig' ) {
-                $figures[] = $entry;
-            }
-        }
-        closedir( $fh );
+  // Scan the folder for appropriate images.
+  $figures = array();
+  if ( $fh = opendir( $CFG['dir']['ppl'] ) ) {
+    while ( false !== ( $entry = readdir( $fh ) ) ) {
+      if ( $entry != '.' && $entry != '..' && substr( $entry, 0, 3 ) == 'fig' ) {
+        $figures[] = $entry;
+      }
     }
+    closedir( $fh );
+  }
 
-    if ( $figures ) {
+  if ( $figures ) {
 
-        asort( $figures );
+    asort( $figures );
 
-        $figure_num = rand( 0, count( $figures ) - 1 );
-        $file_loc = $CFG['dir']['ppl'] . $figures[ $figure_num ];
+    $figure_num = rand( 0, count( $figures ) - 1 );
+    $file_loc = $CFG['dir']['ppl'] . $figures[ $figure_num ];
 
-        if ( file_exists( $file_loc ) ) {
-            adminlog( 'img|rnd|' . $figures[ $figure_num ] );
-            return '<img src="' . $file_loc . '" title="' . substr( $figures[ $figure_num ], 4 ) . '">' . "\n";
-
-        } else {
-            adminlog( 'img|err|' . $file_loc );
-            return '<p class="error">Image error.</p>' . "\n";
-        }
+    if ( file_exists( $file_loc ) ) {
+      adminlog( 'img|rnd|' . $figures[ $figure_num ] );
+      return '<img src="' . $file_loc . '" title="' . substr( $figures[ $figure_num ], 4 ) . '">' . "\n";
 
     } else {
-        adminlog( 'img|err|no images' );
-        return '<p class="error">Couldn\'t find any images.</p>' . "\n";
+      adminlog( 'img|err|' . $file_loc );
+      return '<p class="error">Image error.</p>' . "\n";
     }
+
+  } else {
+    adminlog( 'img|err|no images' );
+    return '<p class="error">Couldn\'t find any images.</p>' . "\n";
+  }
 }
 
 
@@ -475,10 +414,10 @@ function get_scroller() {
 
   // Add an image to the start of the feed.
   if ( preg_match( '/newsrss.bbc.co.uk/', $feedurl ) ) {
-      $build .= '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.83.4/orb/4/img/bbc-blocks-light.png" height="25" style="vertical-align: middle;"> ';
+    $build .= '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.83.4/orb/4/img/bbc-blocks-light.png" height="25" style="vertical-align: middle;"> ';
 
   } else if ( preg_match( '/slashdot/', $feedurl ) ) {
-      $build .= '<img src="http://farm3.static.flickr.com/2302/2454530894_f2ca265bde_o.jpg" height="30" style="vertical-align: middle;"> ';
+    $build .= '<img src="http://farm3.static.flickr.com/2302/2454530894_f2ca265bde_o.jpg" height="30" style="vertical-align: middle;"> ';
   }
 
   foreach ( $feed->get_items() as $item ) {
@@ -497,19 +436,19 @@ function get_scroller() {
 // DONE
 function get_page_background_image() {
 
-    global $CFG, $DB;
+  global $CFG, $DB;
 
-    $sql = "SELECT background FROM pages WHERE id = '" . $CFG['page'] . "' LIMIT 1;";
-    $res = $DB->query( $sql );
+  $sql = "SELECT background FROM pages WHERE id = '" . $CFG['page'] . "' LIMIT 1;";
+  $res = $DB->query( $sql );
 
-    if ( $res->num_rows == 0 ) {
-        error( 'Can\'t get this page\'s background image.' );
-        return false;
+  if ( $res->num_rows == 0 ) {
+    error( 'Can\'t get this page\'s background image.' );
+    return false;
 
-    } else {
-        $row = $res->fetch_assoc();
-        return $row['background'];
-    }
+  } else {
+    $row = $res->fetch_assoc();
+    return $row['background'];
+  }
 }
 
 
@@ -517,36 +456,36 @@ function get_page_background_image() {
 // DONE
 function get_status_img() {
 
-    global $CFG, $DB;
+  global $CFG, $DB;
 
-    $sql = "SELECT image FROM status WHERE id = '" . $CFG['status'] . "' LIMIT 1;";
-    $res = $DB->query( $sql );
+  $sql = "SELECT image FROM status WHERE id = '" . $CFG['status'] . "' LIMIT 1;";
+  $res = $DB->query( $sql );
 
-    if ( $res->num_rows == 0 ) {
-        return '<p class="error">Sorry, no status image.</p>';
+  if ( $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no status image.</p>';
 
-    } else {
-        $row = $res->fetch_assoc();
-        return '<img src="' . $CFG['dir']['status'] . $row['image'] . '.png" width="60">' . "\n";
-    }
+  } else {
+    $row = $res->fetch_assoc();
+    return '<img src="' . $CFG['dir']['status'] . $row['image'] . '.png" width="60">' . "\n";
+  }
 }
 
 // Get this status' text, depending on what the current status is.
 // DONE
 function get_status_txt() {
 
-    global $CFG, $DB;
+  global $CFG, $DB;
 
-    $sql = "SELECT description FROM status WHERE id = '" . $CFG['status'] . "';";
-    $res = $DB->query( $sql);
+  $sql = "SELECT description FROM status WHERE id = '" . $CFG['status'] . "';";
+  $res = $DB->query( $sql);
 
-    if ( $res->num_rows == 0 ) {
-        return '<p class="error">Sorry, no status.</p>';
+  if ( $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no status.</p>';
 
-    } else {
-        $row = $res->fetch_row();
-        return '<p>' . $row[0] . '</p>' . "\n";
-    }
+  } else {
+    $row = $res->fetch_row();
+    return '<p>' . $row[0] . '</p>' . "\n";
+  }
 }
 
 
@@ -555,34 +494,34 @@ function get_status_txt() {
 // TODO: Probably best to split this between 'viewing' and 'editing' screens.
 function get_events( $num = 3, $edit = false ) {
 
-    global $DB;
+  global $DB;
 
-    $now = time();
-    $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
+  $now = time();
+  $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
 
-    $sql = "SELECT id, start, text, deleted FROM events WHERE start >= '" . $today . "' AND deleted = 0 ORDER BY start ASC, id ASC LIMIT " . $num . ";";
-    $res = $DB->query( $sql );
+  $sql = "SELECT id, start, text, deleted FROM events WHERE start >= '" . $today . "' AND deleted = 0 ORDER BY start ASC, id ASC LIMIT " . $num . ";";
+  $res = $DB->query( $sql );
 
-    if ( $res->num_rows == 0) {
-        return '<p class="error">Sorry, no events.</p>';
+  if ( $res->num_rows == 0) {
+    return '<p class="error">Sorry, no events.</p>';
 
-    } else {
+  } else {
 
-        $build = "<ul>\n";
+    $build = "<ul>\n";
 
-        while ( $row = $res->fetch_assoc() ) {
-            $db_date = $row['start'];
-            $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
-            
-            // Extra styling for deleted events
-            $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . '</em>';
+    while ( $row = $res->fetch_assoc() ) {
+      $db_date = $row['start'];
+      $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
 
-            $build .= "</li>\n";
-        }
+      // Extra styling for deleted events
+      $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . '</em>';
 
-        $build .= "</ul>\n";
-        return $build;
+      $build .= "</li>\n";
     }
+
+    $build .= "</ul>\n";
+    return $build;
+  }
 
 }
 
@@ -591,28 +530,28 @@ function get_events( $num = 3, $edit = false ) {
  * new combined factoid/stats function.
  */
 function make_statoids() {
-    global $CFG, $DB;
-
 /*
-    // change the update time in the config
-    set_config('statoids_upd', $CFG['db']['time']);
+  global $CFG, $DB;
 
-    // run ALL the update functions
-    update_moodle_stats();
-    //update_joomla_stats();
-    update_website_stats();
-    update_online_apps();
+  // change the update time in the config
+  set_config('statoids_upd', $CFG['db']['time']);
 
-    // truncate the table
-    $res = mysql_query("TRUNCATE TABLE statoids;", $DB);
-    // insert data from factoids
-    $res2 = mysql_query("INSERT INTO statoids (`text`) SELECT text FROM factoids;", $DB);
-    // insert data from stats, formatted
-    $res3 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, FORMAT(value, 0), text_after) FROM stats WHERE readonly = '1';", $DB);
-    // insert data from stats, UNformatted
-    $res4 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, value, text_after) FROM stats WHERE readonly = '0';", $DB);
+  // run ALL the update functions
+  update_moodle_stats();
+  //update_joomla_stats();
+  update_website_stats();
+  update_online_apps();
+
+  // truncate the table
+  $res = mysql_query("TRUNCATE TABLE statoids;", $DB);
+  // insert data from factoids
+  $res2 = mysql_query("INSERT INTO statoids (`text`) SELECT text FROM factoids;", $DB);
+  // insert data from stats, formatted
+  $res3 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, FORMAT(value, 0), text_after) FROM stats WHERE readonly = '1';", $DB);
+  // insert data from stats, UNformatted
+  $res4 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, value, text_after) FROM stats WHERE readonly = '0';", $DB);
 */
 
-    set_config('statoids_upd[DENIED]', $CFG['db']['time']);
+  set_config('statoids_upd[DENIED]', $CFG['db']['time']);
 
 }

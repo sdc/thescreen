@@ -19,8 +19,8 @@ session_start();
 
 // Secure this page a little bit.
 if ( !isset( $_SESSION['loggedin'] ) ) {
-    header( 'location: login.php' );
-    exit(0);
+  header( 'location: login.php' );
+  exit(0);
 }
 
 // Debugging.
@@ -189,10 +189,19 @@ adminlog('manage');
   body {
     padding-top: 70px;
   }
+  /* Green. */
   .tick { color: #0b0; }
+  /* Red. */
   .cross, .factoid-delete { color: #d00; }
+  /* Light blue. */
   .edit, .factoid-edit { color: #337ab7; }
-  .default, .factoid-hide, .factoid-show { color: #777; }
+  /* Grey. */
+  .default { color: #777; }
+  /* Light grey. */
+  .factoid-hide { color: #bbb; }
+  /* Dark grey. */
+  .factoid-show { color: #333; }
+
   #showstopper_counter { display: inline; }
   </style>
 
