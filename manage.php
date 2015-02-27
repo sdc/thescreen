@@ -85,7 +85,10 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GE
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'status_change' && isset( $_GET['status'] ) && !empty( $_GET['status'] ) && is_numeric( $_GET['status'] ) ) {
   if ( update_check( 'status', $_GET['status'] ) ) {
     $_SESSION['alerts'] = array( 'success' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was set successfully.' );
-    set_change();
+    // If the showstopper page is set when the showstopper text is changed, update the page.
+    if ( get_config( 'page' ) == get_id( 'pages', 'standard' ) ) {
+      set_change();
+    }
   } else {
     $_SESSION['alerts'] = array( 'danger' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was not set for some reason.' );
   }
@@ -113,7 +116,8 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isse
   if ( set_config( 'rssfeed', $_POST['rssfeed_url'] ) ) {
     $_SESSION['alerts'] = array( 'success' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was updated successfully.' );
     // If the default page is set when the rss feed URL is changed, update the page.
-    if ( get_config( 'page' ) == get_default( 'pages' ) ) {
+    //if ( get_config( 'page' ) == get_default( 'pages' ) ) {
+    if ( get_config( 'page' ) == get_id( 'pages', 'standard' ) ) {
       set_change();
     }
   } else {

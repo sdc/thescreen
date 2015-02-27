@@ -603,6 +603,7 @@ function logout() {
 
 // Set the config settings 'changes' to yes.
 function set_change() {
+  $_SESSION['alerts'][] = array( 'success' => 'The main page will refresh in a moment.' );
   return set_config( 'changes', 'yes' );
 }
 
