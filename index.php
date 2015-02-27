@@ -88,21 +88,24 @@ if ( file_exists( $pagename ) ) {
   <script type="text/javascript" src="jquery.marquee.js"></script>
 
   <script type="text/javascript">
-  $(document).ready(function(){
-      $('#scroller marquee').marquee();
-
-      $("#news1").newsticker(8000);
-      $("#news2").newsticker(8000);
-      $("#news3").newsticker(8000);
-
-      /* Trying to do a database polling thing to change the screen automatically. */
-      function doPoll(){
-        $.post('refresh.php', function(data) {
-          alert(data);
-          setTimeout(doPoll,5000);
-        });
+  /* Trying to do a database polling thing to change the screen automatically. */
+  function doPoll(){
+    $.post('refresh.php', function(data) {
+      if (data === "yes") {
+        location.reload();
       }
+      setTimeout(doPoll,<?php echo $CFG['poll']; ?>);
+    });
+  }
 
+  $(document).ready(function(){
+    $('#scroller marquee').marquee();
+
+    $("#news1").newsticker(8000);
+    $("#news2").newsticker(8000);
+    $("#news3").newsticker(8000);
+
+    doPoll();
   });
   </script>
 

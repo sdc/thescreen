@@ -23,9 +23,9 @@ CREATE TABLE `config` (
   `modified` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `item` (`item`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `config` VALUES (1,'page','1',1424319228,1424864691),(2,'status','1',1424319228,1424860568),(3,'showstopper','error!',1424319229,1424861237),(4,'specific_fig','fig-bobby.png',1424319229,1424941183),(5,'refresh','300',1424319229,1424319229),(6,'rssfeed','http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',1424319229,1424863502),(7,'statoids_upd','initial_configuration',1424319229,1424319229),(8,'apply_date','2009-11-01',1424319229,1424319229),(15,'changes','1',1424967893,1424967893);
+INSERT INTO `config` VALUES (1,'page','1',1424319228,1424864691),(2,'status','1',1424319228,1424860568),(3,'showstopper','error!',1424319229,1424861237),(4,'specific_fig','aaa-random.png',1424319229,1424875750),(5,'refresh','300',1424319229,1424319229),(6,'rssfeed','http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',1424319229,1424863502),(7,'statoids_upd','initial_configuration',1424319229,1424319229),(8,'apply_date','2009-11-01',1424319229,1424319229),(9,'changes','no',1425044087,1425044087);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `events` (
@@ -58,8 +58,9 @@ CREATE TABLE `log` (
   `date` datetime NOT NULL,
   `data` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `log` VALUES (1,'2015-02-27 13:36:08','set_config|statoids_upd[DENIED]|2015-02-27 13:36:08');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `old_stats` (

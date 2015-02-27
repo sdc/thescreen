@@ -601,6 +601,11 @@ function logout() {
   exit(0);
 }
 
+// Set the config settings 'changes' to yes.
+function set_change() {
+  return set_config( 'changes', 'yes' );
+}
+
 /**
  * Some well deprecated stuff below this point.
  */

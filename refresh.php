@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Very simple code to return the 'changes' config setting.
+ * 'Refresh' web service to return the 'changes' config setting. If it is yes, change it back to no.
  */
 
 require_once( 'functions.inc.php' );
 
 $changes = get_config( 'changes' );
 
-if ( $changes == 1 ) {
-  set_config( 'changes', 0 );
+if ( $changes == 'yes' ) {
+  set_config( 'changes', 'no' );
 }
 
-return $changes;
+echo $changes;

@@ -24,6 +24,9 @@ $CFG['ext']             = '.txt';   // text file extension for loading data from
 // App's name.
 $CFG['lang']['title']   = 'The Screen&trade; Admin';
 
+// Main page refresh poll time in milliseconds.
+$CFG['poll']            = 3000;
+
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
     error( 'Could not include the configuration file.' );
@@ -71,6 +74,7 @@ if ( !get_config( 'rssfeed' ) ) {
         exit(1);
     }
 }
+/*
 if ( !get_config( 'apply_date' ) ) {
     // There is no application date, so add a default.
     if ( !set_config( 'apply_date', '2009-11-01', true ) ) {
@@ -87,6 +91,7 @@ if ( !get_config( 'statoids_upd' ) ) {
     // Make the statoids table.
     make_statoids();
 }
+*/
 if ( !get_config( 'showstopper' ) ) {
     // There is no showstopper text, so add some as default.
     if ( !set_config( 'showstopper', 'error', true ) ) {
@@ -94,6 +99,7 @@ if ( !get_config( 'showstopper' ) ) {
         exit(1);
     }
 }
+// TODO: change 'specific_fig' to 'person'.
 if ( !get_config( 'specific_fig' ) ) {
     // There is no specific_fig text, so add some as default.
     if ( !set_config( 'specific_fig', 'no', true ) ) {
@@ -103,7 +109,7 @@ if ( !get_config( 'specific_fig' ) ) {
 }
 if ( !get_config( 'changes' ) ) {
     // There is no changes setting, so add one as default.
-    if ( !set_config( 'changes', '0', true ) ) {
+    if ( !set_config( 'changes', 'no', true ) ) {
         error( '<p>Could not add in a default changes setting.</p>' );
         exit(1);
     }
