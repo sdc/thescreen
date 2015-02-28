@@ -27,7 +27,7 @@ function make_page_change_menu() {
         $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" title="This option is active." aria-hidden="true"></span>';
 
       } else {
-        $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>';
+        $build .= '<a href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>';
       }
 
       // Add in a flag for default if it's the default choice.
@@ -160,7 +160,7 @@ function make_status_change_menu() {
         $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" title="This option is active." aria-hidden="true"></span>';
 
       } else {
-        $build .= '<a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>';
+        $build .= '<a href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>';
       }
 
       // Add in a flag for default if it's the default choice.
@@ -283,7 +283,7 @@ function get_figures_thumbnails() {
       if ( $figures['filename'][$j] == get_config( 'specific_fig' ) ) {
         $build .= '            <p><a class="btn btn-success btn-block" disabled="disabled" role="button">Chosen!</a></p>' . "\n";
       } else {
-        $build .= '            <p><a href="' . $_SERVER["PHP_SELF"] . '?action=figure_change&figure_filename=' . $figures['filename'][$j] . '&figure_name=' . $figures['name'][$j] . '" class="btn btn-info btn-block" role="button">Select ' . $figures['name'][$j] . '</a></p>' . "\n";
+        $build .= '            <p><a href="' . $CFG['adminpage'] . '?action=figure_change&figure_filename=' . $figures['filename'][$j] . '&figure_name=' . $figures['name'][$j] . '" class="btn btn-info btn-block" role="button">Select ' . $figures['name'][$j] . '</a></p>' . "\n";
       }
 
       $build .= '          </div>' . "\n";
@@ -350,7 +350,7 @@ function get_data_from_file( $file, $type = '' ) {
 // TODO: Probably best to split this between 'viewing' and 'editing' screens.
 function make_events_menu( $num = 10 ) {
 
-    global $DB;
+    global $CFG, $DB;
 
     $now = time();
     $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
@@ -371,13 +371,14 @@ function make_events_menu( $num = 10 ) {
             
             // Extra styling for deleted events
             if ( $row['deleted'] == 0 ) {
-                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $_SERVER["PHP_SELF"] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
+                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
             } else {
-                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $_SERVER["PHP_SELF"] . '?action=event_restore&event_id=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_restore&event_id=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
             }
 
             // Editing button.
-            $build .= ' <a href="' . $_SERVER["PHP_SELF"] . '?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
+            //$build .= ' <a href="' . $CFG['adminpage'] . '?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
+            $build .= ' <a href="event.php?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
 
             $build .= "</li>\n";
         }
@@ -400,6 +401,24 @@ function add_event( $date, $text ) {
     adminlog( 'add_event|' . $text );
 
     $sql = "INSERT INTO events (start, text, created, modified) VALUES ('" . $date . "', '" . $text . "', '" . time() . "', '" . time() . "');";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
+
+// Adds an event.
+// DONE
+// TODO: Check that this event id exists before we attempt to update it.
+function edit_event( $date, $text, $id ) {
+
+    global $DB;
+
+    $text = $DB->real_escape_string( $text );
+    
+    adminlog( 'edit_event|' . $id );
+
+    $sql = "UPDATE events SET start = '" . $date . "', text = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;
@@ -527,7 +546,7 @@ function default_page_warning_page() {
   $out = '';
   if ( !default_check( 'pages', $CFG['page'] ) ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default page <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default page <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
     $out .=  "</div>\n";
   }
 
@@ -556,7 +575,7 @@ function default_status_warning() {
   $out = '';
   if ( !default_check( 'status', $CFG['status'] ) ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default status <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $_SERVER["PHP_SELF"] . '?action=status_change&status=' . get_default( 'status' ) . '" class="alert-link">Click here to reset the status to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default status <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $CFG['adminpage'] . '?action=status_change&status=' . get_default( 'status' ) . '" class="alert-link">Click here to reset the status to default</a>.' . "\n";
     $out .= "</div>\n";
   }
 
@@ -570,11 +589,11 @@ function showstopper_page_warning() {
   $out = '';
   if ( get_name( 'pages', $CFG['page'] ) != 'showstopper' ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_id( 'pages', 'showstopper' ) . '" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
+    $out .= '  <strong>Note!</strong> This text is only shown on the <strong>Showstopper</strong> page, which is not currently set. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_id( 'pages', 'showstopper' ) . '" class="alert-link">Click here to turn on the Showstopper page</a>, first making sure that the below text is correct and saved.' . "\n";
     $out .= "</div>\n";
   } else {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $_SERVER["PHP_SELF"] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> page.' . "\n";
+    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> page.' . "\n";
     $out .= "</div>\n";
   }
 

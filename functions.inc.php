@@ -7,7 +7,7 @@
 // Configuration array and some settings.
 $CFG = array();
 
-$CFG['version'] = '2015022300';
+$CFG['version'] = '2015022700';
 
 $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';
@@ -17,7 +17,15 @@ $CFG['dir']['pages']    = 'pages/';
 
 //$CFG['dir']['data']     = './data/';
 
-$CFG['db']['time']      = date( "Y-m-d H:i:s", time()) ;
+// Set the name of the admin page, for use in other add/edit pages.
+// TODO: this, better.
+$CFG['adminpage']       = 'manage.php';
+// Minutes before the admin screen times out.
+$CFG['admintimeout']    = 60;
+
+$CFG['db']['time']      = date( 'Y-m-d H:i:s', time()) ;
+
+$CFG['time']['full']    = 'l j\<\s\u\p\>S\<\/\s\u\p\> F Y, g:ia' ;
 
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 

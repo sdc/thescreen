@@ -9,10 +9,7 @@
  */
 
 // TODO: check to ensure there is precisely one row in 'pages' and 'status' tables and complain if otherwise.
-
-
-require_once( 'functions.inc.php' );
-require_once( 'functions-admin.inc.php' );
+// TODO: jQuery jGrowl: https://github.com/stanlemon/jGrowl
 
 session_name( 'sdc-thescreen' );
 session_start();
@@ -22,6 +19,12 @@ if ( !isset( $_SESSION['loggedin'] ) ) {
   header( 'location: login.php' );
   exit(0);
 }
+
+require_once( 'functions.inc.php' );
+require_once( 'functions-admin.inc.php' );
+
+// Set the name of the admin page, for use in other add/edit pages.
+//$CFG['adminpage'] = $_SERVER["PHP_SELF"];
 
 // Debugging.
 if ( isset( $_POST ) && !empty( $_POST ) ) {
@@ -49,7 +52,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GE
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was not set for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -64,10 +67,11 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'status_change' && isset( $_
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The status &ldquo;' . get_title( 'status', $_GET['status'] ) . '&rdquo; was not set for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
+/*
 // Adding a new event.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_POST['event_date'] ) && !empty( $_POST['event_date'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
   if ( add_event( $_POST['event_date'], $_POST['event_description'] ) ) {
@@ -75,9 +79,10 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_PO
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was not added for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
+*/
 
 // Deleting an event.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
@@ -86,7 +91,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET[
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -97,7 +102,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_restore' && isset( $_
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not restored for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -112,7 +117,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isse
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was not updated for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -128,7 +133,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isse
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was not updated for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -143,7 +148,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was not updated for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -155,7 +160,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'figure_change' && isset( $_
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'Figure &ldquo;' . $_GET['figure_name'] . '&rdquo; (' . $_GET['figure_filename'] . ') was not updated for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -166,7 +171,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'refresh_main' ) {
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The main page could not be set to refresh for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -178,7 +183,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'full_reset' ) {
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The full reset didn\'t work for some reason.' );
   }
-  header( 'location: ' . $_SERVER["PHP_SELF"] );
+  header( 'location: ' . $CFG['adminpage'] );
   exit(0);
 }
 
@@ -233,6 +238,7 @@ adminlog('manage');
   <![endif]-->
 
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -252,7 +258,7 @@ adminlog('manage');
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <!-- li class="active"><a href="#">Home</a></li -->
-          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
+          <li><a href="<?php echo $CFG['adminpage']; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -263,15 +269,15 @@ adminlog('manage');
               <li><a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome icons</a></li>
               <li class="divider"></li>
               <li class="dropdown-header">Site Operations</li>
-              <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=full_reset">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
           </li>
         </ul>
         <!-- button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button -->
         <ul class="nav navbar-nav navbar-right">
           <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
-          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=refresh_main">Refresh main screen <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
-          <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=logout">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+          <li><a href="<?php echo $CFG['adminpage']; ?>?action=refresh_main">Refresh main screen <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
+          <li><a href="<?php echo $CFG['adminpage']; ?>?action=logout">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
@@ -281,7 +287,9 @@ adminlog('manage');
 
 <?php
 
+// If there are any 'alerts' set, do cool stuff.
 if ( isset( $_SESSION['alerts'] ) ) {
+
   foreach ( $_SESSION['alerts'] as $alert ) {
     foreach ( $alert as $alert_type => $alert_text ) {
       echo '    <div class="alert alert-' . $alert_type . ' alert-dismissible alert-' . $alert_type . '-fade" role="alert">' . "\n";
@@ -308,7 +316,7 @@ if ( isset( $_SESSION['alerts'] ) ) {
     <div class="row">
       <div class="col-md-12">
         <h1>Last Logged In</h1>
-        <p>You last logged in at <?php echo date( 'c', $_SESSION['loggedin.time'] ); ?>.</p>
+        <p>You last logged in at <?php echo date( $CFG['time']['full'], $_SESSION['loggedin.time'] ); ?>. You will be automatically logged out after <?php echo $CFG['admintimeout']; ?> minutes of inactivity.</p>
       </div>
     </div>
 
@@ -366,30 +374,10 @@ echo make_status_change_menu();
         Edit an event by clicking the <span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span>.</p>
 <?php
 
-echo make_events_menu();
+echo make_events_menu( 15 );
 
 ?>
-        <hr>
-        <h3>Add a new event</h3>
-        <p>Use the basic form, below, to specify an date and description for a new event.</p>
-
-        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-          <input type="hidden" name="action" value="event_add">
-
-          <div class="form-group">
-            <label for="event_date">Event date</label>
-            <input type="date" class="form-control" id="event_date" name="event_date" placeholder="Enter date" aria-describedby="event_date_help">
-            <span id="event_date_help" class="help-block">Use the 'date picker' tools to the right (when you hover over the text box).</span>
-          </div>
-
-          <div class="form-group">
-            <label for="event_description">Event description</label>
-            <input type="text" class="form-control" id="event_description" name="event_description" placeholder="Enter event details" aria-describedby="event_description_help">
-            <span id="event_description_help" class="help-block">Be concise! We don't have much space to work with.</span>
-          </div>
-
-          <button type="submit" class="btn btn-info">Submit</button>
-        </form>
+        <a class="btn btn-primary btn-block" href="event.php" role="button">Add a new event</a>
 
       </div>
 
@@ -414,7 +402,7 @@ echo showstopper_page_warning();
 
         <p>Text for the Showstopper page. You have *about* 170 characters maximum.</p>
 
-        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+        <form action="<?php echo $CFG['adminpage']; ?>" method="post">
           <input type="hidden" name="action" value="showstopper_edit">
 
           <div class="form-group">
@@ -433,7 +421,7 @@ echo showstopper_page_warning();
 
         <p>URL of the RSS feed for the scroller.</p>
 
-        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+        <form action="<?php echo $CFG['adminpage']; ?>" method="post">
           <input type="hidden" name="action" value="rssfeed_url_edit">
 
           <div class="form-group">
@@ -447,12 +435,12 @@ echo showstopper_page_warning();
 
         <h3>Choose a preset</h3>
         <ul>
-            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
-            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
-            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
-            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
-            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
-            <li><a href="<?php echo $_SERVER["PHP_SELF"]; ?>?action=rssfeed_preset&rssfeed_preset_url=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
+            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
+            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
+            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
+            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
+            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
+            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
         </ul>
 
       </div>
@@ -646,6 +634,7 @@ echo help_modals();
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
   <script type="text/javascript" src="js/holder.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -665,6 +654,43 @@ echo help_modals();
       append: false,
       target: '#showstopper_help'
     });
+
+    /* Trying to do a database polling thing to change the screen automatically. */
+    function doPoll(){
+      $.post('refresh.php', function(data) {
+        if (data === "yes") {
+          location.reload();
+        }
+        setTimeout(doPoll,<?php echo $CFG['poll']; ?>);
+      });
+    }
+
+    // Will log you out after x milliseconds.
+    window.setTimeout(function() { 
+      location.href = '<?php echo $CFG['adminpage']; ?>?action=logout';
+    }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
+
+/*
+    $.jGrowl.defaults.pool = 5;
+    $.jGrowl.defaults.position = 'bottom-right';
+    // Sample 1
+    $.jGrowl("Hello world!");
+    // Sample 2
+    $.jGrowl("Stick this!", { sticky: true });
+    // Sample 3
+    $.jGrowl("A message with a header", { header: 'Important' });
+    // Sample 4
+    $.jGrowl("A message that will live a little longer.", { life: 10000 });
+    // Sample 5
+    $.jGrowl("A message with a beforeOpen callback and a different opening animation.", {
+        beforeClose: function(e,m) {
+            alert('About to close this notification!');
+        },
+        animateOpen: {
+            height: 'show'
+        }
+    });
+*/
 
 //    $('#datepicker').datepicker({ 
 //      dateFormat: 'yy-mm-dd', 

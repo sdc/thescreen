@@ -2,15 +2,17 @@
 
 //echo hash('sha256', 'polo');
 
-require_once( 'functions.inc.php' );
 session_name( 'sdc-thescreen' );
 session_start();
+
+require_once( 'functions.inc.php' );
 
 if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) ) {
 
   if ( hash( 'sha256', $_POST['password'] ) == $CFG['login']['pwd'] ) {
     // They got the right password, let them in.
     $_SESSION['loggedin'] = true;
+    // TODO: change this to 'logintime'?
     $_SESSION['loggedin.time'] = time();
 
     header( 'location: manage.php' );
