@@ -17,9 +17,9 @@ require_once( 'functions.inc.php' );
 require_once( 'functions-admin.inc.php' );
 
 // Debugging.
-//if ( isset( $_POST ) && !empty( $_POST ) ) {
-//  echo '<p>POST:</p><pre>'; var_dump( $_POST ); echo '</pre>';
-//}
+if ( isset( $_POST ) && !empty( $_POST ) ) {
+  echo '<p>POST:</p><pre>'; var_dump( $_POST ); echo '</pre>';
+}
 if ( isset( $_GET ) && !empty( $_GET ) ) {
   echo '<p>GET:</p><pre>'; var_dump( $_GET ); echo '</pre>';
 }
@@ -29,10 +29,10 @@ if ( isset( $_GET ) && !empty( $_GET ) ) {
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' ) {
 
   if ( isset( $_POST['event_date'] ) && !empty( $_POST['event_date'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
-    
+
     if ( isset( $_POST['event_edit'] ) && !empty( $_POST['event_edit'] ) && is_numeric( $_POST['event_edit'] ) ) {
 
-      // Make the following function!! UPDATE rather than INSERT.
+      // Make the following function UPDATE rather than INSERT.
       if ( edit_event( $_POST['event_date'], $_POST['event_description'], $_POST['event_edit'] ) ) {
 
         $_SESSION['alerts'][] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was updated successfully.' );
@@ -177,6 +177,8 @@ if ( isset( $_SESSION['alerts'] ) ) {
 
 if ( isset( $row['id'] ) ) {
   echo '          <input type="hidden" name="event_edit" value="' . $row['id'] . '">' . "\n";
+} else if ( isset( $_POST['event_edit'] ) ) {
+  echo '          <input type="hidden" name="event_edit" value="' . $_POST['event_edit'] . '">' . "\n";
 }
 
 $event_date_error = '';

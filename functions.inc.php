@@ -7,7 +7,7 @@
 // Configuration array and some settings.
 $CFG = array();
 
-$CFG['version'] = '2015022700';
+$CFG['version'] = '2015030100';
 
 $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';
@@ -32,8 +32,8 @@ $CFG['ext']             = '.txt';   // text file extension for loading data from
 // App's name.
 $CFG['lang']['title']   = 'The Screen&trade; Admin';
 
-// Main page refresh poll time in milliseconds.
-$CFG['poll']            = 3000;
+// Main page refresh poll time in seconds.
+$CFG['poll']            = 5;
 
 // Initial configuration settings array.
 $CFG['defaults'] = array(
@@ -507,10 +507,10 @@ function get_events( $num = 3, $edit = false ) {
   $now = time();
   $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
 
-  $sql = "SELECT id, start, text, deleted FROM events WHERE start >= '" . $today . "' AND deleted = 0 ORDER BY start ASC, id ASC LIMIT " . $num . ";";
+  $sql = "SELECT id, start, text FROM events WHERE start >= '" . $today . "' AND hidden = 0 ORDER BY start ASC, id ASC LIMIT " . $num . ";";
   $res = $DB->query( $sql );
 
-  if ( $res->num_rows == 0) {
+  if ( $res->num_rows == 0 ) {
     return '<p class="error">Sorry, no events.</p>';
 
   } else {
@@ -521,10 +521,7 @@ function get_events( $num = 3, $edit = false ) {
       $db_date = $row['start'];
       $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
 
-      // Extra styling for deleted events
-      $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . '</em>';
-
-      $build .= "</li>\n";
+      $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . "</em></li>\n";
     }
 
     $build .= "</ul>\n";

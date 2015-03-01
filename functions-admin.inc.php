@@ -279,7 +279,7 @@ function get_figures_thumbnails() {
       $build .= '          </div>' . "\n";
       $build .= '          <img class="img-thumbnail" src="' . $CFG['dir']['ppl'] . $figures['filename'][$j] . '" >' . "\n";
       $build .= '          <div class="caption">' . "\n";
-      
+
       if ( $figures['filename'][$j] == get_config( 'specific_fig' ) ) {
         $build .= '            <p><a class="btn btn-success btn-block" disabled="disabled" role="button">Chosen!</a></p>' . "\n";
       } else {
@@ -355,7 +355,7 @@ function make_events_menu( $num = 10 ) {
     $now = time();
     $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
 
-    $sql = "SELECT id, start, text, deleted FROM events WHERE start >= '" . $today . "' ORDER BY start ASC, id ASC LIMIT " . $num . ";";
+    $sql = "SELECT id, start, text, hidden FROM events WHERE start >= '" . $today . "' ORDER BY start ASC, id ASC LIMIT " . $num . ";";
     $res = $DB->query( $sql );
 
     if ( $res->num_rows == 0) {
@@ -368,17 +368,19 @@ function make_events_menu( $num = 10 ) {
         while ( $row = $res->fetch_assoc() ) {
             $db_date = $row['start'];
             $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
-            
-            // Extra styling for deleted events
-            if ( $row['deleted'] == 0 ) {
-                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
+
+            // Extra styling for hidden events
+            if ( $row['hidden'] == 0 ) {
+                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_hide&event_id=' . $row['id'] . '" title="Hide"><span class="glyphicon glyphicon-eye-close event-hide" aria-hidden="true"></span></a>';
             } else {
-                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_restore&event_id=' . $row['id'] . '" title="Un-delete" ><span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span></a>';
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_show&event_id=' . $row['id'] . '" title="Show" ><span class="glyphicon glyphicon-eye-open event-show" aria-hidden="true"></span></a>';
             }
 
             // Editing button.
-            //$build .= ' <a href="' . $CFG['adminpage'] . '?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
             $build .= ' <a href="event.php?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
+
+            // Delete button.
+            $build .= ' <a href="' . $CFG['adminpage'] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete" onclick="return confirm(\'Are you sure you want to delete the event \\\'' . $row['text'] . '\\\' ?\');"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
 
             $build .= "</li>\n";
         }
@@ -397,7 +399,7 @@ function add_event( $date, $text ) {
     global $DB;
 
     $text = $DB->real_escape_string( $text );
-    
+
     adminlog( 'add_event|' . $text );
 
     $sql = "INSERT INTO events (start, text, created, modified) VALUES ('" . $date . "', '" . $text . "', '" . time() . "', '" . time() . "');";
@@ -415,7 +417,7 @@ function edit_event( $date, $text, $id ) {
     global $DB;
 
     $text = $DB->real_escape_string( $text );
-    
+
     adminlog( 'edit_event|' . $id );
 
     $sql = "UPDATE events SET start = '" . $date . "', text = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
@@ -424,34 +426,48 @@ function edit_event( $date, $text, $id ) {
     return $res;
 }
 
-// Deletes an event.
+// Hides an event.
 // DONE
-function del_event( $eid ) {
+function hide_event( $id ) {
 
     global $DB;
 
-    adminlog( 'del_event|' . $eid );
+    adminlog( 'del_event|' . $id );
 
-    $sql = "UPDATE events SET deleted = 1, modified = '" . time() . "' WHERE id = " . $eid . ";";
+    $sql = "UPDATE events SET hidden = 1, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;
 }
 
 
-// Restores an event.
+// Shows a hidden event.
 // TODO: Check the event exists before restoring.
-function restore_event( $id ) {
+function show_event( $id ) {
 
     global $DB;
 
-    adminlog( 'restore_event|' . $id );
+    adminlog( 'show_event|' . $id );
 
-    $sql = "UPDATE events SET deleted = 0, modified = '" . time() . "' WHERE id = " . $id . ";";
+    $sql = "UPDATE events SET hidden = 0, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;
 }
+
+// Deletes an event completely.
+function delete_event( $id ) {
+
+    global $DB;
+
+    adminlog( 'delete_event|' . $id );
+
+    $sql = "DELETE FROM events WHERE id = " . $id . " LIMIT 1;";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
 
 // Make the form for adding in statistics.
 // DONE

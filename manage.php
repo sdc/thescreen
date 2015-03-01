@@ -3,7 +3,7 @@
 //phpinfo();
 
 /**
- * The Screen - Admin 
+ * The Screen - Admin
  * Code:    Paul Vaughan
  * Feb 2010 to Feb 2015, with minimal development in between.
  */
@@ -46,7 +46,7 @@ if ( isset( $_GET ) && !empty( $_GET ) ) {
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GET['page'] ) && !empty( $_GET['page'] ) && is_numeric( $_GET['page'] ) ) {
   if ( update_check( 'pages', $_GET['page'] ) ) {
     $_SESSION['alerts'][] = array( 'success' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was set successfully.' );
-    // TODO: Proposed change: 
+    // TODO: Proposed change:
     //$_SESSION['alerts'][] = array( 'type' => 'success', 'text' => 'The page called &ldquo;' . get_title( 'pages', $_GET['page'] ) . '&rdquo; was set successfully.', 'timeout' => 3000 );
     set_change();
   } else {
@@ -86,8 +86,9 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && isset( $_PO
 
 // Deleting an event.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
-  if ( del_event( $_GET['event_id'] ) ) {
+  if ( delete_event( $_GET['event_id'] ) ) {
     $_SESSION['alerts'][] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was deleted.' );
+    set_change();
   } else {
     $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not deleted for some reason.' );
   }
@@ -95,12 +96,25 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_del' && isset( $_GET[
   exit(0);
 }
 
-// Restoring a deleted event.
-if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_restore' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
-  if ( restore_event( $_GET['event_id'] ) ) {
-    $_SESSION['alerts'][] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was restored successfully.' );
+// Hiding an event.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_hide' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+  if ( hide_event( $_GET['event_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was hidden successfully.' );
+    set_change();
   } else {
-    $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not restored for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Showing a hidden event.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_show' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+  if ( show_event( $_GET['event_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was un-hidden successfully.' );
+    set_change();
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The event with id <strong>' . $_GET['event_id'] . '</strong> was not un-hidden for some reason.' );
   }
   header( 'location: ' . $CFG['adminpage'] );
   exit(0);
@@ -218,15 +232,15 @@ adminlog('manage');
   /* Green. */
   .tick { color: #0b0; }
   /* Red. */
-  .cross, .factoid-delete, .ts-warning { color: #d00; }
+  .cross, .factoid-delete, .event-delete, .ts-warning { color: #d00; }
   /* Light blue. */
-  .edit, .factoid-edit, .ts-info { color: #38b; }
+  .edit, .factoid-edit, .event-edit, .ts-info { color: #38b; }
   /* Grey. */
   .default { color: #777; }
   /* Light grey. */
-  .factoid-hide { color: #bbb; }
+  .factoid-hide, .event-hide { color: #bbb; }
   /* Dark grey. */
-  .factoid-show { color: #333; }
+  .factoid-show, .event-show  { color: #333; }
 
   #showstopper_counter { display: inline; }
   </style>
@@ -369,6 +383,7 @@ echo make_status_change_menu();
       <div class="col-md-4">
         <h2>Events <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
         <p>All future events (events which have passed are not shown).</p>
+        <p>TODO: edit the below and put the css into config!</p>
         <p>Delete an event by clicking the <span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span>. 
         The event will become greyed out, and can be un-deleted by clicking the <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>. 
         Edit an event by clicking the <span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span>.</p>

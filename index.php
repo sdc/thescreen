@@ -94,7 +94,7 @@ if ( file_exists( $pagename ) ) {
       if (data === "yes") {
         location.reload();
       }
-      setTimeout(doPoll,<?php echo $CFG['poll']; ?>);
+      setTimeout(doPoll,<?php echo $CFG['poll']; ?> * 1000);
     });
   }
 
