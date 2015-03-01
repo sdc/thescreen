@@ -283,7 +283,7 @@ adminlog('manage');
               <li><a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome icons</a></li>
               <li class="divider"></li>
               <li class="dropdown-header">Site Operations</li>
-              <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
           </li>
         </ul>
@@ -615,34 +615,14 @@ echo help_modals();
   <footer class="bs-docs-footer" role="contentinfo">
     <div class="container">
 
-      <p>Designed and built with all the love in the world by <a href="https://twitter.com/mdo" target="_blank">@mdo</a> and <a href="https://twitter.com/fat" target="_blank">@fat</a>.</p>
-      <p>Maintained by the <a href="https://github.com/orgs/twbs/people">core team</a> with the help of <a href="https://github.com/twbs/bootstrap/graphs/contributors">our contributors</a>.</p>
-      <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      <p>Designed and built with all the love in the world by <a href="https://twitter.com/sdcmoodle" target="_blank">@sdcmoodle</a>.</p>
       <ul class="bs-docs-footer-links text-muted">
-        <li>Currently v3.3.2</li>
+        <li>Currently v<?php echo $CFG['version']['build']; ?>, <?php echo $CFG['version']['date']; ?></li>
         <li>&middot;</li>
-        <li><a href="https://github.com/twbs/bootstrap">GitHub</a></li>
-        <li>&middot;</li>
-        <li><a href="../getting-started/#examples">Examples</a></li>
-        <li>&middot;</li>
-        <li><a href="../2.3.2/">v2.3.2 docs</a></li>
-        <li>&middot;</li>
-        <li><a href="../about/">About</a></li>
-        <li>&middot;</li>
-        <li><a href="http://expo.getbootstrap.com">Expo</a></li>
-        <li>&middot;</li>
-        <li><a href="http://blog.getbootstrap.com">Blog</a></li>
-        <li>&middot;</li>
-        <li><a href="https://github.com/twbs/bootstrap/issues">Issues</a></li>
-        <li>&middot;</li>
-        <li><a href="https://github.com/twbs/bootstrap/releases">Releases</a></li>
+        <li>Built with <a href="http://getbootstrap.com">Bootstrap 3</a></li>
       </ul>
     </div>
   </footer>
-
-
-
-
 
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -654,11 +634,11 @@ echo help_modals();
   <script type="text/javascript">
   $(document).ready(function(){
 
-    window.setTimeout(function() { 
+    window.setTimeout(function() {
       $(".alert-success-fade").fadeTo(800, 0).slideUp(500);
     }, 5000);
 
-    window.setTimeout(function() { 
+    window.setTimeout(function() {
       $(".alert-info-fade").fadeTo(800, 0).slideUp(500);
     }, 2000);
 
@@ -681,7 +661,7 @@ echo help_modals();
     }
 
     // Will log you out after x milliseconds.
-    window.setTimeout(function() { 
+    window.setTimeout(function() {
       location.href = '<?php echo $CFG['adminpage']; ?>?action=logout';
     }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
 

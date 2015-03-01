@@ -7,7 +7,9 @@
 // Configuration array and some settings.
 $CFG = array();
 
-$CFG['version'] = '2015030100';
+// Version stuff.
+$CFG['version']['date']   = '20150301';
+$CFG['version']['build']  = '0.2.0.1';
 
 $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';

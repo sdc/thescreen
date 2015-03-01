@@ -23,16 +23,17 @@ function make_page_change_menu() {
 
       $build .= '<li>';
 
-      if ( $row['id'] == $CFG['page'] ) {
-        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" title="This option is active." aria-hidden="true"></span>';
-
-      } else {
-        $build .= '<a href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>';
+      // Add in a flag for default if it's the default choice.
+      $default = '';
+      if ( $row['defaultpage'] ) {
+        $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>';
       }
 
-      // Add in a flag for default if it's the default choice.
-      if ( $row['defaultpage'] ) {
-        $build .= ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
+      if ( $row['id'] == $CFG['page'] ) {
+        $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
+
+      } else {
+        $build .= '<a href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
       }
 
       $build .= "</li>\n";
@@ -156,22 +157,24 @@ function make_status_change_menu() {
 
       $build .= '<li>';
 
-      if ( $row['id'] == $CFG['status'] ) {
-        $build .= '<strong>' . $row['title'] . '</strong> <span class="glyphicon glyphicon-ok tick" title="This option is active." aria-hidden="true"></span>';
-
-      } else {
-        $build .= '<a href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>';
+      // Add in a flag for default if it's the default choice.
+      $default = '';
+      if ( $row['defaultstatus'] ) {
+        $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
       }
 
-      // Add in a flag for default if it's the default choice.
-      if ( $row['defaultstatus'] ) {
-        $build .= ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
+      if ( $row['id'] == $CFG['status'] ) {
+        $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
+
+      } else {
+        $build .= '<a href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
       }
 
       $build .= "</li>\n";
     }
 
     $build .= "</ul>\n";
+
     return $build;
 
   }
@@ -371,16 +374,16 @@ function make_events_menu( $num = 10 ) {
 
             // Extra styling for hidden events
             if ( $row['hidden'] == 0 ) {
-                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_hide&event_id=' . $row['id'] . '" title="Hide"><span class="glyphicon glyphicon-eye-close event-hide" aria-hidden="true"></span></a>';
+                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_hide&event_id=' . $row['id'] . '"><span class="glyphicon glyphicon-eye-close event-hide" aria-hidden="true"></span></a>';
             } else {
-                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_show&event_id=' . $row['id'] . '" title="Show" ><span class="glyphicon glyphicon-eye-open event-show" aria-hidden="true"></span></a>';
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_show&event_id=' . $row['id'] . '"><span class="glyphicon glyphicon-eye-open event-show" aria-hidden="true"></span></a>';
             }
 
             // Editing button.
-            $build .= ' <a href="event.php?action=event_edit&event_id=' . $row['id'] . '" title="Edit"><span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span></a>';
+            $build .= ' <a href="event.php?action=event_edit&event_id=' . $row['id'] . '">' . get_icon( 'edit', 'Edit this event' ) . '</a>';
 
             // Delete button.
-            $build .= ' <a href="' . $CFG['adminpage'] . '?action=event_del&event_id=' . $row['id'] . '" title="Delete" onclick="return confirm(\'Are you sure you want to delete the event \\\'' . $row['text'] . '\\\' ?\');"><span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span></a>';
+            $build .= ' <a href="' . $CFG['adminpage'] . '?action=event_del&event_id=' . $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete the event \\\'' . $row['text'] . '\\\' ?\');">' . get_icon( 'cross', 'Delete this event' ) . '</a>';
 
             $build .= "</li>\n";
         }
@@ -678,6 +681,29 @@ function help_modals() {
     </div>
   </div>
 <?php
+}
+
+// Generates the icons used around the admin interface.
+function get_icon( $type = 'tick', $title = '' ) {
+  global $CFG;
+
+  if ( empty( $title ) ) {
+    $title = $type;
+  }
+
+  $out = ' <span class="glyphicon glyphicon-';
+
+  if ( strtolower( $type ) == 'tick' ) {
+    $out .= 'ok tick';
+  } else if ( strtolower( $type ) == 'cross' ) {
+    $out .= 'remove cross';
+  } else if ( strtolower( $type ) == 'edit' ) {
+    $out .= 'pencil edit';
+  }
+
+  $out .= '" title="' . $title . '" aria-hidden="true"></span> ';
+
+  return $out;
 }
 
 /**
