@@ -201,6 +201,17 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'full_reset' ) {
   exit(0);
 }
 
+// Truncating the log table.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'truncate_log' ) {
+  if ( truncate_log() ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The log table was truncated successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The log table was not truncated for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
 // Logging out.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'logout' ) {
   logout();
@@ -283,6 +294,7 @@ adminlog('manage');
               <li><a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome icons</a></li>
               <li class="divider"></li>
               <li class="dropdown-header">Site Operations</li>
+              <li><a href="<?php echo $CFG['adminpage']; ?>?action=truncate_log" onclick="return confirm('Are you sure?');">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
               <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
           </li>
@@ -581,7 +593,8 @@ echo get_figures_thumbnails();
 
                     <h2>Logs</h2>
                     <p>Last few log entries.</p>
-                    <?php echo get_last_log(12); ?>
+                    <p>The log table has <?php echo count_log(); ?> rows.</p>
+                    <?php echo get_last_log(15); ?>
                     <hr>
 
 

@@ -706,6 +706,38 @@ function get_icon( $type = 'tick', $title = '' ) {
   return $out;
 }
 
+// Truncates the log table. Because it gets big.
+// Might be good to remove all but the most recent 24 hours, 7 days, 1 month etc.
+function truncate_log() {
+
+  global $DB;
+
+  $res = $DB->query( "TRUNCATE TABLE log;" );
+
+  if ( $res ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+// Counts the number of lines in the log table.
+function count_log() {
+
+  global $DB;
+
+  $res = $DB->query( "SELECT COUNT(*) AS rowcount FROM log;" );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+  }
+
+  $row = $res->fetch_assoc();
+  return $row['rowcount'];
+
+}
+
 /**
  * Some well deprecated stuff below this point.
  */

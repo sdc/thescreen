@@ -22,8 +22,9 @@ $CFG['dir']['pages']    = 'pages/';
 // Set the name of the admin page, for use in other add/edit pages.
 // TODO: this, better.
 $CFG['adminpage']       = 'manage.php';
+
 // Minutes before the admin screen times out.
-$CFG['admintimeout']    = 60;
+$CFG['admintimeout']    = 5;
 
 $CFG['db']['time']      = date( 'Y-m-d H:i:s', time()) ;
 
