@@ -212,10 +212,66 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'truncate_log' ) {
   exit(0);
 }
 
+/**
+ * Factoids.
+ */
+
+// Showing (un-hiding) a factoid.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_show' && isset( $_GET['factoid_id'] ) && !empty( $_GET['factoid_id'] ) && is_numeric( $_GET['factoid_id'] ) ) {
+  if ( factoid_show( $_GET['factoid_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The factoid with id &ldquo;' . $_GET['factoid_id'] . '&rdquo; was un-hidden successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The factoid with id &ldquo;' . $_GET['factoid_id'] . '&rdquo; was not un-hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Hiding a factoid.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_hide' && isset( $_GET['factoid_id'] ) && !empty( $_GET['factoid_id'] ) && is_numeric( $_GET['factoid_id'] ) ) {
+  if ( factoid_hide( $_GET['factoid_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The factoid with id &ldquo;' . $_GET['factoid_id'] . '&rdquo; was hidden successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The factoid with id &ldquo;' . $_GET['factoid_id'] . '&rdquo; was not hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Showing all factoids.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_show_all' ) {
+  if ( factoid_show_all() ) {
+    $_SESSION['alerts'][] = array( 'success' => 'All factoids have been un-hidden successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'All factoids have not been un-hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Hiding all factoids.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_hide_all' ) {
+  if ( factoid_hide_all() ) {
+    $_SESSION['alerts'][] = array( 'success' => 'All factoids have been hidden successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'All factoids have not been hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+/**
+ * Logging out.
+ */
+
 // Logging out.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'logout' ) {
   logout();
 }
+
+/**
+ * Done with the page-load $_GET and $_POST checks.
+ */
 
 adminlog('manage');
 
@@ -249,9 +305,9 @@ adminlog('manage');
   /* Grey. */
   .default { color: #777; }
   /* Light grey. */
-  .factoid-hide, .event-hide { color: #bbb; }
+  .factoid-hide, .event-hide, .factoid-hide { color: #bbb; }
   /* Dark grey. */
-  .factoid-show, .event-show  { color: #333; }
+  .factoid-show, .event-show, .factoid-show  { color: #333; }
 
   #showstopper_counter { display: inline; }
   </style>
@@ -505,8 +561,14 @@ echo get_figures_thumbnails();
     <div class="row">
       <div class="col-md-8">
         <h2>Factoids</h2>
-        <p>Yeah, the previous one was too complicated. This is not. So far. Hopefully.</p>
-        <p>We need edit <span class="glyphicon glyphicon-pencil factoid-edit" aria-hidden="true"></span> hide <span class="glyphicon glyphicon-eye-close factoid-hide" aria-hidden="true"></span> show <span class="glyphicon glyphicon-eye-open factoid-show" aria-hidden="true"></span> and delete <span class="glyphicon glyphicon-remove factoid-delete" aria-hidden="true"></span> icons, with appropriate colours.</p>
+        <p>We have <?php echo count_rows( 'factoids' ); ?> factoids (<?php echo count_rows( 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'factoids', 'hidden = 1' ); ?> hidden).</p>
+        <p><a href="<?php echo $CFG['adminpage']; ?>?action=factoid_hide_all"><?php echo get_icon( 'hide', 'Hide all Factoids!' ); ?> Hide all Factoids</a> or <a href="<?php echo $CFG['adminpage']; ?>?action=factoid_show_all"><?php echo get_icon( 'show', 'Show all Factoids!' ); ?> show all Factoids</a>.</p>
+        <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete a factoid.</p>
+<?php
+
+echo make_factoids_menu();
+
+?>
       </div>
       <div class="col-md-4">
         <h2>Refresh Rate (possibly)</h2>
@@ -593,7 +655,7 @@ echo get_figures_thumbnails();
 
                     <h2>Logs</h2>
                     <p>Last few log entries.</p>
-                    <p>The log table has <?php echo count_log(); ?> rows.</p>
+                    <p>The log table has <?php echo count_rows( 'log' ); ?> rows.</p>
                     <?php echo get_last_log(15); ?>
                     <hr>
 

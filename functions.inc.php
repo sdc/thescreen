@@ -29,6 +29,7 @@ $CFG['admintimeout']    = 5;
 $CFG['db']['time']      = date( 'Y-m-d H:i:s', time()) ;
 
 $CFG['time']['full']    = 'l j\<\s\u\p\>S\<\/\s\u\p\> F Y, g:ia' ;
+$CFG['time']['title']   = 'D jS M Y, g:ia' ;
 
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
@@ -276,19 +277,18 @@ function get_rnd_statoid() {
 
 } else {
   // All other dates and times.
-  $sql = "SELECT COUNT(id) FROM factoids LIMIT 1;";
+  $sql = "SELECT id FROM factoids WHERE hidden = 0;";
   $res = $DB->query( $sql );
 
-  if ( $res->num_rows == 0 ) {
-    return '<p class="error">Sorry, no factoids found.</p>';
+  if ( !$res || $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no Factoids found.</p>';
+  } 
 
-  } else {
-    $row = $res->fetch_row();
-    $id = rand( 0, $row[0] - 1 );
+  $id = rand( 0, $res->num_rows );
 
-    $factoid = get_factoid( $id );
-    return make_text_bigger( $factoid );
-    }
+  $factoid = get_factoid( $id );
+  return make_text_bigger( $factoid );
+
   }
 }
 
