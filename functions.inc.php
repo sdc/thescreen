@@ -31,10 +31,18 @@ $CFG['ext']             = '.txt';   // text file extension for loading data from
 // App's name.
 $CFG['lang']['title']   = 'The Screen&trade; Admin';
 
+// Set the name of the admin page, for use in other add/edit pages.
+// TODO: this, better.
+$CFG['adminpage']       = 'manage.php';
+
+// Minutes before the admin screen times out.
+$CFG['admintimeout']    = 5;
+
 // Main page refresh poll time in seconds.
 $CFG['poll']            = 5;
 
 // Initial configuration settings array.
+// TODO: Put these into a seperate file so they can be used in the installation script.
 $CFG['defaults'] = array(
   'page'          => 1,
   'status'        => 1,
@@ -312,13 +320,12 @@ function get_factoid( $id = 1 ) {
   $sql = "SELECT fact FROM factoids WHERE id = '" . $id . "' LIMIT 1;";
   $res = $DB->query( $sql );
 
-  if ( $res->num_rows == 0 ) {
+  if ( !$res || $res->num_rows == 0 ) {
     return '<p class="error">Sorry, no factoids.</p>';
-
-  } else {
-    $row = $res->fetch_row();
-    return $row[0];
   }
+  
+  $row = $res->fetch_row();
+  return $row[0];
 }
 
 // A function solely for April 1st, or for any 'fun' facts and that, really.

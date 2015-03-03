@@ -4,7 +4,8 @@
  * Administrative functions.
  */
 
-// Require the Factoids functions.
+// Require the other functions files.
+require_once( 'functions-admin-general.inc.php' );
 require_once( 'functions-admin-factoids.inc.php' );
 
 
