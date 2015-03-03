@@ -26,7 +26,7 @@
       <li>AV Bookings: <em>avbookings</em></li>
     </ul>
 
-    <ul  id="news3">
+    <ul id="news3">
       <li>Staff Website: <em>staff.southdevon.ac.uk</em></li>
       <li>LZ Bookings: <em>lzbookings.southdevon.ac.uk</em></li>
       <li>Remote Email: <em>https://webmail.southdevon.ac.uk</em></li>
@@ -37,7 +37,7 @@
   <div id="factoid">
 
     <div id="factoid_inner">
-      <?php echo get_rnd_statoid(); ?>
+      <?php echo get_random_factoid(); ?>
     </div>
 
   </div>

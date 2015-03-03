@@ -12,6 +12,7 @@ if ( !isset( $_SESSION['loggedin'] ) ) {
   header( 'location: login.php' );
   exit(0);
 }
+$_SESSION['last_activity'] = time();
 
 require_once( 'functions.inc.php' );
 require_once( 'functions-admin.inc.php' );

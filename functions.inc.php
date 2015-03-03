@@ -19,17 +19,12 @@ $CFG['dir']['pages']    = 'pages/';
 
 //$CFG['dir']['data']     = './data/';
 
-// Set the name of the admin page, for use in other add/edit pages.
-// TODO: this, better.
-$CFG['adminpage']       = 'manage.php';
-
-// Minutes before the admin screen times out.
-$CFG['admintimeout']    = 5;
-
 $CFG['db']['time']      = date( 'Y-m-d H:i:s', time()) ;
 
+$CFG['time']['short']   = 'j\<\s\u\p\>S\<\/\s\u\p\> F';
 $CFG['time']['full']    = 'l j\<\s\u\p\>S\<\/\s\u\p\> F Y, g:ia' ;
 $CFG['time']['title']   = 'D jS M Y, g:ia' ;
+$CFG['time']['time']    = 'g:ia' ;
 
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
@@ -251,9 +246,9 @@ function get_refresh( $id ) {
 
 }
 
-// Get a random 'statoid' from the database.
+// Get a random factoid from the database.
 // DONE
-function get_rnd_statoid() {
+function get_random_factoid() {
 
   global $DB;
 
@@ -284,7 +279,7 @@ function get_rnd_statoid() {
     return '<p class="error">Sorry, no Factoids found.</p>';
   } 
 
-  $id = rand( 0, $res->num_rows );
+  $id = rand( 1, $res->num_rows );
 
   $factoid = get_factoid( $id );
   return make_text_bigger( $factoid );
@@ -307,8 +302,9 @@ function make_text_bigger( $text, $lbound = 30 ) {
   }
 }
 
-// Get a specific statoid based on it's ID.
+// Get a specific factoid based on it's ID.
 // DONE
+// TODO: Is this necessary?
 function get_factoid( $id = 1 ) {
 
   global $DB;
@@ -502,10 +498,9 @@ function get_status_txt() {
 
 // Get 'n' next events.
 // DONE
-// TODO: Probably best to split this between 'viewing' and 'editing' screens.
-function get_events( $num = 3, $edit = false ) {
+function get_events( $num = 3 ) {
 
-  global $DB;
+  global $CFG, $DB;
 
   $now = time();
   $today = date( 'Y', $now ) . '-' . date( 'm', $now ) . '-' . date( 'd', $now );
@@ -513,53 +508,20 @@ function get_events( $num = 3, $edit = false ) {
   $sql = "SELECT id, start, text FROM events WHERE start >= '" . $today . "' AND hidden = 0 ORDER BY start ASC, id ASC LIMIT " . $num . ";";
   $res = $DB->query( $sql );
 
-  if ( $res->num_rows == 0 ) {
+  if ( !$res || $res->num_rows == 0 ) {
     return '<p class="error">Sorry, no events.</p>';
-
-  } else {
-
-    $build = "<ul>\n";
-
-    while ( $row = $res->fetch_assoc() ) {
-      $db_date = $row['start'];
-      $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
-
-      $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . "</em></li>\n";
-    }
-
-    $build .= "</ul>\n";
-    return $build;
   }
 
-}
+  $build = "<ul>\n";
 
+  while ( $row = $res->fetch_assoc() ) {
+    $db_date = $row['start'];
+    $disp_date = date( $CFG['time']['short'], mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
 
-/**
- * new combined factoid/stats function.
- */
-function make_statoids() {
-/*
-  global $CFG, $DB;
+    $build .= '<li>' . $disp_date . ': <em>' . $row['text'] . "</em></li>\n";
+  }
 
-  // change the update time in the config
-  set_config('statoids_upd', $CFG['db']['time']);
-
-  // run ALL the update functions
-  update_moodle_stats();
-  //update_joomla_stats();
-  update_website_stats();
-  update_online_apps();
-
-  // truncate the table
-  $res = mysql_query("TRUNCATE TABLE statoids;", $DB);
-  // insert data from factoids
-  $res2 = mysql_query("INSERT INTO statoids (`text`) SELECT text FROM factoids;", $DB);
-  // insert data from stats, formatted
-  $res3 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, FORMAT(value, 0), text_after) FROM stats WHERE readonly = '1';", $DB);
-  // insert data from stats, UNformatted
-  $res4 = mysql_query("INSERT INTO statoids (`text`) SELECT CONCAT_WS ('', text_before, value, text_after) FROM stats WHERE readonly = '0';", $DB);
-*/
-
-  set_config('statoids_upd[DENIED]', $CFG['db']['time']);
+  $build .= "</ul>\n";
+  return $build;
 
 }

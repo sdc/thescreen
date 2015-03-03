@@ -15,6 +15,7 @@
  * * Secure all the admin pages, or consolidate them into the main admin page.
  * * Flash messages? Over POST?
  * * RSS feeds in database and URL encoded.
+ * * Use web workers?
  */
 
 // Do some including.
@@ -39,6 +40,7 @@ adminlog( 'pageload_' . $CFG['page'] );
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
 <?php
+
 if ( DEBUG ) {
   echo '  <meta http-equiv="Cache-Control" content="no-store">';
   echo '  <meta http-equiv="cache-control" content="max-age=0">';
@@ -47,8 +49,9 @@ if ( DEBUG ) {
   echo '  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">';
   echo '  <meta http-equiv="pragma" content="no-cache">';
 }
+
 ?>
-  <title>If you can read this, something is not entirely right. Go fullscreen! (F12)</title>
+  <title><?php echo date( $CFG['time']['title'], time() ); ?></title>
 
   <meta http-equiv="refresh" content="<?php echo get_refresh( $CFG['page'] ); ?>">
 
@@ -88,15 +91,17 @@ if ( file_exists( $pagename ) ) {
   <script type="text/javascript" src="jquery.marquee.js"></script>
 
   <script type="text/javascript">
-  /* Trying to do a database polling thing to change the screen automatically. */
+
+  // Poll the database to change the screen automatically.
   function doPoll(){
     $.post('refresh.php', function(data) {
       if (data === "yes") {
         location.reload();
       }
-      setTimeout(doPoll,<?php echo $CFG['poll']; ?> * 1000);
     });
   }
+
+  setInterval(function(){ doPoll(); }, <?php echo $CFG['poll']; ?> * 1000 );
 
   $(document).ready(function(){
     $('#scroller marquee').marquee();
@@ -105,7 +110,6 @@ if ( file_exists( $pagename ) ) {
     $("#news2").newsticker(8000);
     $("#news3").newsticker(8000);
 
-    doPoll();
   });
   </script>
 

@@ -1,7 +1,5 @@
 <?php
 
-//phpinfo();
-
 /**
  * The Screen - Admin
  * Code:    Paul Vaughan
@@ -9,6 +7,7 @@
  */
 
 // TODO: check to ensure there is precisely one row in 'pages' and 'status' tables and complain if otherwise.
+// TODO: check for no factoids and no shown factoids and warn if otherwise.
 // TODO: jQuery jGrowl: https://github.com/stanlemon/jGrowl
 
 session_name( 'sdc-thescreen' );
@@ -19,12 +18,18 @@ if ( !isset( $_SESSION['loggedin'] ) ) {
   header( 'location: login.php' );
   exit(0);
 }
+$_SESSION['last_activity'] = time();
 
 require_once( 'functions.inc.php' );
 require_once( 'functions-admin.inc.php' );
 
 // Set the name of the admin page, for use in other add/edit pages.
-//$CFG['adminpage'] = $_SERVER["PHP_SELF"];
+// TODO: this, better.
+$CFG['adminpage']       = 'manage.php';
+
+// Minutes before the admin screen times out.
+$CFG['admintimeout']    = 5;
+
 
 // Debugging.
 if ( isset( $_POST ) && !empty( $_POST ) ) {
@@ -37,9 +42,12 @@ if ( isset( $_GET ) && !empty( $_GET ) ) {
 //  echo '<p>SESSION[\'alerts\']:</p><pre>'; var_dump( $_SESSION['alerts'] ); echo '</pre>';
 //}
 
-
 /**
  * Before loading the page proper, check to see if any $_POST or $_GET are set, and deal with it.
+ */
+
+/**
+ * Page changing.
  */
 
 // Changing the page.
@@ -270,8 +278,24 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'logout' ) {
 }
 
 /**
- * Done with the page-load $_GET and $_POST checks.
+ * Some database checks and warnings if something's not right.
  */
+
+// No factoids.
+if ( count_rows( 'factoids' ) == 0 ) {
+  $_SESSION['alerts'][] = array( 'danger' => 'There are no factoids in the database. <a href="#" class="alert-link">Add one?</a>' );
+} else {
+  // No un-hidden factoids.
+  if ( count_rows( 'factoids', 'hidden = 0' ) == 0 ) {
+    $_SESSION['alerts'][] = array( 'danger' => 'There are no un-hidden factoids in the database. You might want to show at least one.' );
+  }
+}
+
+// No events.
+if ( count_rows( 'events' ) == 0 ) {
+  $_SESSION['alerts'][] = array( 'danger' => 'There are no events in the database. <a href="#" class="alert-link">Add one?</a>' );
+}
+
 
 adminlog('manage');
 
@@ -398,7 +422,7 @@ if ( isset( $_SESSION['alerts'] ) ) {
     <div class="row">
       <div class="col-md-12">
         <h1>Last Logged In</h1>
-        <p>You last logged in at <?php echo date( $CFG['time']['full'], $_SESSION['loggedin.time'] ); ?>. You will be automatically logged out after <?php echo $CFG['admintimeout']; ?> minutes of inactivity.</p>
+        <p>You last logged in at <?php echo date( $CFG['time']['full'], $_SESSION['loggedin.time'] ); ?>. Your last activity was at <?php echo date( $CFG['time']['time'], $_SESSION['last_activity'] ); ?>. You will be automatically logged out after <?php echo $CFG['admintimeout']; ?> minutes of inactivity.</p>
       </div>
     </div>
 
@@ -451,7 +475,6 @@ echo make_status_change_menu();
       <div class="col-md-4">
         <h2>Events <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
         <p>All future events (events which have passed are not shown).</p>
-        <p>TODO: edit the below and put the css into config!</p>
         <p>Delete an event by clicking the <span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span>. 
         The event will become greyed out, and can be un-deleted by clicking the <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>. 
         Edit an event by clicking the <span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span>.</p>
@@ -619,11 +642,6 @@ echo make_factoids_menu();
 
 
 
-                    <h2>Refresh Stats</h2>
-                    <p>Stats last refreshed <?php echo get_config('statoids_upd'); ?>. This happens automatically, randomly, throughout the day. 
-                    <a href="statoids_make.php">Click here</a> to refresh the statistics manually. </p>
-                    <hr>
-
                     <h2>Refresh</h2>
                     <p>Number of seconds between page refreshes.</p>
                     <form action="refresh_edit.php" method="get">
@@ -709,11 +727,11 @@ echo help_modals();
   <script type="text/javascript">
   $(document).ready(function(){
 
-    window.setTimeout(function() {
+    setTimeout(function() {
       $(".alert-success-fade").fadeTo(800, 0).slideUp(500);
     }, 5000);
 
-    window.setTimeout(function() {
+    setTimeout(function() {
       $(".alert-info-fade").fadeTo(800, 0).slideUp(500);
     }, 2000);
 
@@ -725,18 +743,9 @@ echo help_modals();
       target: '#showstopper_help'
     });
 
-    /* Trying to do a database polling thing to change the screen automatically. */
-    function doPoll(){
-      $.post('refresh.php', function(data) {
-        if (data === "yes") {
-          location.reload();
-        }
-        setTimeout(doPoll,<?php echo $CFG['poll']; ?>);
-      });
-    }
-
     // Will log you out after x milliseconds.
-    window.setTimeout(function() {
+    // TODO: use setInterval here instead?
+    setTimeout(function() {
       location.href = '<?php echo $CFG['adminpage']; ?>?action=logout';
     }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
 
@@ -761,13 +770,6 @@ echo help_modals();
         }
     });
 */
-
-//    $('#datepicker').datepicker({ 
-//      dateFormat: 'yy-mm-dd', 
-//      firstDay: 1, 
-//      yearRange: '2010:2011', 
-//      numberOfMonths: 2
-//    });
 
   });
   </script>

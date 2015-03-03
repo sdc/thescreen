@@ -43,7 +43,7 @@
     </div>
     <div id="factoid">
         <div id="factoid_inner">
-            <?php echo get_rnd_statoid(); ?>
+            <?php echo get_random_factoid(); ?>
         </div>
     </div>
     <div id="factoid_pic">
