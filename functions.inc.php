@@ -41,37 +41,31 @@ $CFG['admintimeout']    = 5;
 // Main page refresh poll time in seconds.
 $CFG['poll']            = 5;
 
-// Initial configuration settings array.
-// TODO: Put these into a seperate file so they can be used in the installation script.
-$CFG['defaults'] = array(
-  'page'          => 1,
-  'status'        => 1,
-  'refresh'       => 300, // May not need this one much longer...
-  'rssfeed'       => 'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',
-  'showstopper'   => 'error!',
-  'specific_fig'  => 'aaa-random.png',
-  //'person'        => 'aaa-random.png',
-  'changes'       => 'no',
-);
-
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
-  error( 'Could not include the configuration file.' );
+  error( 'Could not open the configuration file.' );
   exit(1);
 }
 
 // Connect to the database.
-!$DB = new mysqli( $CFG['db']['host'], $CFG['db']['user'], $CFG['db']['pwd'], $CFG['db']['name'] );
-if ( $DB->connect_errno ) {
-  error( 'Failed to connect to database: ' . $DB->connect_error . ' [' . $DB->connect_errno . ']' );
+$DB = new mysqli( $CFG['db']['host'], $CFG['db']['user'], $CFG['db']['pwd'], $CFG['db']['name'] );
+if ( $DB->connect_error ) {
+  echo 'Failed to connect to database: ' . $DB->connect_error;
+  exit(1);
+}
+
+// Initial configuration settings array.
+if ( !require_once( 'defaults.inc.php' ) ) {
+  echo 'Could not open the default configuration file.';
   exit(1);
 }
 
 // Check the database for defaults and if none found, add them in.
+// TODO: This assumes a config table is in place. It might not be!
 foreach ( $CFG['defaults'] as $setting => $value ) {
   if ( !get_config( $setting ) ) {
     if ( !set_config( $setting, $value, true ) ) {
-      error( 'Could not set a default "' . $setting . '" of "' . $value . '".' );
+      echo 'Could not set a default "' . $setting . '" of "' . $value . '".';
       exit(1);
     }
   }
