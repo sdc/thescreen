@@ -1,11 +1,21 @@
 <?php
 
+if ( !isset( $_GET['confirm'] ) ) {
+  // Print a warning.
+  // Link to this page with 'confirm' set.
+  exit(0);
+}
+
 $now = time();
 
 $sql = array(
   'tables'    => array(),
   'contents'  => array()
 );
+
+/**
+ * SQL for table definitions.
+ */
 
 $sql['tables']['aprilfools'] = "DROP TABLE IF EXISTS `aprilfools`;
 CREATE TABLE IF NOT EXISTS `aprilfools` (
@@ -104,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `status` (
 
 /**
  * End of the table definitions.
- * 
+ *
  * Start of the table contents.
  */
 
