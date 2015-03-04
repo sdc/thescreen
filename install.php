@@ -1,10 +1,78 @@
 <?php
 
+echo "<h1>The Screen&trade; Installation</h1>";
+echo "<p>This installer looks basic, but it contains all the SQL needed to create a new database on your databsae server, create the tables needed and populate them with enough data to get you started.</p>";
+echo "<p>Before you do anything else, (if you haven't already), please rename the file called <code>config-dist.inc.php</code> to <code>config.inc.php</code>, edit it, and change the details within to match that of your system.<p>";
+echo "<p><hr></p>";
+
+echo "<p>1. <code>config.inc.php</code> status: ";
+if ( !file_exists( 'config.inc.php' ) ) {
+  echo "doesn't seem to exist.</p>";
+  exit(1);
+} else {
+  echo 'exists, so loading the details.</p>';
+  require_once( 'config.inc.php' );
+}
+
+$error = false;
+
+echo "<p>2. Database name is ";
+if ( empty( $CFG['db']['name'] ) ) {
+  echo "empty. Fix this!</p>";
+  $error = true;
+} else if ( $CFG['db']['name'] == 'thescreen' ) {
+  echo "set to default default of '<code>thescreen</code>' (which is fine).</p>";
+} else {
+  echo "set to: '<code>" . $CFG['db']['name'] . "</code>'.</p>";
+}
+
+echo "<p>3. Database host (e.g. '<code>localhost</code>' or '<code>192.168.0.100</code>') is ";
+if ( empty( $CFG['db']['host'] ) ) {
+  echo "empty. Fix this!</p>";
+  $error = true;
+} else if ( $CFG['db']['host'] == 'localhost' ) {
+  echo "set to default of '<code>localhost</code>' (which is fine).</p>";
+} else {
+  echo "set to: '<code>" . $CFG['db']['host'] . "</code>'.</p>";
+}
+
+echo "<p>4. Database user is ";
+if ( empty( $CFG['db']['user'] ) ) {
+  echo "empty. Fix this!</p>";
+  $error = true;
+} else {
+  echo "set to: '<code>" . $CFG['db']['user'] . "</code>'.</p>";
+}
+
+if ( strtolower( $CFG['db']['user'] ) == 'root' || strtolower( $CFG['db']['user'] ) == 'admin' || strtolower( $CFG['db']['user'] ) == 'administrator' ) {
+  echo "<p><strong>Note:</strong> We noticed that your database username is '<code>" . $CFG['db']['user'] . "</code>'. It is not a good idea to log in to your database as a user with full root privileges. Instead, create a new user with less privileges and log in as them instead.</p>";
+}
+
+echo "<p>5. Database password is ";
+if ( empty( $CFG['db']['pwd'] ) ) {
+  echo "empty. Fix this!</p>";
+  $error = true;
+} else {
+  echo "set (which is enough for now).</p>";
+}
+
+if ( $error ) {
+  echo "Stopping due to errors. Please fix them and reload this page.";
+  exit(1);
+}
+
 if ( !isset( $_GET['confirm'] ) ) {
-  // Print a warning.
-  // Link to this page with 'confirm' set.
+  echo "<p>All that is needed now is for you to click on this link which will set the installation off. Keep an eye out for error messages, just in case.</p>";
+  echo '<p><a href="install.php?confirm">Let\'s install this thing!</a></p>'; 
   exit(0);
 }
+
+echo "<p>6. You confirmed that you want installation to start, so let's go... ";
+echo "<p><hr></p>";
+echo "<h2>Installation</h2>";
+
+
+die('testing death');
 
 $now = time();
 
@@ -12,6 +80,14 @@ $sql = array(
   'tables'    => array(),
   'contents'  => array()
 );
+
+/**
+ * SQL for the database definition.
+ */
+
+$sql['database'] = "DROP DATABASE IF EXISTS `thescreen`;
+CREATE DATABASE `thescreen` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `thescreen`;";
 
 /**
  * SQL for table definitions.
