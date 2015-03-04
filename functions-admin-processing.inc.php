@@ -273,11 +273,16 @@ if ( count_rows( 'factoids' ) == 0 ) {
 } else {
   // No un-hidden factoids.
   if ( count_rows( 'factoids', 'hidden = 0' ) == 0 ) {
-    $_SESSION['alerts'][] = array( 'danger' => 'There are no un-hidden factoids in the database. You might want to show at least one.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'There are no un-hidden factoids. You should show at least one.' );
   }
 }
 
 // No events.
 if ( count_rows( 'events' ) == 0 ) {
   $_SESSION['alerts'][] = array( 'danger' => 'There are no events in the database. <a href="#" class="alert-link">Add one?</a>' );
+} else {
+  // No un-hidden events.
+  if ( count_rows( 'events', 'hidden = 0' ) == 0 ) {
+    $_SESSION['alerts'][] = array( 'danger' => 'There are no un-hidden events. You should show at least one.' );
+  }
 }
