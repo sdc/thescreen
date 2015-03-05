@@ -5,6 +5,7 @@
  */
 
 // Configuration array and some settings.
+// TODO: Split these into options which can be changed (move into config[.dist].inc.php) or not (leave here).
 $CFG = array();
 
 // Version stuff.
@@ -36,7 +37,7 @@ $CFG['lang']['title']   = 'The Screen&trade; Admin';
 $CFG['adminpage']       = 'manage.php';
 
 // Minutes before the admin screen times out.
-$CFG['admintimeout']    = 5;
+$CFG['admintimeout']    = 15;
 
 // Main page refresh poll time in seconds.
 $CFG['poll']            = 5;
