@@ -42,6 +42,12 @@ $CFG['admintimeout']    = 15;
 // Main page refresh poll time in seconds.
 $CFG['poll']            = 5;
 
+// For teh lulz.
+//$now = time();
+$now = 1427878800; // 9am, April 1st 2015 (for testing).
+$CFG['aprilfool']       = ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) ? true : false;
+
+
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
   error( 'Could not open the configuration file.' );
@@ -253,41 +259,46 @@ function get_refresh( $id ) {
 // DONE
 function get_random_factoid() {
 
-  global $DB;
+  global $CFG, $DB;
 
-  $now = time();
-  // check the date...
-  if ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) {
-    // April 1st.
-    $sql = "SELECT COUNT(id) FROM aprilfools LIMIT 1;";
-    $res = $DB->query( $sql );
+  $db = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+  $sql = "SELECT `id` FROM `" . $db . "` WHERE `hidden` = '0';";
 
-    if ( $res->num_rows == 0 ) {
-      return '<p class="error">Sorry, no April Fools found.</p>';
-
-    } else {
-      $row = $res->fetch_row();
-      $id = rand( 0, $row[0] - 1 );
-
-      $fool = get_aprilfools( $id );
-      return make_text_bigger( $fool );
-    }
-
-} else {
-  // All other dates and times.
-  $sql = "SELECT id FROM factoids WHERE hidden = 0;";
   $res = $DB->query( $sql );
 
   if ( !$res || $res->num_rows == 0 ) {
     return '<p class="error">Sorry, no Factoids found.</p>';
-  } 
+  }
 
-  $id = rand( 1, $res->num_rows );
+  $rows = array();
+  while ( $row = $res->fetch_assoc() ) {
+    $rows[] = $row['id'];
+  }
 
-  $factoid = get_factoid( $id );
+  $id = rand( 0, count( $rows ) - 1 );
+  $factoid = get_factoid( $rows[$id] );
+
   return make_text_bigger( $factoid );
 
+}
+
+// Get a specific factoid based on it's ID.
+// DONE
+function get_factoid( $id = 1 ) {
+
+  global $CFG, $DB;
+
+  $db = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+  $sql = "SELECT `fact` FROM `" . $db . "` WHERE `id` = '" . $id . "' LIMIT 1;";
+
+  $res = $DB->query( $sql );
+
+  if ( !$res || $res->num_rows == 0 ) {
+    return '<p class="error">Sorry, no factoids.</p>';
   }
+  
+  $row = $res->fetch_row();
+  return $row[0];
 }
 
 // Make text bigger or not, depending on how many characters there are.
@@ -305,41 +316,6 @@ function make_text_bigger( $text, $lbound = 30 ) {
   }
 }
 
-// Get a specific factoid based on it's ID.
-// DONE
-// TODO: Is this necessary?
-function get_factoid( $id = 1 ) {
-
-  global $DB;
-
-  $sql = "SELECT fact FROM factoids WHERE id = '" . $id . "' LIMIT 1;";
-  $res = $DB->query( $sql );
-
-  if ( !$res || $res->num_rows == 0 ) {
-    return '<p class="error">Sorry, no factoids.</p>';
-  }
-  
-  $row = $res->fetch_row();
-  return $row[0];
-}
-
-// A function solely for April 1st, or for any 'fun' facts and that, really.
-// DONE
-function get_aprilfools( $id = 1 ) {
-
-  global $DB;
-
-  $sql = "SELECT fact FROM aprilfools WHERE id = '" . $id . "' LIMIT 1;";
-  $res = $DB->query( $sql );
-
-  if ( $res->num_rows == 0 ) {
-    return '<p class="error">Sorry, no April Fools.</p>';
-
-  } else {
-    $row = $res->fetch_row();
-    return $row[0];
-  }
-}
 
 // Gets a named 'figure' then returns it, or a random one on fail.
 // DONE
