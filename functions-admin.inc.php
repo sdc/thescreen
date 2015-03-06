@@ -7,6 +7,7 @@
 // Require the other functions files.
 require_once( 'functions-admin-general.inc.php' );
 require_once( 'functions-admin-factoids.inc.php' );
+require_once( 'functions-admin-events.inc.php' );
 
 
 /**
@@ -277,8 +278,8 @@ function get_figures_thumbnails() {
 
 // Get 'n' next events.
 // DONE
-// TODO: Probably best to split this between 'viewing' and 'editing' screens.
-function make_events_menu( $num = 10 ) {
+// TODO: Do we want to limit the number of future events being shown?
+function make_events_menu( $num = 20 ) {
 
     global $CFG, $DB;
 
@@ -297,7 +298,7 @@ function make_events_menu( $num = 10 ) {
 
         while ( $row = $res->fetch_assoc() ) {
             $db_date = $row['start'];
-            $disp_date = date( 'j\<\s\u\p\>S\<\/\s\u\p\> M', mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
+            $disp_date = date( $CFG['time']['short'], mktime( 0, 0, 0, substr($db_date, 5, 2), substr($db_date, 8, 2), substr($db_date, 0, 4) ));
 
             // Extra styling for hidden events
             if ( $row['hidden'] == 0 ) {
@@ -495,6 +496,30 @@ function showstopper_page_warning() {
   } else {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
     $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> page.' . "\n";
+    $out .= "</div>\n";
+  }
+
+  return $out;
+}
+
+// Checks to see if there are any un-hidden factoids, and shows a warning if not.
+function no_unhidden_factoids_warning() {
+  $out = '';
+  if ( count_rows( 'factoids', 'hidden = 0' ) == 0 ) {
+    $out .= '<div class="alert alert-danger" role="alert">' . "\n";
+    $out .= '  <strong>Warning!</strong> There are no un-hidden factoids. You should show at least one.' . "\n";
+    $out .= "</div>\n";
+  }
+
+  return $out;
+}
+
+// Checks to see if there are any un-hidden factoids, and shows a warning if not.
+function no_unhidden_events_warning() {
+  $out = '';
+  if ( count_rows( 'events', 'hidden = 0' ) == 0 ) {
+    $out .= '<div class="alert alert-danger" role="alert">' . "\n";
+    $out .= '  <strong>Warning!</strong> There are no un-hidden events. You should show at least one.' . "\n";
     $out .= "</div>\n";
   }
 
