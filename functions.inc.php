@@ -20,12 +20,12 @@ $CFG['dir']['pages']    = 'pages/';
 
 //$CFG['dir']['data']     = './data/';
 
-$CFG['db']['time']      = date( 'Y-m-d H:i:s', time()) ;
+$CFG['db']['time']      = date( 'Y-m-d H:i:s', time()) ;            // 2015-03-09 09:00:00
 
-$CFG['time']['short']   = 'j\<\s\u\p\>S\<\/\s\u\p\> F';
-$CFG['time']['full']    = 'l j\<\s\u\p\>S\<\/\s\u\p\> F Y, g:ia' ;
-$CFG['time']['title']   = 'D jS M Y, g:ia' ;
-$CFG['time']['time']    = 'g:ia' ;
+$CFG['time']['short']   = 'j\<\s\u\p\>S\<\/\s\u\p\> F';             // 9th March
+$CFG['time']['full']    = 'l j\<\s\u\p\>S\<\/\s\u\p\> F Y, g:ia';   // Monday 9th March 2015, 9:00am
+$CFG['time']['title']   = 'D jS M Y, g:ia';                         // Mon 9th Mar 2015, 9:00am
+$CFG['time']['time']    = 'g:ia';                                   // 9:00am
 
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
@@ -267,7 +267,7 @@ function get_random_factoid() {
   $res = $DB->query( $sql );
 
   if ( !$res || $res->num_rows == 0 ) {
-    return '<p class="error">Sorry, no Factoids found.</p>';
+    return '<p class="error">Sorry, no factoids.</p>';
   }
 
   $rows = array();
