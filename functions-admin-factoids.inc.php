@@ -88,7 +88,7 @@ function factoid_hide( $id ) {
   return $res;
 }
 
-// Hides all factoids.
+// Shows all factoids.
 function factoid_show_all() {
 
   adminlog( 'factoid_show_all|' );
