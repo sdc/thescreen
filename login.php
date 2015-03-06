@@ -5,11 +5,18 @@
 session_name( 'sdc-thescreen' );
 session_start();
 
+$logout = false;
+$login_fail = false;
+
+if ( isset( $_GET['logout'] ) ) {
+  $logout = true;
+}
+
 require_once( 'functions.inc.php' );
 
 if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) ) {
 
-  if ( hash( 'sha256', $_POST['password'] ) == $CFG['login']['pwd'] ) {
+  if ( hash( 'sha256', $_POST['password'] ) == get_config( 'admin_password' ) ) {
     // They got the right password, let them in.
     $_SESSION['loggedin'] = true;
     // TODO: change this to 'logintime'?
@@ -18,7 +25,10 @@ if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) ) {
     header( 'location: manage.php' );
     exit(0);
 
+  } else {
+    $login_fail = true;
   }
+
 }
 
 ?><!DOCTYPE html>
@@ -45,6 +55,16 @@ if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) ) {
     <div class="container">
 
       <form class="form-signin" action="login.php" method="post">
+<?php
+
+if ( $logout ) {
+  echo '      <div class="alert alert-success" role="alert">You have logged out.</div>';
+}
+if ( $login_fail ) {
+  echo '      <div class="alert alert-danger" role="alert">Login failure.</div>';
+}
+
+?>
         <h2 class="form-signin-heading">Please sign in</h2>
         <!-- label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus -->

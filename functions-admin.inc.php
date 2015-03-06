@@ -542,7 +542,7 @@ function logout() {
     );
   }
   session_destroy();
-  header( 'location: login.php' );
+  header( 'location: login.php?logout' );
   exit(0);
 }
 

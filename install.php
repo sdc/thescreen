@@ -502,4 +502,6 @@ echo "<p>Done.</p>";
 
 echo "<p><hr></p>";
 echo "<h2>Installation complete</h2>";
-echo "<p>If you're reading this, chances are that everything worked as it should, but please check for read '<strong><span style=\"color:red;\">failed</span></strong>' text.</p>";
+echo "<p>If you're reading this, chances are that everything worked as it should, but please check for read '<strong><span style=\"color:red;\">failed</span></strong>' text. If you need to re-run the installer, just reload this page.</p>";
+
+echo '<p>Installation is complete, so <a href="install-password.php">click here for a final task</a>.</p>';
