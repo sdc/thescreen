@@ -106,6 +106,29 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_show' && isset( $_GET
   exit(0);
 }
 
+// Showing all events.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_show_all' ) {
+  if ( event_show_all() ) {
+    $_SESSION['alerts'][] = array( 'success' => 'All events have been un-hidden successfully.' );
+    set_change();
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'All events have not been un-hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Hiding all events.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_hide_all' ) {
+  if ( event_hide_all() ) {
+    $_SESSION['alerts'][] = array( 'success' => 'All events have been hidden successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'All events have not been hidden for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
 
 /**
  * Showstopper checks.
@@ -268,6 +291,7 @@ if ( file_exists( 'install.php' ) ) {
 
 
 // No factoids.
+// TODO: Complete the 'add one' link.
 if ( count_rows( 'factoids' ) == 0 ) {
   $_SESSION['alerts'][] = array( 'danger' => 'There are no factoids in the database. <a href="#" class="alert-link">Add one?</a>' );
 } else {
@@ -278,6 +302,7 @@ if ( count_rows( 'factoids' ) == 0 ) {
 }
 
 // No events.
+// TODO: Complete the 'add one' link.
 if ( count_rows( 'events' ) == 0 ) {
   $_SESSION['alerts'][] = array( 'danger' => 'There are no events in the database. <a href="#" class="alert-link">Add one?</a>' );
 } else {
