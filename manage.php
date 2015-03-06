@@ -105,6 +105,7 @@ adminlog('manage');
         <ul class="nav navbar-nav">
           <!-- li class="active"><a href="#">Home</a></li -->
           <li><a href="<?php echo $CFG['adminpage']; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
+
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -118,6 +119,18 @@ adminlog('manage');
               <li><a href="<?php echo $CFG['adminpage']; ?>?action=truncate_log" onclick="return confirm('Are you sure?');">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
               <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
+          </li>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new: <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">event</a></li>
+              <li><a href="#">factoid</a></li>
+              <li><a href="#">page</a></li>
+              <li><a href="#">status</a></li>
+              <li><a href="#">figure</a></li>
+            </ul>
+
           </li>
         </ul>
         <!-- button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button -->
@@ -203,13 +216,18 @@ echo make_status_change_menu();
 
       <div class="col-md-4">
         <h2>Events <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
-        <p>All future events (events which have passed are not shown).</p>
-        <p>Delete an event by clicking the <span class="glyphicon glyphicon-remove cross" aria-hidden="true"></span>. 
-        The event will become greyed out, and can be un-deleted by clicking the <span class="glyphicon glyphicon-ok tick" aria-hidden="true"></span>. 
-        Edit an event by clicking the <span class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span>.</p>
 <?php
 
-echo make_events_menu( 15 );
+echo no_unhidden_events_warning();
+
+?>
+        <p>All future events are listed here. Events which have passed are not shown.</p>
+        <p>We have <?php echo count_rows( 'events' ); ?> events (<?php echo count_rows( 'events', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'events', 'hidden = 1' ); ?> hidden).</p>
+        <p><a href="<?php echo $CFG['adminpage']; ?>?action=event_hide_all"><?php echo get_icon( 'hide', 'Hide all events!' ); ?> Hide all events</a> or <a href="<?php echo $CFG['adminpage']; ?>?action=event_show_all"><?php echo get_icon( 'show', 'Show all events!' ); ?> show all events</a>.</p>
+        <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete an event.</p>
+<?php
+
+echo make_events_menu();
 
 ?>
         <a class="btn btn-primary btn-block" href="event.php" role="button">Add a new event</a>
@@ -291,6 +309,34 @@ echo showstopper_page_warning();
     <!-- Row four. -->
     <div class="row">
       <div class="col-md-12">
+        <h2>Factoids</h2>
+<?php
+
+echo no_unhidden_factoids_warning();
+
+?>
+        <p>We have <?php echo count_rows( 'factoids' ); ?> factoids (<?php echo count_rows( 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'factoids', 'hidden = 1' ); ?> hidden).</p>
+        <p><a href="<?php echo $CFG['adminpage']; ?>?action=factoid_hide_all"><?php echo get_icon( 'hide', 'Hide all Factoids!' ); ?> Hide all Factoids</a> or <a href="<?php echo $CFG['adminpage']; ?>?action=factoid_show_all"><?php echo get_icon( 'show', 'Show all Factoids!' ); ?> show all Factoids</a>.</p>
+        <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete a factoid.</p>
+<?php
+
+echo make_factoids_menu();
+
+?>
+        <a class="btn btn-primary" href="factoid.php" role="button">Add a new factoid</a>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+
+    <!-- Row five. -->
+    <div class="row">
+      <div class="col-md-12">
         <h2>Specific Person</h2>
         <p>Click on the person whose face you want to show, or choose 'random' for a random person each time.</p>
       </div>
@@ -309,30 +355,7 @@ echo get_figures_thumbnails();
       </div>
     </div>
 
-    <!-- Row five. -->
-    <div class="row">
-      <div class="col-md-8">
-        <h2>Factoids</h2>
-        <p>We have <?php echo count_rows( 'factoids' ); ?> factoids (<?php echo count_rows( 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'factoids', 'hidden = 1' ); ?> hidden).</p>
-        <p><a href="<?php echo $CFG['adminpage']; ?>?action=factoid_hide_all"><?php echo get_icon( 'hide', 'Hide all Factoids!' ); ?> Hide all Factoids</a> or <a href="<?php echo $CFG['adminpage']; ?>?action=factoid_show_all"><?php echo get_icon( 'show', 'Show all Factoids!' ); ?> show all Factoids</a>.</p>
-        <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete a factoid.</p>
-<?php
 
-echo make_factoids_menu();
-
-?>
-      </div>
-      <div class="col-md-4">
-        <h2>Refresh Rate (possibly)</h2>
-        <p>Click on the person whose face you want to show, or choose 'random' for a random person each time.</p>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <hr>
-      </div>
-    </div>
 
 
 
