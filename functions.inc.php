@@ -43,8 +43,8 @@ $CFG['admintimeout']    = 15;
 $CFG['poll']            = 5;
 
 // For teh lulz.
-//$now = time();
-$now = 1427878800; // 9am, April 1st 2015 (for testing).
+$now = time();
+//$now = 1427878800; // 9am, April 1st 2015 (for testing).
 $CFG['aprilfool']       = ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) ? true : false;
 
 
