@@ -9,8 +9,8 @@
 $CFG = array();
 
 // Version stuff.
-$CFG['version']['date']   = '20150301';
-$CFG['version']['build']  = '0.2.0.1';
+$CFG['version']['date']   = '20150306';
+$CFG['version']['build']  = '0.2.0.2';
 
 $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';
@@ -318,14 +318,19 @@ function make_text_bigger( $text, $lbound = 30 ) {
 
 
 // Gets a named 'figure' then returns it, or a random one on fail.
-// DONE
+// TODO: Use the config option 'aprilfool' to choose a specific image on April 1st?
+// This needs refactoring, quite urgently.
 function get_figure() {
   global $CFG;
 
   $img = get_config( 'specific_fig' );
 
-  if ( $img == 'aaa-random.png' ) {
-    return get_rnd_figure();
+  if ( $CFG['aprilfool'] ) {
+    adminlog( 'img|set|aprilfool' );
+    return '<img src="' . $CFG['dir']['ppl'] . 'special-aleksandr.png" title="Aleksandr">' . "\n";
+
+  } else if ( $img == 'aaa-random.png' ) {
+    return get_random_figure();
 
   } else {
     $file_loc = $CFG['dir']['ppl'] . $img;
@@ -335,7 +340,7 @@ function get_figure() {
       return '<img src="' . $file_loc . '" title="' . $img . '">' . "\n";
 
     } else {
-      return get_rnd_figure();
+      return get_random_figure();
     }
       
   }
@@ -343,7 +348,7 @@ function get_figure() {
 
 // Gets a random figure from those available on disk.
 // DONE
-function get_rnd_figure() {
+function get_random_figure() {
   global $CFG;
 
   // Scan the folder for appropriate images.
