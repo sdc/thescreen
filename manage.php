@@ -54,8 +54,8 @@ adminlog('manage');
 
   <meta http-equiv="refresh" content="300">
 
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="css/bs-docs.css" rel="stylesheet">
   <style type="text/css">
   body {
@@ -83,7 +83,7 @@ adminlog('manage');
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" rel="stylesheet">
   <!-- link href="bower_components/sweetalert/lib/sweet-alert.css" rel="stylesheet" -->
   <link href="bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
@@ -474,8 +474,8 @@ echo help_modals();
     </div>
   </footer>
 
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/bootstreap/dist/js/bootstrap.min.js"></script>
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
   <script type="text/javascript" src="js/holder.min.js"></script>
