@@ -85,6 +85,8 @@ adminlog('manage');
 
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" rel="stylesheet">
+  <!-- link href="bower_components/sweetalert/lib/sweet-alert.css" rel="stylesheet" -->
+  <link href="bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
 
 </head>
 <body>
@@ -116,13 +118,15 @@ adminlog('manage');
               <li><a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome icons</a></li>
               <li class="divider"></li>
               <li class="dropdown-header">Site Operations</li>
-              <li><a href="<?php echo $CFG['adminpage']; ?>?action=truncate_log" onclick="return confirm('Are you sure?');">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
-              <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=truncate_log" onclick="return confirm('Are you sure?');">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
+              <li><a id="truncate_log" href="#">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
+              <li><a id="full_reset" href="#">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
           </li>
 
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new: <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#">event</a></li>
               <li><a href="#">factoid</a></li>
@@ -474,6 +478,8 @@ echo help_modals();
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
   <script type="text/javascript" src="js/holder.min.js"></script>
+  <!-- script type="text/javascript" src="bower_components/sweetalert/lib/sweet-alert.min.js"></script -->
+  <script type="text/javascript" src="bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
 
   <script type="text/javascript">
@@ -500,6 +506,62 @@ echo help_modals();
     setTimeout(function() {
       location.href = '<?php echo $CFG['adminpage']; ?>?action=logout';
     }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
+
+    // Initial SweetAlert code.
+    document.querySelector('#truncate_log').onclick = function(){
+      swal({
+        title:              "Are you sure?",
+        text:               "You will not be able to recover the log table unless you have a backup",
+        type:               "warning",
+        showCancelButton:   true,
+        //confirmButtonColor: "#DD6B55",
+        confirmButtonClass: "btn-danger",
+        confirmButtonText:  "Yes, drop it like it's hot!",
+        cancelButtonText:   "No, cancel",
+        closeOnConfirm:     true,
+        closeOnCancel:      false
+      }, 
+      function(isConfirm){
+        if (isConfirm) {
+          location.assign("<?php echo $CFG['adminpage']; ?>?action=truncate_log");
+        } else {
+          swal({
+            title:  "Cancelled", 
+            text:   "The log table is safe (for now)! :)", 
+            type:   "error",
+            timer:  2000
+          });
+        }
+      });
+    };
+
+    document.querySelector('#full_reset').onclick = function(){
+      swal({
+        title:              "Are you sure?",
+        text:               "Do you really want to reset all the settings back to their defaults?",
+        type:               "warning",
+        showCancelButton:   true,
+        //confirmButtonColor: "#DD6B55",
+        confirmButtonClass: "btn-danger",
+        confirmButtonText:  "Yes, like a BOSS I do!",
+        cancelButtonText:   "Oops, nope",
+        closeOnConfirm:     true,
+        closeOnCancel:      false
+      }, 
+      function(isConfirm){
+        if (isConfirm) {
+          location.assign("<?php echo $CFG['adminpage']; ?>?action=full_reset");
+        } else {
+          swal({
+            title:  "Cancelled", 
+            text:   "Ok, go configure it youself then.", 
+            type:   "error",
+            timer:  2000
+          });
+        }
+      });
+    };   
+
 
 /*
     $.jGrowl.defaults.pool = 5;
