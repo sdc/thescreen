@@ -87,6 +87,7 @@ adminlog('manage');
   <link href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" rel="stylesheet">
   <!-- link href="bower_components/sweetalert/lib/sweet-alert.css" rel="stylesheet" -->
   <link href="bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
+  <link href="bower_components/hover/css/hover-min.css" rel="stylesheet">
 
 </head>
 <body>

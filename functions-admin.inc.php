@@ -43,7 +43,7 @@ function make_page_change_menu() {
         $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
 
       } else {
-        $build .= '<a href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
+        $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
       }
 
       $build .= "</li>\n";
@@ -178,7 +178,7 @@ function make_status_change_menu() {
         $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
 
       } else {
-        $build .= '<a href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
+        $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
       }
 
       $build .= "</li>\n";
