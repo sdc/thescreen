@@ -75,6 +75,7 @@ adminlog('manage');
   .factoid-show, .event-show, .factoid-show  { color: #333; }
 
   #showstopper_counter { display: inline; }
+
   </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -149,6 +150,8 @@ adminlog('manage');
   </nav><!-- END fixed navbar. -->
 
   <div class="container">
+
+    <div id="particles-js"></div>
 
 <?php
 
@@ -475,13 +478,14 @@ echo help_modals();
   </footer>
 
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="bower_components/bootstreap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
   <script type="text/javascript" src="js/holder.min.js"></script>
   <!-- script type="text/javascript" src="bower_components/sweetalert/lib/sweet-alert.min.js"></script -->
   <script type="text/javascript" src="bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
+  <script type="text/javascript" src="bower_components/particles.js/particles.js"></script>
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -562,6 +566,73 @@ echo help_modals();
         }
       });
     };   
+
+
+    /* particlesJS('dom-id', params);
+    /* @dom-id : set the html tag id [string, optional, default value : particles-js]
+    /* @params: set the params [object, optional, default values : check particles.js] */
+
+    /* config dom id (optional) + config particles params */
+    particlesJS('particles-js', {
+      particles: {
+        color: '#777',
+        color_random: false,
+        shape: 'circle', // "circle", "edge" or "triangle"
+        opacity: {
+          opacity: 1,
+          anim: {
+            enable: true,
+            speed: 1.5,
+            opacity_min: 0,
+            sync: false
+          }
+        },
+        size: 4,
+        size_random: true,
+        nb: 150,
+        line_linked: {
+          enable_auto: true,
+          distance: 100,
+          color: '#777',
+          opacity: 1,
+          width: 1,
+          condensed_mode: {
+            enable: false,
+            rotateX: 600,
+            rotateY: 600
+          }
+        },
+        anim: {
+          enable: true,
+          speed: 1
+        }
+      },
+      interactivity: {
+        enable: true,
+        mouse: {
+          distance: 300
+        },
+        detect_on: 'canvas', // "canvas" or "window"
+        mode: 'grab', // "grab" of false
+        line_linked: {
+          opacity: .5
+        },
+        events: {
+          onclick: {
+            enable: true,
+            mode: 'push', // "push" or "remove"
+            nb: 4
+          },
+          onresize: {
+            enable: true,
+            mode: 'out', // "out" or "bounce"
+            density_auto: false,
+            density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
+          }
+        }
+      },
+      retina_detect: true
+    });
 
 
 /*
