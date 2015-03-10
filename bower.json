@@ -23,6 +23,7 @@
     "sweetalert": "~0.4.2",
     "hover": "~2.0.2",
     "letteringjs": "~0.7.0",
-    "bootstrap-sweetalert": "~0.4.3"
+    "bootstrap-sweetalert": "~0.4.3",
+    "particles.js": "~1.1.0"
   }
 }
