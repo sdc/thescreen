@@ -57,6 +57,9 @@ adminlog('manage');
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="css/bs-docs.css" rel="stylesheet">
+
+  <link href="http://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" type="text/css">
+
   <style type="text/css">
   body {
     padding-top: 70px;
@@ -76,6 +79,22 @@ adminlog('manage');
 
   #showstopper_counter { display: inline; }
 
+  h1, h2, h3 {
+    font-family: 'Indie Flower', cursive;
+    color: #4f2170;
+  }
+
+  h1.fancy_title {
+    font-size: 5em;
+  }
+  .char1, .char3, .char5, .char7, .char9, .char11, .char13, .char15, .char17 {
+    color: #6f4190;
+  }
+
+  html.chrome {
+    background: blue !important;
+  }
+
   </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -86,7 +105,6 @@ adminlog('manage');
 
   <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" rel="stylesheet">
-  <!-- link href="bower_components/sweetalert/lib/sweet-alert.css" rel="stylesheet" -->
   <link href="bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
   <link href="bower_components/hover/css/hover-min.css" rel="stylesheet">
 
@@ -151,8 +169,6 @@ adminlog('manage');
 
   <div class="container">
 
-    <div id="particles-js"></div>
-
 <?php
 
 echo display_alerts();
@@ -167,6 +183,13 @@ echo display_alerts();
         <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
       </p>
     </div --><!-- END jumbotron. -->
+
+    <!-- Row zero! -->
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="fancy_title"><?php echo $CFG['lang']['title']; ?></h1>
+      </div>
+    </div>
 
     <!-- Row one. -->
     <div class="row">
@@ -402,6 +425,10 @@ echo get_figures_thumbnails();
 
 
 
+
+
+
+
                     <h2>Refresh</h2>
                     <p>Number of seconds between page refreshes.</p>
                     <form action="refresh_edit.php" method="get">
@@ -473,6 +500,7 @@ echo help_modals();
         <li>Currently v<?php echo $CFG['version']['build']; ?>, <?php echo $CFG['version']['date']; ?></li>
         <li>&middot;</li>
         <li>Built with <a href="http://getbootstrap.com">Bootstrap 3</a></li>
+        <span id="browserdata"></span>
       </ul>
     </div>
   </footer>
@@ -482,10 +510,10 @@ echo help_modals();
 
   <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
   <script type="text/javascript" src="js/holder.min.js"></script>
-  <!-- script type="text/javascript" src="bower_components/sweetalert/lib/sweet-alert.min.js"></script -->
   <script type="text/javascript" src="bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
-  <script type="text/javascript" src="bower_components/particles.js/particles.js"></script>
+  <script type="text/javascript" src="bower_components/letteringjs/jquery.lettering.js"></script>
+  <script type="text/javascript" src="bower_components/browserdetection/src/browser-detection.js"></script>
+  <!-- script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script -->
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -505,6 +533,24 @@ echo help_modals();
       append: false,
       target: '#showstopper_help'
     });
+
+    /* Letteringjs */
+    $(".fancy_title").lettering();
+
+    var browserdata = browserDetection({
+      addClasses: true
+    });
+    console.log(browserdata.browser); // chrome
+    console.log(browserdata.version); // 29
+    console.log(browserdata.os); // osx
+
+    if (browserdata.browser == 'chrome') {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li><li>Well done for using Chrome.</li>";
+    } else if (browserdata.browser == 'firefox') {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li><li>Well done for using Chrome. You should probably use Chrome though.</li>";
+    } else {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li><li>I see you're not using Chrome. You should use a better browser, like Chrome.</li>";
+    }
 
     // Will log you out after x milliseconds.
     // TODO: use setInterval here instead?
@@ -568,71 +614,6 @@ echo help_modals();
     };   
 
 
-    /* particlesJS('dom-id', params);
-    /* @dom-id : set the html tag id [string, optional, default value : particles-js]
-    /* @params: set the params [object, optional, default values : check particles.js] */
-
-    /* config dom id (optional) + config particles params */
-    particlesJS('particles-js', {
-      particles: {
-        color: '#777',
-        color_random: false,
-        shape: 'circle', // "circle", "edge" or "triangle"
-        opacity: {
-          opacity: 1,
-          anim: {
-            enable: true,
-            speed: 1.5,
-            opacity_min: 0,
-            sync: false
-          }
-        },
-        size: 4,
-        size_random: true,
-        nb: 150,
-        line_linked: {
-          enable_auto: true,
-          distance: 100,
-          color: '#777',
-          opacity: 1,
-          width: 1,
-          condensed_mode: {
-            enable: false,
-            rotateX: 600,
-            rotateY: 600
-          }
-        },
-        anim: {
-          enable: true,
-          speed: 1
-        }
-      },
-      interactivity: {
-        enable: true,
-        mouse: {
-          distance: 300
-        },
-        detect_on: 'canvas', // "canvas" or "window"
-        mode: 'grab', // "grab" of false
-        line_linked: {
-          opacity: .5
-        },
-        events: {
-          onclick: {
-            enable: true,
-            mode: 'push', // "push" or "remove"
-            nb: 4
-          },
-          onresize: {
-            enable: true,
-            mode: 'out', // "out" or "bounce"
-            density_auto: false,
-            density_area: 800 // nb_particles = particles.nb * (canvas width *  canvas height / 1000) / density_area
-          }
-        }
-      },
-      retina_detect: true
-    });
 
 
 /*
