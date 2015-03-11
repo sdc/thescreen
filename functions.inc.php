@@ -30,7 +30,8 @@ $CFG['time']['time']    = 'g:ia';                                   // 9:00am
 $CFG['ext']             = '.txt';   // text file extension for loading data from files
 
 // App's name.
-$CFG['lang']['title']   = 'The Screen&trade; Admin';
+$CFG['lang']['title']     = 'The Screen&trade; Admin';
+$CFG['lang']['longtitle'] = 'The Screen - Administration';
 
 // Set the name of the admin page, for use in other add/edit pages.
 // TODO: this, better.
