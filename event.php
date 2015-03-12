@@ -96,9 +96,12 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_edit' && isset( $_GET
 
   <title><?php echo $CFG['lang']['title']; ?> :: Edit page</title>
 
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="css/bs-docs.css" rel="stylesheet">
+
+  <link href="http://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" type="text/css">
+
   <style type="text/css">
   body {
     padding-top: 70px;
@@ -245,21 +248,19 @@ if ( isset( $row['text'] ) ) {
 
   <footer class="bs-docs-footer" role="contentinfo">
     <div class="container">
+<?php
 
-      <p>Something something darkside.</p>
+echo footer_content();
 
+?>
     </div>
   </footer>
 
 
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-
-
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-
-  <script type="text/javascript" src="js/jquery.word-and-character-counter.min.js"></script>
-  <script type="text/javascript" src="js/holder.min.js"></script>
+  <script type="text/javascript" src="bower_components/browserdetection/src/browser-detection.js"></script>
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -272,20 +273,20 @@ if ( isset( $row['text'] ) ) {
       $(".alert-info-fade").fadeTo(800, 0).slideUp(500);
     }, 2000);
 
-    $("#showstopper").counter({
-      count:  'down',
-      goal:   170,
-      msg:    'characters left. ',
-      append: false,
-      target: '#showstopper_help'
+    var browserdata = browserDetection({
+      addClasses: true
     });
+    console.log(browserdata.browser); // chrome
+    console.log(browserdata.version); // 29
+    console.log(browserdata.os); // osx
 
-//    $('#datepicker').datepicker({ 
-//      dateFormat: 'yy-mm-dd', 
-//      firstDay: 1, 
-//      yearRange: '2010:2011', 
-//      numberOfMonths: 2
-//    });
+    if (browserdata.browser == 'chrome') {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>Well done for using Chrome.</li>";
+    } else if (browserdata.browser == 'firefox') {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>Well done for using Firefox. You should probably use Chrome though.</li>";
+    } else {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>I see you're not using Chrome. You should use a better browser, like Chrome.</li>";
+    }
 
   });
   </script>
