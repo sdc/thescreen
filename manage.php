@@ -89,11 +89,14 @@ adminlog('manage');
   }
   .char1, .char3, .char5, .char7, .char9, .char11, .char13, .char15, .char17, .char19, .char21, .char23, .char25, .char27 {
     color: #6f4190;
-    background-color: #4f2170;
+    background-color: rgba(79, 33, 112, 0.2);
   }
   .char2, .char4, .char6, .char8, .char10, .char12, .char14, .char16, .char18, .char20, .char22, .char24, .char26, .char28 {
-    color: #4f2170;
-    background-color: #6f4190;
+    background-color: rgba(111, 65, 144, 0.2);
+  }
+  h1.fancy_title span {
+    padding: 1px;
+    /*border: 1px solid #fff;*/
   }
 
   html.chrome {
