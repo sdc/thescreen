@@ -89,15 +89,17 @@ adminlog('manage');
   }
   .char1, .char3, .char5, .char7, .char9, .char11, .char13, .char15, .char17, .char19, .char21, .char23, .char25, .char27 {
     color: #6f4190;
-    background-color: rgba(79, 33, 112, 0.2);
+    /*background-color: rgba(79, 33, 112, 0.2);*/
   }
   .char2, .char4, .char6, .char8, .char10, .char12, .char14, .char16, .char18, .char20, .char22, .char24, .char26, .char28 {
-    background-color: rgba(111, 65, 144, 0.2);
+    /*background-color: rgba(111, 65, 144, 0.2);*/
   }
+  /*
   h1.fancy_title span {
     padding: 1px;
     /*border: 1px solid #fff;*/
   }
+  */
 
   html.chrome {
     background: blue !important;
@@ -222,13 +224,9 @@ echo display_alerts();
 
 echo default_page_warning_page();
 
-?>
-          <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-              <p><img src="<?php echo $CFG['dir']['bg'] . '/' . get_page_background_image(); ?>" alt="Current page in use" class="img-thumbnail"></p>
-            </div>
-          </div>
+echo get_page_background_thumb();
 
+?>
           <p>Change the page type:</p>
 <?php
 
@@ -262,7 +260,7 @@ echo no_unhidden_events_warning();
 ?>
         <p>All future events are listed here. Events which have passed are not shown.</p>
         <p>We have <?php echo count_rows( 'events' ); ?> events (<?php echo count_rows( 'events', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'events', 'hidden = 1' ); ?> hidden).</p>
-        <p><a href="<?php echo $CFG['adminpage']; ?>?action=event_hide_all"><?php echo get_icon( 'hide', 'Hide all events!' ); ?> Hide all events</a> or <a href="<?php echo $CFG['adminpage']; ?>?action=event_show_all"><?php echo get_icon( 'show', 'Show all events!' ); ?> show all events</a>.</p>
+        <p><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=event_hide_all"><?php echo get_icon( 'hide', 'Hide all events!' ); ?> Hide all events</a> or <a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=event_show_all"><?php echo get_icon( 'show', 'Show all events!' ); ?> show all events</a>.</p>
         <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete an event.</p>
 <?php
 
@@ -327,12 +325,12 @@ echo showstopper_page_warning();
 
         <h3>Choose a preset</h3>
         <ul>
-            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
-            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
-            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
-            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
-            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
-            <li><a href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
+            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
+            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
+            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
+            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
+            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
+            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
         </ul>
 
       </div>
@@ -355,7 +353,7 @@ echo no_unhidden_factoids_warning();
 
 ?>
         <p>We have <?php echo count_rows( 'factoids' ); ?> factoids (<?php echo count_rows( 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'factoids', 'hidden = 1' ); ?> hidden).</p>
-        <p><a href="<?php echo $CFG['adminpage']; ?>?action=factoid_hide_all"><?php echo get_icon( 'hide', 'Hide all Factoids!' ); ?> Hide all Factoids</a> or <a href="<?php echo $CFG['adminpage']; ?>?action=factoid_show_all"><?php echo get_icon( 'show', 'Show all Factoids!' ); ?> show all Factoids</a>.</p>
+        <p><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=factoid_hide_all"><?php echo get_icon( 'hide', 'Hide all Factoids!' ); ?> Hide all Factoids</a> or <a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=factoid_show_all"><?php echo get_icon( 'show', 'Show all Factoids!' ); ?> show all Factoids</a>.</p>
         <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete a factoid.</p>
 <?php
 
@@ -502,16 +500,14 @@ echo help_modals();
 
   <footer class="bs-docs-footer" role="contentinfo">
     <div class="container">
+<?php
 
-      <p>Designed and built with all the love in the world by <a href="https://twitter.com/sdcmoodle" target="_blank">@sdcmoodle</a>.</p>
-      <ul class="bs-docs-footer-links text-muted">
-        <li>Currently v<?php echo $CFG['version']['build']; ?>, <?php echo $CFG['version']['date']; ?></li>
-        <li>&middot;</li>
-        <li>Built with <a href="http://getbootstrap.com">Bootstrap 3</a></li>
-        <span id="browserdata"></span>
-      </ul>
+echo footer_content();
+
+?>
     </div>
   </footer>
+
 
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

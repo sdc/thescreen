@@ -43,6 +43,9 @@ $CFG['admintimeout']    = 15;
 // Main page refresh poll time in seconds.
 $CFG['poll']            = 5;
 
+// Set to true to ignore the installation files warning.
+$CFG['ignoreinstallfiles']  = true;
+
 // For teh lulz.
 $now = time();
 //$now = 1427878800; // 9am, April 1st 2015 (for testing).

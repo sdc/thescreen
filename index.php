@@ -58,7 +58,7 @@ if ( DEBUG ) {
 <?php
 
   // Require the stylesheet instead of linking it, as it has php to be processed within it.
-  require_once('style.css');
+  require_once('css/style.css');
 
 ?>
 
@@ -86,9 +86,9 @@ if ( file_exists( $pagename ) ) {
 
 ?>
 
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="jquery.newsticker.js"></script>
-  <script type="text/javascript" src="jquery.marquee.js"></script>
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.newsticker.js"></script>
+  <script type="text/javascript" src="js/jquery.marquee.js"></script>
 
   <script type="text/javascript">
 

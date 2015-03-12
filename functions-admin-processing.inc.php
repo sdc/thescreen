@@ -285,8 +285,10 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_hide_all' ) {
  */
 
 // Install script still here.
-if ( file_exists( 'install.php' ) ) {
-  $_SESSION['alerts'][] = array( 'danger' => 'The installation script is still accessible. Best to delete it.' );
+if ( file_exists( 'install.php' ) || file_exists( 'install-password.php' ) ) {
+  if ( !$CFG['ignoreinstallfiles'] ) {
+    $_SESSION['alerts'][] = array( 'danger' => 'The installation files <code>install.php</code> and <code>install-password.php</code> still accessible. Best to delete them immediately.' );
+  }
 }
 
 

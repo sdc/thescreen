@@ -35,3 +35,19 @@ function display_alerts() {
   }
 
 }
+
+// Footer content.
+function footer_content() {
+
+  global $CFG;
+
+?>
+      <p>Designed and built with all the love in the world by <a href="https://twitter.com/sdcmoodle" target="_blank">@sdcmoodle</a>.</p>
+      <ul class="bs-docs-footer-links text-muted">
+        <li>Currently v<?php echo $CFG['version']['build']; ?>, <?php echo $CFG['version']['date']; ?></li>
+        <li>&middot;</li>
+        <li>Built with <a href="http://getbootstrap.com">Bootstrap 3</a></li>
+        <span id="browserdata"></span>
+      </ul>
+<?php
+}
