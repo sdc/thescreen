@@ -545,11 +545,11 @@ echo help_modals();
     console.log(browserdata.os); // osx
 
     if (browserdata.browser == 'chrome') {
-      document.getElementById("browserdata").innerHTML = "<li>&middot;</li><li>Well done for using Chrome.</li>";
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>Well done for using Chrome.</li>";
     } else if (browserdata.browser == 'firefox') {
-      document.getElementById("browserdata").innerHTML = "<li>&middot;</li><li>Well done for using Chrome. You should probably use Chrome though.</li>";
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>Well done for using Firefox. You should probably use Chrome though.</li>";
     } else {
-      document.getElementById("browserdata").innerHTML = "<li>&middot;</li><li>I see you're not using Chrome. You should use a better browser, like Chrome.</li>";
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>I see you're not using Chrome. You should use a better browser, like Chrome.</li>";
     }
 
     // Will log you out after x milliseconds.
