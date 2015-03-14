@@ -113,3 +113,49 @@ function factoid_hide_all() {
 
   return $res;
 }
+
+// Adds a factoid.
+// DONE
+function add_factoid( $text ) {
+
+    global $DB;
+
+    $text = $DB->real_escape_string( $text );
+
+    adminlog( 'add_factoid|' . $text );
+
+    $sql = "INSERT INTO factoids (fact, created, modified) VALUES ('" . $text . "', '" . time() . "', '" . time() . "');";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
+// Edits an existing factoid.
+// DONE
+// TODO: Check that this factoid id exists before we attempt to update it.
+function edit_factoid( $text, $id ) {
+
+    global $DB;
+
+    $text = $DB->real_escape_string( $text );
+
+    adminlog( 'edit_factoid|' . $id );
+
+    $sql = "UPDATE factoids SET fact = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
+// Deletes a factoid completely.
+function delete_factoid( $id ) {
+
+    global $DB;
+
+    adminlog( 'delete_factoid|' . $id );
+
+    $sql = "DELETE FROM factoids WHERE id = " . $id . " LIMIT 1;";
+    $res = $DB->query( $sql );
+
+    return $res;
+}

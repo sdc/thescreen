@@ -235,6 +235,18 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'truncate_log' ) {
  * Factoid checks.
  */
 
+// Deleting a factoid.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_delete' && isset( $_GET['factoid_id'] ) && !empty( $_GET['factoid_id'] ) && is_numeric( $_GET['factoid_id'] ) ) {
+  if ( delete_factoid( $_GET['factoid_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The factoid with id <strong>' . $_GET['factoid_id'] . '</strong> was deleted.' );
+    set_change();
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The factoid with id <strong>' . $_GET['factoid_id'] . '</strong> was not deleted for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
 // Showing (un-hiding) a factoid.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_show' && isset( $_GET['factoid_id'] ) && !empty( $_GET['factoid_id'] ) && is_numeric( $_GET['factoid_id'] ) ) {
   if ( factoid_show( $_GET['factoid_id'] ) ) {

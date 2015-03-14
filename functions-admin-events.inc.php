@@ -77,22 +77,6 @@ function make_events_menu( $num = 20 ) {
 
 }
 
-// Adds an event.
-// DONE
-// TODO: Check that this event id exists before we attempt to update it.
-function edit_event( $date, $text, $id ) {
-
-    global $DB;
-
-    $text = $DB->real_escape_string( $text );
-
-    adminlog( 'edit_event|' . $id );
-
-    $sql = "UPDATE events SET start = '" . $date . "', text = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
-    $res = $DB->query( $sql );
-
-    return $res;
-}
 
 // Hides an event.
 // DONE
@@ -118,6 +102,39 @@ function show_event( $id ) {
     adminlog( 'show_event|' . $id );
 
     $sql = "UPDATE events SET hidden = 0, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
+// Adds an event.
+// DONE
+function add_event( $date, $text ) {
+
+    global $DB;
+
+    $text = $DB->real_escape_string( $text );
+
+    adminlog( 'add_event|' . $text );
+
+    $sql = "INSERT INTO events (start, text, created, modified) VALUES ('" . $date . "', '" . $text . "', '" . time() . "', '" . time() . "');";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
+// Edits an existing event.
+// DONE
+// TODO: Check that this event id exists before we attempt to update it.
+function edit_event( $date, $text, $id ) {
+
+    global $DB;
+
+    $text = $DB->real_escape_string( $text );
+
+    adminlog( 'edit_event|' . $id );
+
+    $sql = "UPDATE events SET start = '" . $date . "', text = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;

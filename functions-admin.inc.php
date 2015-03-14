@@ -276,25 +276,6 @@ function get_figures_thumbnails() {
 }
 
 
-
-
-// Adds an event.
-// DONE
-function add_event( $date, $text ) {
-
-    global $DB;
-
-    $text = $DB->real_escape_string( $text );
-
-    adminlog( 'add_event|' . $text );
-
-    $sql = "INSERT INTO events (start, text, created, modified) VALUES ('" . $date . "', '" . $text . "', '" . time() . "', '" . time() . "');";
-    $res = $DB->query( $sql );
-
-    return $res;
-}
-
-
 // Edits a stat - but this has been deprecated for a while.
 // DONE
 function edit_stat( $key, $value ) {
