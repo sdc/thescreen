@@ -445,25 +445,44 @@ function set_change() {
 }
 
 function help_modals() {
+
+  global $DB;
+
+  $sql = "SELECT id, name, title, content FROM help ORDER BY title ASC;";
+  $res = $DB->query( $sql );
+
+  if ( $res->num_rows == 0 ) {
+    return false;
+  } else {
+
+    while ( $row = $res->fetch_assoc() ) {
+
 ?>
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <!-- <?php echo $row['title']; ?> modal. -->
+  <div class="modal fade" id="<?php echo $row['name']; ?>-modal" tabindex="-1" role="dialog" aria-labelledby="<?php echo $row['name']; ?>-modallabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          <h4 class="modal-title" id="<?php echo $row['name']; ?>-modallabel"><?php echo $row['title']; ?></h4>
         </div>
         <div class="modal-body">
-          <p>Stuff! and Things!</p>
+          <p><?php echo $row['content']; ?></p>
         </div>
         <div class="modal-footer">
+          <a class="btn btn-link" href="help.php?action=help_edit&help_id=<?php echo $row['id']; ?>" role="button">Edit?</a>
           <button type="button" class="btn btn-success" data-dismiss="modal">Got it!</button>
         </div>
       </div>
     </div>
   </div>
 <?php
+
+
+
+
+    }
+  }
 }
 
 // Generates the icons used around the admin interface.
