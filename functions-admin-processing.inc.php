@@ -137,13 +137,13 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_hide_all' ) {
 // Updating the showstopper text.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isset( $_POST['showstopper'] ) && !empty( $_POST['showstopper'] ) ) {
   if ( set_config( 'showstopper', $_POST['showstopper'] ) ) {
-    $_SESSION['alerts'][] = array( 'success' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was updated successfully.' );
+    $_SESSION['alerts'][] = array( 'success' => 'Showstopper text &ldquo;' . htmlspecialchars( $_POST['showstopper'] ) . '&rdquo; was updated successfully.' );
     // If the showstopper page is set when the showstopper text is changed, update the page.
     if ( get_config( 'page' ) == get_id( 'pages', 'showstopper' ) ) {
       set_change();
     }
   } else {
-    $_SESSION['alerts'][] = array( 'danger' => 'Showstopper text &ldquo;' . $_POST['showstopper'] . '&rdquo; was not updated for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'Showstopper text &ldquo;' . htmlspecialchars( $_POST['showstopper'] ) . '&rdquo; was not updated for some reason.' );
   }
   header( 'location: ' . $CFG['adminpage'] );
   exit(0);
