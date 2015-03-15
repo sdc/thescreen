@@ -166,9 +166,9 @@ $sql['tables']['aprilfools'][] = "DROP TABLE IF EXISTS `aprilfools`;";
 $sql['tables']['aprilfools'][] = "CREATE TABLE IF NOT EXISTS `aprilfools` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `fact` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `deleted` tinyint(1) unsigned NOT NULL DEFAULT 0,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
@@ -187,8 +187,8 @@ $sql['tables']['config'][] = "CREATE TABLE IF NOT EXISTS `config` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `item` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `item` (`item`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
@@ -208,9 +208,9 @@ $sql['tables']['events'][] = "CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `start` date NOT NULL,
   `text` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `hidden` tinyint(1) unsigned NOT NULL DEFAULT 0,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
@@ -228,9 +228,9 @@ $sql['tables']['factoids'][] = "DROP TABLE IF EXISTS `factoids`;";
 $sql['tables']['factoids'][] = "CREATE TABLE IF NOT EXISTS `factoids` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `fact` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `hidden` tinyint(1) unsigned NOT NULL DEFAULT 0,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
@@ -250,8 +250,8 @@ $sql['tables']['help'][] = "CREATE TABLE IF NOT EXISTS `help` (
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
@@ -293,11 +293,11 @@ $sql['tables']['pages'][] = "CREATE TABLE IF NOT EXISTS `pages` (
   `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `background` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `refresh` smallint(4) unsigned NOT NULL DEFAULT 0,
+  `refresh` smallint(4) unsigned NOT NULL DEFAULT '0',
   `priority` tinyint(2) unsigned NOT NULL,
   `defaultpage` tinyint(1) unsigned NOT NULL,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `title` (`title`)
@@ -322,8 +322,8 @@ $sql['tables']['status'][] = "CREATE TABLE IF NOT EXISTS `status` (
   `image` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `priority` tinyint(2) unsigned NOT NULL,
   `defaultstatus` tinyint(1) unsigned NOT NULL,
-  `created` int(11) unsigned NOT NULL,
-  `modified` int(11) unsigned NOT NULL,
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `title` (`title`)
@@ -429,7 +429,17 @@ flush();
 
 
 $sql['contents']['help'][] = "INSERT INTO `help` (`name`, `title`, `content`, `created`, `modified`) VALUES
-('pagetype', 'Page Types', 'All page types are equal, but some page types are more equal than others.', " . $now . ", " . $now . ");";
+('pagetype', 'Page Type', 'All page types are equal, but some page types are more equal than others.', " . $now . ", " . $now . "),
+('status', 'Current Status', 'If there''s a problem, change this and it will display on the main page.', " . $now . ", " . $now . "),
+('events', 'Events', 'Help with events.', " . $now . ", " . $now . "),
+('showstopper', 'Showstopper', 'Help with Showstopper.', " . $now . ", " . $now . "),
+('rssfeed', 'RSS Feed', 'Help with RSS feed.', " . $now . ", " . $now . "),
+('rssfeedpreset', 'RSS Feed Presets', 'Help with the RSS feed presets.', " . $now . ", " . $now . "),
+('factoids', 'Factoids', 'Help with factoids.', " . $now . ", " . $now . "),
+('person', 'Specific Person', 'Help with choosing a person.', " . $now . ", " . $now . "),
+('refresh', 'Refresh', 'Help with the refresh rate setting.', " . $now . ", " . $now . "),
+('stats', 'Stats', 'Help with stats (deprecated).', " . $now . ", " . $now . "),
+('logs', 'Logs', 'Logs help (really?).', " . $now . ", " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['help'] as $query ) {
