@@ -57,6 +57,7 @@ adminlog('manage');
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="css/bs-docs.css" rel="stylesheet">
+  <link href="bower_components/trumbowyg/dist/ui/trumbowyg.min.css" rel="stylesheet">
 
   <link href="http://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" type="text/css">
 
@@ -136,12 +137,24 @@ adminlog('manage');
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <!-- li class="active"><a href="#">Home</a></li -->
-          <li><a href="<?php echo $CFG['adminpage']; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li>
+          <!-- li><a href="<?php echo $CFG['adminpage']; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li -->
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">event</a></li>
+              <li><a href="#">factoid</a></li>
+              <li><a href="#">page</a></li>
+              <li><a href="#">status</a></li>
+              <li><a href="#">figure</a></li>
+            </ul>
+          </li>
 
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#">About (modal)</a></li>
+              <li><a href="help.php">Edit Help text</a></li>
               <li class="divider"></li>
               <li class="dropdown-header">Development stuff</li>
               <li><a target="_blank" href="http://getbootstrap.com/css/">Get Bootstrap</a></li>
@@ -155,17 +168,6 @@ adminlog('manage');
             </ul>
           </li>
 
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">event</a></li>
-              <li><a href="#">factoid</a></li>
-              <li><a href="#">page</a></li>
-              <li><a href="#">status</a></li>
-              <li><a href="#">figure</a></li>
-            </ul>
-
-          </li>
         </ul>
         <!-- button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button -->
         <ul class="nav navbar-nav navbar-right">
@@ -218,7 +220,7 @@ echo display_alerts();
     <!-- Row two. -->
     <div class="row">
       <div class="col-md-4">
-        <h2>Page Type <small><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Page Type <small><a href="#" data-toggle="modal" data-target="#pagetype-modal"><i class="fa fa-question-circle"></i></a></small></h2>
 
 <?php
 
@@ -235,7 +237,7 @@ echo make_page_change_menu();
 ?>
       </div>
       <div class="col-md-4">
-        <h2>Current Status <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Current Status <small><a href="#" data-toggle="modal" data-target="#status-modal"><i class="fa fa-question-circle"></i></a></small></h2>
 <?php
 
 echo default_page_warning_status();
@@ -252,7 +254,7 @@ echo make_status_change_menu();
       </div>
 
       <div class="col-md-4">
-        <h2>Events <small><a href="#"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Events <small><a href="#" data-toggle="modal" data-target="#events-modal"><i class="fa fa-question-circle"></i></a></small></h2>
 <?php
 
 echo no_unhidden_events_warning();
@@ -282,7 +284,7 @@ echo make_events_menu();
     <!-- Row three. -->
     <div class="row">
       <div class="col-md-6">
-        <h2>Showstopper Text</h2>
+        <h2>Showstopper Text <small><a href="#" data-toggle="modal" data-target="#showstopper-modal"><i class="fa fa-question-circle"></i></a></small></h2>
 
 <?php
 
@@ -307,7 +309,7 @@ echo showstopper_page_warning();
       </div>
 
       <div class="col-md-6">
-        <h2>RSS Feed</h2>
+        <h2>RSS Feed <small><a href="#" data-toggle="modal" data-target="#rssfeed-modal"><i class="fa fa-question-circle"></i></a></small></h2>
 
         <p>URL of the RSS feed for the scroller.</p>
 
@@ -323,7 +325,7 @@ echo showstopper_page_warning();
           <button type="submit" class="btn btn-info">Submit</button>
         </form>
 
-        <h3>Choose a preset</h3>
+        <h3>Choose a preset <small><a href="#" data-toggle="modal" data-target="#rssfeedpreset-modal"><i class="fa fa-question-circle"></i></a></small></h3>
         <ul>
             <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
             <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
@@ -346,7 +348,7 @@ echo showstopper_page_warning();
     <!-- Row four. -->
     <div class="row">
       <div class="col-md-12">
-        <h2>Factoids</h2>
+        <h2>Factoids <small><a href="#" data-toggle="modal" data-target="#factoids-modal"><i class="fa fa-question-circle"></i></a></small></h2>
 <?php
 
 echo no_unhidden_factoids_warning();
@@ -374,7 +376,7 @@ echo make_factoids_menu();
     <!-- Row five. -->
     <div class="row">
       <div class="col-md-12">
-        <h2>Specific Person</h2>
+        <h2>Specific Person <small><a href="#" data-toggle="modal" data-target="#person-modal"><i class="fa fa-question-circle"></i></a></small></h2>
         <p>Click on the person whose face you want to show, or choose 'random' for a random person each time.</p>
       </div>
     </div>
@@ -435,7 +437,7 @@ echo get_figures_thumbnails();
 
 
 
-                    <h2>Refresh</h2>
+                    <h2>Refresh <small><a href="#" data-toggle="modal" data-target="#refresh-modal"><i class="fa fa-question-circle"></i></a></small></h2>
                     <p>Number of seconds between page refreshes.</p>
                     <form action="refresh_edit.php" method="get">
                         Seconds:
@@ -457,14 +459,14 @@ echo get_figures_thumbnails();
                     </ul>
                     <hr>
 
-                    <h2>Stats</h2>
+                    <h2>Stats <small><a href="#" data-toggle="modal" data-target="#stats-modal"><i class="fa fa-question-circle"></i></a></small></h2>
                     <p>Change the details and click the update button:</p>
                     <table id="stats">
                         <?php //echo get_stats_form(); ?>
                     </table>
                     <hr>
 
-                    <h2>Logs</h2>
+                    <h2>Logs <small><a href="#" data-toggle="modal" data-target="#logs-modal"><i class="fa fa-question-circle"></i></a></small></h2>
                     <p>Last few log entries.</p>
                     <p>The log table has <?php echo count_rows( 'log' ); ?> rows.</p>
                     <?php echo get_last_log(15); ?>
@@ -517,6 +519,7 @@ echo footer_content();
   <script type="text/javascript" src="bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js"></script>
   <script type="text/javascript" src="bower_components/letteringjs/jquery.lettering.js"></script>
   <script type="text/javascript" src="bower_components/browserdetection/src/browser-detection.js"></script>
+  <script type="text/javascript" src="bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
   <!-- script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script -->
 
   <script type="text/javascript">
@@ -561,6 +564,8 @@ echo footer_content();
     setTimeout(function() {
       location.href = '<?php echo $CFG['adminpage']; ?>?action=logout';
     }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
+
+    $('#showstopper').trumbowyg();
 
     // Initial SweetAlert code.
     document.querySelector('#truncate_log').onclick = function(){
