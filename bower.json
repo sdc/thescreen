@@ -23,6 +23,7 @@
     "hover": "~2.0.2",
     "letteringjs": "~0.7.0",
     "bootstrap-sweetalert": "~0.4.3",
-    "browserdetection": "~0.3.3"
+    "browserdetection": "~0.3.3",
+    "trumbowyg": "~1.1.7"
   }
 }
