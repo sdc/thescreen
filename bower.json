@@ -18,12 +18,13 @@
   ],
   "dependencies": {
     "fontawesome": "~4.3.0",
-    "bootstrap": "~3.3.2",
+    "bootstrap": "~3.3.4",
     "jquery": "~2.1.3",
     "hover": "~2.0.2",
     "letteringjs": "~0.7.0",
     "bootstrap-sweetalert": "~0.4.3",
     "browserdetection": "~0.3.3",
-    "trumbowyg": "~1.1.7"
+    "trumbowyg": "~1.1.7",
+    "anchor": "~1.1.0"
   }
 }
