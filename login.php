@@ -1,7 +1,5 @@
 <?php
 
-//echo hash('sha256', 'polo');
-
 session_name( 'sdc-thescreen' );
 session_start();
 
@@ -40,7 +38,8 @@ if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) ) {
 
     <title>Log In</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="css/signin.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -70,7 +69,7 @@ if ( $login_fail ) {
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus -->
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-info btn-block" type="submit">Sign in</button>
       </form>
 
     </div> <!-- /container -->
