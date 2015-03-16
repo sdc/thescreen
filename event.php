@@ -25,7 +25,6 @@ if ( isset( $_GET ) && !empty( $_GET ) ) {
   echo '<p>GET:</p><pre>'; var_dump( $_GET ); echo '</pre>';
 }
 
-
 // Adding a new event.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' ) {
 
@@ -94,7 +93,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_edit' && isset( $_GET
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
 
-  <title><?php echo $CFG['lang']['title']; ?> :: Edit page</title>
+  <title><?php echo $CFG['lang']['title']; ?> :: Event edit page</title>
 
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">

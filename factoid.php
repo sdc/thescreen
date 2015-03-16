@@ -93,7 +93,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_edit' && isset( $_G
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
 
-  <title><?php echo $CFG['lang']['title']; ?> :: Edit page</title>
+  <title><?php echo $CFG['lang']['title']; ?> :: Factoid edit page</title>
 
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">

@@ -8,6 +8,7 @@
 require_once( 'functions-admin-events.inc.php' );
 require_once( 'functions-admin-factoids.inc.php' );
 require_once( 'functions-admin-general.inc.php' );
+require_once( 'functions-admin-help.inc.php' );
 require_once( 'functions-admin-pages.inc.php' );
 
 /**
@@ -467,10 +468,10 @@ function help_modals() {
           <h4 class="modal-title" id="<?php echo $row['name']; ?>-modallabel"><?php echo $row['title']; ?></h4>
         </div>
         <div class="modal-body">
-          <p><?php echo $row['content']; ?></p>
+          <?php echo $row['content']; ?>
         </div>
         <div class="modal-footer">
-          <a class="btn btn-link" href="help.php?action=help_edit&help_id=<?php echo $row['id']; ?>" role="button">Edit?</a>
+          <a class="btn btn-link btn-sm pull-left" href="help.php?action=help_edit&help_id=<?php echo $row['id']; ?>" role="button">Edit</a>
           <button type="button" class="btn btn-success" data-dismiss="modal">Got it!</button>
         </div>
       </div>

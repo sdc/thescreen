@@ -27,34 +27,21 @@ if ( isset( $_GET ) && !empty( $_GET ) ) {
 
 
 // Adding a new event.
-if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' ) {
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'help_edit' ) {
 
-  if ( isset( $_POST['event_date'] ) && !empty( $_POST['event_date'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
+  if ( isset( $_POST['help_title'] ) && !empty( $_POST['help_title'] ) && isset( $_POST['help_content'] ) && !empty( $_POST['help_content'] ) ) {
 
-    if ( isset( $_POST['event_edit'] ) && !empty( $_POST['event_edit'] ) && is_numeric( $_POST['event_edit'] ) ) {
+    if ( isset( $_POST['help_edit'] ) && !empty( $_POST['help_edit'] ) && is_numeric( $_POST['help_edit'] ) ) {
 
       // Make the following function UPDATE rather than INSERT.
-      if ( edit_event( $_POST['event_date'], $_POST['event_description'], $_POST['event_edit'] ) ) {
+      if ( edit_help( $_POST['help_title'], $_POST['help_content'], $_POST['help_edit'] ) ) {
 
-        $_SESSION['alerts'][] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was updated successfully.' );
+        $_SESSION['alerts'][] = array( 'success' => 'The help test for &ldquo;' . $_POST['help_title'] . '&rdquo; was updated successfully.' );
         header( 'location: ' . $CFG['adminpage'] );
         exit(0);
 
       } else {
-        $_SESSION['alerts'][] = array( 'warning' => 'The event was not updated for some reason.' );
-      }
-
-    // If we are inserting a new event.
-    } else {
-
-      if ( add_event( $_POST['event_date'], $_POST['event_description'] ) ) {
-
-        $_SESSION['alerts'][] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was created successfully.' );
-        header( 'location: ' . $CFG['adminpage'] );
-        exit(0);
-
-      } else {
-        $_SESSION['alerts'][] = array( 'warning' => 'The event was not created for some reason.' );
+        $_SESSION['alerts'][] = array( 'warning' => 'The help text was not updated for some reason.' );
       }
 
     }
@@ -71,13 +58,13 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' ) {
 adminlog('help');
 
 // If we've received $_GET parameters, populate the form with them.
-if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_edit' && isset( $_GET['event_id'] ) && !empty( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) {
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'help_edit' && isset( $_GET['help_id'] ) && !empty( $_GET['help_id'] ) && is_numeric( $_GET['help_id'] ) ) {
 
-  $sql = "SELECT id, start, text FROM events WHERE id = " . $_GET['event_id'] . " LIMIT 1;";
+  $sql = "SELECT id, title, content FROM help WHERE id = " . $_GET['help_id'] . " LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {
-    $_SESSION['alerts'][] = array( 'danger' => 'Could not get the event with id ' . $_GET['event_id'] . '.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'Could not get the help text with id ' . $_GET['help_id'] . '.' );
   } else {
     $row = $res->fetch_assoc();
   }
@@ -94,11 +81,12 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_edit' && isset( $_GET
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
 
-  <title><?php echo $CFG['lang']['title']; ?> :: Edit page</title>
+  <title><?php echo $CFG['lang']['title']; ?> :: Help text edit page</title>
 
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="css/bs-docs.css" rel="stylesheet">
+  <link href="bower_components/trumbowyg/dist/ui/trumbowyg.min.css" rel="stylesheet">
 
   <link href="http://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" type="text/css">
 
@@ -144,8 +132,8 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_edit' && isset( $_GET
     <!-- Row one. -->
     <div class="row">
       <div class="col-md-12">
-        <h1>Add a new event</h1>
-        <p>Use the below form to add a new event.</p>
+        <h1>Edit the help text</h1>
+        <p>Use the below form to edit the help text.</p>
       </div>
     </div>
 
@@ -175,20 +163,19 @@ if ( isset( $_SESSION['alerts'] ) ) {
 ?>
 
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-          <!-- input type="hidden" name="action" value="event_add" -->
+          <input type="hidden" name="action" value="help_edit">
 
 <?php
 
 if ( isset( $row['id'] ) ) {
   echo '          <input type="hidden" name="help_edit" value="' . $row['id'] . '">' . "\n";
-} else if ( isset( $_POST['event_edit'] ) ) {
+} else if ( isset( $_POST['help_edit'] ) ) {
   echo '          <input type="hidden" name="help_edit" value="' . $_POST['help_edit'] . '">' . "\n";
 }
 
 
-// We're not adding anything - do we need this?
 $help_title_error = '';
-if ( isset( $_POST['action'] ) && $_POST['action'] == 'help_add' && ( !isset( $_POST['help_title'] ) || empty( $_POST['help_title'] ) ) ) {
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'help_edit' && ( !isset( $_POST['help_title'] ) || empty( $_POST['help_title'] ) ) ) {
   $help_title_error = ' has-error';
 }
 
@@ -202,29 +189,29 @@ if ( isset( $row['title'] ) ) {
 ?>
           <div class="form-group<?php echo $help_title_error; ?>">
             <label for="help_title">Help Title</label>
-            <input type="date" class="form-control" id="help_title" name="help_title" placeholder="Enter title" <?php echo $help_title_value; ?> aria-describedby="help_title_help">
+            <input type="text" class="form-control" id="help_title" name="help_title" placeholder="Enter title" <?php echo $help_title_value; ?> aria-describedby="help_title_help">
             <span id="help_title_help" class="help-block">Title for this help.</span>
           </div>
-
 <?php
 
-$event_description_error = '';
-if ( isset( $_POST['action'] ) && $_POST['action'] == 'event_add' && ( !isset( $_POST['event_description'] ) || empty( $_POST['event_description'] ) ) ) {
-  $event_description_error = ' has-error';
+$help_content_error = '';
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'help_edit' && ( !isset( $_POST['help_content'] ) || empty( $_POST['help_content'] ) ) ) {
+  $help_content_error = ' has-error';
 }
 
-$event_description_value = '';
-if ( isset( $row['text'] ) ) {
-  $event_description_value = 'value="' . $row['text'] . '"';
-} elseif ( isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
-  $event_description_value = 'value="' . $_POST['event_description'] . '"';
+$help_content_value = '';
+if ( isset( $row['content'] ) ) {
+  $help_content_value = $row['content'];
+} elseif ( isset( $_POST['help_content'] ) && !empty( $_POST['help_content'] ) ) {
+  $help_content_value = $_POST['help_content'];
 }
 
 ?>
-          <div class="form-group<?php echo $event_description_error; ?>">
-            <label for="event_description">Event description</label>
-            <input type="text" class="form-control" id="event_description" name="event_description" placeholder="Enter event details" <?php echo $event_description_value; ?>aria-describedby="event_description_help">
-            <span id="event_description_help" class="help-block">Be concise! We don't have much space to work with.</span>
+          <div class="form-group<?php echo $help_content_error; ?>">
+            <label for="help_content">Event description</label>
+            <!-- input type="text" class="form-control" id="help_content" name="help_content" placeholder="Enter help content" <?php echo $help_content_value; ?>aria-describedby="help_content_help" -->
+            <textarea class="form-control" id="help_content" name="help_content" placeholder="Enter help content" aria-describedby="help_content_help"><?php echo $help_content_value; ?></textarea>
+            <span id="help_content_help" class="help-block">Write useful help text.</span>
           </div>
 
           <a class="btn btn-default" href="manage.php" role="button">Cancel</a>
@@ -237,17 +224,7 @@ if ( isset( $row['text'] ) ) {
 
   </div> <!-- /container -->
 
-
-
-
-
-
-
-
-
-
-
-
+ 
   <footer class="bs-docs-footer" role="contentinfo">
     <div class="container">
 <?php
@@ -263,6 +240,7 @@ echo footer_content();
   <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
   <script type="text/javascript" src="bower_components/browserdetection/src/browser-detection.js"></script>
+  <script type="text/javascript" src="bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -274,6 +252,8 @@ echo footer_content();
     window.setTimeout(function() { 
       $(".alert-info-fade").fadeTo(800, 0).slideUp(500);
     }, 2000);
+
+    $('#help_content').trumbowyg();
 
     var browserdata = browserDetection({
       addClasses: true
