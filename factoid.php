@@ -113,7 +113,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_edit' && isset( $_G
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -143,8 +143,21 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_edit' && isset( $_G
     <!-- Row one. -->
     <div class="row">
       <div class="col-md-12">
-        <h1>Add a new factoid</h1>
-        <p>Use the below form to add a new factoid.</p>
+<?php
+
+if (
+  ( isset( $_GET['factoid_id'] ) && !empty( $_GET['factoid_id'] ) && is_numeric( $_GET['factoid_id'] ) )
+  ||
+  ( isset( $_POST['factoid_edit'] ) && !empty( $_POST['factoid_edit'] ) && is_numeric( $_POST['factoid_edit'] ) )
+) {
+  echo '        <h1>Edit this factoid</h1>';
+  echo '        <p>Use the below form to edit the existing factoid.</p>';
+} else {
+  echo '        <h1>Add a new factoid</h1>';
+  echo '        <p>Use the below form to add a new factoid.</p>';
+}
+
+?>
       </div>
     </div>
 

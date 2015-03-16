@@ -114,7 +114,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'event_edit' && isset( $_GET
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <body>
