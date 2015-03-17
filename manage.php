@@ -118,6 +118,7 @@ adminlog('manage');
   <link href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
   <link href="bower_components/hover/css/hover-min.css" rel="stylesheet">
+  <link href="bower_components/anchor-js/anchor.css" rel="stylesheet">
 
 </head>
 <body>
@@ -520,6 +521,7 @@ echo footer_content();
   <script type="text/javascript" src="bower_components/letteringjs/jquery.lettering.js"></script>
   <script type="text/javascript" src="bower_components/browserdetection/src/browser-detection.js"></script>
   <script type="text/javascript" src="bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
+  <script type="text/javascript" src="bower_components/anchor-js/anchor.js"></script>
   <!-- script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script -->
 
   <script type="text/javascript">
@@ -566,6 +568,8 @@ echo footer_content();
     }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
 
     $('#showstopper').trumbowyg();
+
+    addAnchors();
 
     // Initial SweetAlert code.
     document.querySelector('#truncate_log').onclick = function(){
