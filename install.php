@@ -6,6 +6,8 @@
  * TODO: As the database evolves, ensure the SQL statements here which create the db and tables are kept up to date.
  */
 
+$now = time();
+
 echo "<h1>The Screen&trade; Installation</h1>";
 echo "<p>This installer looks basic, but it contains all the SQL needed to create a new database on your databsae server, create the tables needed and populate them with enough data to get you started.</p>";
 echo "<p>Before you do anything else, (if you haven't already), please rename the file called <code>config-dist.inc.php</code> to <code>config.inc.php</code>, edit it, and change the details within to match that of your system.<p>";
@@ -107,8 +109,6 @@ echo "<h2>Installation</h2>";
 ob_flush();
 flush();
 
-
-$now = time();
 
 function okay() {
   return ' <strong style="color:green;">...okay.</strong>';
@@ -319,7 +319,7 @@ $sql['tables']['status'][] = "CREATE TABLE IF NOT EXISTS `status` (
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `image` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `priority` tinyint(2) unsigned NOT NULL,
   `defaultstatus` tinyint(1) unsigned NOT NULL,
   `created` int(11) unsigned NOT NULL DEFAULT '0',
@@ -487,7 +487,7 @@ ob_flush();
 flush();
 
 
-$sql['contents']['status'][] = "INSERT INTO `status` (`name`, `title`, `description`, `image`, `priority`, `defaultstatus`, `created`, `modified`) VALUES
+$sql['contents']['status'][] = "INSERT INTO `status` (`name`, `title`, `description`, `type`, `priority`, `defaultstatus`, `created`, `modified`) VALUES
 ('ok',            'Okay',                 'Everything is awesome.',                                                                                     'green',      1,    1,  " . $now . ",  " . $now . "),
 ('minorproblem',  'Problems',             'We''re experiencing problems with the server, which we are looking in to at the moment',                     'amber',      10,   0,  " . $now . ",  " . $now . "),
 ('epicfail',      'Epic fail',            'Something has gone horribly, terribly wrong. It may even involve a zombie apocalypse.',                      'red',        20,   0,  " . $now . ",  " . $now . "),

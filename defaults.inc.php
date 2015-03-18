@@ -12,4 +12,5 @@ $CFG['defaults'] = array(
   'showstopper'   => 'error!',
   'specific_fig'  => 'aaa-random.png',
   'changes'       => 'no',
+  'installed'     => date( 'c', $now ),
 );
