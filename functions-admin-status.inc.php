@@ -5,7 +5,6 @@
  */
 
 // Makes the status change menu.
-// TODO: Put the description into a title="" (so it appears when you hover over it).
 function make_status_change_menu() {
 
   global $CFG, $DB;
@@ -36,6 +35,8 @@ function make_status_change_menu() {
       $build .= '<ul>';
       while ( $row = $res->fetch_assoc() ) {
 
+        $description = str_replace( array( '<br>', '<br />' ), ' ', $row['description'] );
+
         $build .= '<li>';
 
         // Add in a flag for default if it's the default choice.
@@ -45,10 +46,10 @@ function make_status_change_menu() {
         }
 
         if ( $row['id'] == $CFG['status'] ) {
-          $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
+          $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . get_icon( 'tick', 'This option is active.' );
 
         } else {
-          $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
+          $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '" title="' . $description . '">' . $row['title'] . '</a>' . $default;
         }
 
         $build .= "</li>\n";
