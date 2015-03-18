@@ -339,6 +339,28 @@ ob_flush();
 flush();
 
 
+$sql['tables']['status_types'][] = "DROP TABLE IF EXISTS `status_types`;";
+$sql['tables']['status_types'][] = "CREATE TABLE IF NOT EXISTS `status_types` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+
+echo '<p><pre>';
+foreach ( $sql['tables']['status_types'] as $query ) {
+  run( $query );
+}
+echo '</pre></p>';
+
+ob_flush();
+flush();
+
+
 /**
  * End of the table definitions. Now we have all the tables but none of the content.
  *
@@ -502,6 +524,24 @@ echo '</pre></p>';
 
 ob_flush();
 flush();
+
+
+$sql['contents']['status_types'][] = "INSERT INTO `status_types` (`name`, `title`, `created`, `modified`) VALUES
+('green', 'Green (OK)', " . $now . ", " . $now . "),
+('amber', 'Amber (Alert)', " . $now . ", " . $now . "),
+('red', 'Red (Warning)', " . $now . ", " . $now . "),
+('blue', 'Blue (Information)', " . $now . ", " . $now . "),
+('christmas', 'Christmas', " . $now . ", " . $now . ");";
+
+echo '<p><pre>';
+foreach ( $sql['contents']['status_types'] as $query ) {
+  run( $query );
+}
+echo '</pre></p>';
+
+ob_flush();
+flush();
+
 
 echo "<p>Done.</p>";
 

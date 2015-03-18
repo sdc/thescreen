@@ -10,6 +10,7 @@ require_once( 'functions-admin-factoids.inc.php' );
 require_once( 'functions-admin-general.inc.php' );
 require_once( 'functions-admin-help.inc.php' );
 require_once( 'functions-admin-pages.inc.php' );
+require_once( 'functions-admin-status.inc.php' );
 
 /**
  * Page functions.
@@ -56,7 +57,7 @@ function make_page_change_menu() {
   }
 }
 
-// Checks if the $type id being updated actually exists in the pages table, and save it if so.
+// Checks if the $type id being updated actually exists in the such-and-such table, and save it if so.
 // DONE
 function update_check( $type, $id ) {
   global $DB;
@@ -144,71 +145,6 @@ function get_default( $type ) {
 
 }
 
-
-
-/**
- * Status functions.
- */
-
-// Makes the status change menu.
-// DONE
-function make_status_change_menu() {
-
-  global $CFG, $DB;
-
-  $sql = "SELECT * FROM status ORDER BY priority ASC, name ASC;";
-  $res = $DB->query( $sql );
-
-  if ( $res->num_rows == 0 ) {
-    return false;
-
-  } else {
-
-    $build = '<ul>';
-    while ( $row = $res->fetch_assoc() ) {
-
-      $build .= '<li>';
-
-      // Add in a flag for default if it's the default choice.
-      $default = '';
-      if ( $row['defaultstatus'] ) {
-        $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
-      }
-
-      if ( $row['id'] == $CFG['status'] ) {
-        $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
-
-      } else {
-        $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
-      }
-
-      $build .= "</li>\n";
-    }
-
-    $build .= "</ul>\n";
-
-    return $build;
-
-  }
-
-}
-
-// A function to check if the status id being set actually exists in the status table.
-// DONE
-/*function set_status( $id ) {
-  global $DB;
-
-  $sql = "SELECT * FROM status WHERE id = '" . $id . "' LIMIT 1;";
-  $res = $DB->query( $sql );
-
-  if ( $res->num_rows == 0 ) {
-    return false;
-
-  } else {
-    return set_config( 'status', $id );
-  }
-
-}*/
 
 
 // Gets a list of figures with 'aaa', 'fig' or 'special' in the name.
