@@ -238,6 +238,8 @@ echo get_page_background_thumb();
 echo make_page_change_menu();
 
 ?>
+        <a class="btn btn-danger btn-block" href="page.php" role="button" disabled="disabled">Add a new page</a>
+
       </div>
       <div class="col-md-4">
         <h2>Current Status <small><a href="#" data-toggle="modal" data-target="#status-modal"><i class="fa fa-question-circle"></i></a></small></h2>
@@ -254,6 +256,8 @@ echo default_status_warning();
 echo make_status_change_menu();
 
 ?>
+        <a class="btn btn-danger btn-block" href="status.php" role="button" disabled="disabled">Add a new status</a>
+
       </div>
 
       <div class="col-md-4">
