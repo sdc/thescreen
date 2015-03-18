@@ -575,7 +575,7 @@ echo footer_content();
 
     $('#showstopper').trumbowyg();
 
-    addAnchors();
+    addAnchors('h2, h3');
 
     // Initial SweetAlert code.
     document.querySelector('#truncate_log').onclick = function(){
