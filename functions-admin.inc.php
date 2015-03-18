@@ -12,50 +12,6 @@ require_once( 'functions-admin-help.inc.php' );
 require_once( 'functions-admin-pages.inc.php' );
 require_once( 'functions-admin-status.inc.php' );
 
-/**
- * Page functions.
- */
-
-// Makes the page change menu.
-// TODO: Check to see if $pages is valid before using it (same as make_status_change_menu()).
-function make_page_change_menu() {
-
-  global $CFG, $DB;
-
-  $sql = "SELECT * FROM pages ORDER BY priority ASC, name ASC;";
-  $res = $DB->query( $sql );
-
-  if ( $res->num_rows == 0 ) {
-      return false;
-
-  } else {
-
-    $build = '<ul>';
-    while ( $row = $res->fetch_assoc() ) {
-
-      $build .= '<li>';
-
-      // Add in a flag for default if it's the default choice.
-      $default = '';
-      if ( $row['defaultpage'] ) {
-        $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>';
-      }
-
-      if ( $row['id'] == $CFG['page'] ) {
-        $build .= '<strong>' . $row['title'] . '</strong> ' . $default . get_icon( 'tick', 'This option is active.' );
-
-      } else {
-        $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '">' . $row['title'] . '</a>' . $default;
-      }
-
-      $build .= "</li>\n";
-    }
-
-    $build .= "</ul>\n";
-    return $build;
-
-  }
-}
 
 // Checks if the $type id being updated actually exists in the such-and-such table, and save it if so.
 // DONE
