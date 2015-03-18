@@ -261,7 +261,7 @@ function get_refresh( $id ) {
 
 // Get a random factoid from the database.
 // DONE
-function get_random_factoid() {
+function get_random_factoid( $prettify = true ) {
 
   global $CFG, $DB;
 
@@ -282,7 +282,11 @@ function get_random_factoid() {
   $id = rand( 0, count( $rows ) - 1 );
   $factoid = get_factoid( $rows[$id] );
 
-  return make_text_bigger( $factoid );
+  if ( $prettify ) {
+    return make_text_bigger( $factoid );
+  } else {
+    return $factoid;
+  }
 
 }
 
