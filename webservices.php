@@ -1,41 +1,31 @@
 <?php
 
 /**
- * CSID (Info Display) Web Service(s)
- * Code:    Paul Vaughan
- * Feb 2013
+ * The Screen: web services.
  */
 
-require_once('functions.php');
+// TODO: authentication token check?
 
-adminlog('webservice_request');
+require_once( 'functions.inc.php' );
 
-// check for some kind of token, or something?
+if ( isset( $_GET['factoid'] ) ) {
+  adminlog( 'webservice_request|factoid' );
 
-// query the database for the status
-$res = mysql_query("SELECT * FROM config;");
-if (mysql_num_rows($res) == 0) {
-  return false;
+  header( 'Access-Control-Allow-Origin: http://moodle.southdevon.ac.uk' );
+  header( 'Access-Control-Allow-Origin: http://172.21.4.85' );              // Local testing.
+
+  echo json_encode( array( get_random_factoid( false ) ) );
+  exit(0);
+
+} else if ( isset( $_GET['showstopper'] ) ) {
+  adminlog( 'webservice_request|showstopper' );
+
+  echo json_encode( array( get_config( 'showstopper' ) ) );
+  exit(0);
+
 } else {
-  while ($row = mysql_fetch_assoc($res)) {
-    //echo $row['item'].' - '.$row['value']."<br>\n";
-    if (strtolower($row['item']) == 'page') {
-      $page = strtolower($row['value']);
-    }
-    if (strtolower($row['item']) == 'status') {
-      $status = strtolower($row['value']);
-    }
-    if (strtolower($row['item']) == 'showstopper') {
-      $showstopper = $row['value'];
-    }
-  }
-}
+  adminlog( 'webservice_request|unspecified' );
 
-// output as xml
-header('Content-Type: application/xml');
-echo '<?xml version="1.0" ?>
-<response>
-  <page>'.$page.'</page> 
-  <status>'.$status.'</status> 
-  <showstopper>'.$showstopper.'</showstopper> 
-</response>';
+  echo json_encode( array( 'error' => 'Webservice not specified or specified incorrectly.', 'webservices' => array( 'factoid', 'showstopper' ) ) );
+  exit(1);
+}

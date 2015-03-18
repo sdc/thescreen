@@ -261,7 +261,7 @@ function get_refresh( $id ) {
 
 // Get a random factoid from the database.
 // DONE
-function get_random_factoid() {
+function get_random_factoid( $prettify = true ) {
 
   global $CFG, $DB;
 
@@ -282,7 +282,11 @@ function get_random_factoid() {
   $id = rand( 0, count( $rows ) - 1 );
   $factoid = get_factoid( $rows[$id] );
 
-  return make_text_bigger( $factoid );
+  if ( $prettify ) {
+    return make_text_bigger( $factoid );
+  } else {
+    return $factoid;
+  }
 
 }
 
@@ -446,21 +450,21 @@ function get_page_background_image() {
 }
 
 
-// Get this status' image, depending on what the current status is.
+// Get this status' type, depending on what the current status is.
 // DONE
 function get_status_img() {
 
   global $CFG, $DB;
 
-  $sql = "SELECT image FROM status WHERE id = '" . $CFG['status'] . "' LIMIT 1;";
+  $sql = "SELECT type FROM status WHERE id = '" . $CFG['status'] . "' LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {
-    return '<p class="error">Sorry, no status image.</p>';
+    return '<p class="error">Sorry, no status type image.</p>';
 
   } else {
     $row = $res->fetch_assoc();
-    return '<img src="' . $CFG['dir']['status'] . $row['image'] . '.png" width="60">' . "\n";
+    return '<img src="' . $CFG['dir']['status'] . $row['type'] . '.png" width="60">' . "\n";
   }
 }
 
