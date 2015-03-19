@@ -49,7 +49,7 @@ if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) && isset( $_POS
     echo "<h2>Admin password saved</h2>";
     echo "<p>Well done! Your chosen password was confirmed as correct, hashed and stored in the database.</p>";
     echo "<p>The link below will take you through to the administration pages (which you can get to easily by adding <code>admin/</code> to the end of the main screen url), but please note that if the installation script (or this one, setting the password) are run again either maliciously or intentionally, <strong>they will reset your database utterly</strong>. This is bad, and most likely not what you want, so <strong>please delete the files called <code>install.php</code> and <code>install-password.php</code> at your earliest convenience</strong>!</p>";
-    echo '<p><a href="' . $CFG['adminpage'] . '">Click here to log in and configure the system</a>.</p>';
+    echo '<p><a href="' . $CFG['adminpage'] . '">Click here to log in and configure the system</a>, or <a href="install-sdc.php">click here if you want to install SDC-specific data</a>.</p>';
 
     exit(0);
   } 

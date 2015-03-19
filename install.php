@@ -4,6 +4,7 @@
  * Installer.
  * 
  * TODO: As the database evolves, ensure the SQL statements here which create the db and tables are kept up to date.
+ * TODO: Log any errors and mention them at the end?
  */
 
 $now = time();
@@ -90,7 +91,7 @@ if ( $DB->connect_error ) {
 }
 
 if ( $error ) {
-  echo "Stopping due to database connection error. Please fix them and reload this page.";
+  echo "Stopping due to database connection error. Please fix it and reload this page.";
   exit(1);
 }
 
@@ -111,10 +112,10 @@ flush();
 
 
 function okay() {
-  return ' <strong style="color:green;">...okay.</strong>';
+  return "\n" . '<strong style="color:green;">...okay.</strong>';
 }
 function fail( $error ) {
-  return ' <strong style="color:red;">...failed: ' . $error . '</strong>';
+  return "\n" . '<strong style="color:red;">...failed: ' . $error . '</strong>';
 }
 function run( $query ) {
   global $DB;
@@ -294,8 +295,10 @@ $sql['tables']['pages'][] = "CREATE TABLE IF NOT EXISTS `pages` (
   `description` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `background` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `refresh` smallint(4) unsigned NOT NULL DEFAULT '0',
-  `priority` tinyint(2) unsigned NOT NULL,
-  `defaultpage` tinyint(1) unsigned NOT NULL,
+  `priority` tinyint(2) unsigned NOT NULL DEFAULT '10',
+  `defaultpage` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `scheduled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `scheduled_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `created` int(11) unsigned NOT NULL DEFAULT '0',
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -552,6 +555,6 @@ echo "<p>Done.</p>";
 
 echo "<p><hr></p>";
 echo "<h2>Installation complete</h2>";
-echo "<p>If you're reading this, chances are that everything worked as it should, but please check for read '<strong><span style=\"color:red;\">failed</span></strong>' text. If you need to re-run the installer, just reload this page.</p>";
+echo "<p>If you're reading this, chances are that everything worked as it should, but please check for red '<strong><span style=\"color:red;\">failed</span></strong>' text. If you need to re-run the installer, just reload this page.</p>";
 
-echo '<p>Installation is complete, so <a href="install-password.php">click here for a final task</a>.</p>';
+echo '<p>Installation is complete, so <a href="install-password.php">click here to set an administrative password</a>.</p>';
