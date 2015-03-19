@@ -21,7 +21,7 @@ function make_status_change_menu() {
 
   while ( $row2 = $res2->fetch_assoc() ) {
 
-    $sql = "SELECT * FROM status WHERE type = '" . $row2['name'] . "' ORDER BY priority ASC, name ASC;";
+    $sql = "SELECT * FROM status WHERE type = '" . $row2['name'] . "' ORDER BY priority ASC, title ASC;";
     $res = $DB->query( $sql );
 
     if ( !$res || $res->num_rows == 0 ) {
