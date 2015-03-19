@@ -319,7 +319,7 @@ $sql['tables']['status'][] = "CREATE TABLE IF NOT EXISTS `status` (
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'amber',
   `priority` tinyint(2) unsigned NOT NULL DEFAULT '10',
   `defaultstatus` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `created` int(11) unsigned NOT NULL DEFAULT '0',
