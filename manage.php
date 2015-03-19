@@ -8,6 +8,7 @@
 
 // TODO: check to ensure there is precisely one row in 'pages' and 'status' tables and complain if otherwise.
 // TODO: check for no factoids and no shown factoids and warn if otherwise.
+// TODO: Replace Glyphicons with Font Awesome everywhere (use only one framework, and one with spinning icons).
 // TODO: jQuery jGrowl: https://github.com/stanlemon/jGrowl
 
 session_name( 'sdc-thescreen' );
@@ -66,7 +67,7 @@ adminlog('manage');
     padding-top: 70px;
   }
   /* Green. */
-  .tick { color: #0b0; }
+  .tick, .scheduled-active { color: #0b0; }
   /* Red. */
   .cross, .factoid-delete, .event-delete, .ts-warning { color: #d00; }
   /* Light blue. */
@@ -74,7 +75,7 @@ adminlog('manage');
   /* Grey. */
   .default { color: #777; }
   /* Light grey. */
-  .factoid-hide, .event-hide, .factoid-hide { color: #bbb; }
+  .factoid-hide, .event-hide, .factoid-hide, .scheduled { color: #bbb; }
   /* Dark grey. */
   .factoid-show, .event-show, .factoid-show  { color: #333; }
 

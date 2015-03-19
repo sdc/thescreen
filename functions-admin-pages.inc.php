@@ -31,11 +31,16 @@ function make_page_change_menu() {
         $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>';
       }
 
+      $scheduled = '';
+      if ( $row['scheduled'] ) {
+        $scheduled = ' <span class="glyphicon glyphicon-time scheduled" title="This is a scheduled page." aria-hidden="true"></span>';
+      }
+
       if ( $row['id'] == $CFG['page'] ) {
-        $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . get_icon( 'tick', 'This option is active.' );
+        $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . $scheduled . get_icon( 'tick', 'This page is active.' );
 
       } else {
-        $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '" title="' . $description . '">' . $row['title'] . '</a>' . $default;
+        $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '" title="' . $description . '">' . $row['title'] . '</a>' . $default . $scheduled;
       }
 
       $build .= "</li>\n";
