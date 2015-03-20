@@ -169,6 +169,7 @@ adminlog('manage');
               <li><a id="truncate_log" href="#">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
               <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
               <li><a id="full_reset" href="#">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <li><a href="install.php">Reinstall <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
             </ul>
           </li>
 
