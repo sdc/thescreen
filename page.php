@@ -28,32 +28,36 @@ if ( isset( $_GET ) && !empty( $_GET ) ) {
 // Adding a new page.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' ) {
 
-  if ( isset( $_POST['page_name'] ) && !empty( $_POST['page_name'] ) && isset( $_POST['event_description'] ) && !empty( $_POST['event_description'] ) ) {
+  if (
+    isset( $_POST['page_name'] )        && !empty( $_POST['page_name'] ) &&
+    isset( $_POST['page_title'] )       && !empty( $_POST['page_title'] ) &&
+    isset( $_POST['page_description'] ) && !empty( $_POST['page_description']
+  ) ) {
 
-    if ( isset( $_POST['event_edit'] ) && !empty( $_POST['event_edit'] ) && is_numeric( $_POST['event_edit'] ) ) {
+    if ( isset( $_POST['page_edit'] ) && !empty( $_POST['page_edit'] ) && is_numeric( $_POST['page_edit'] ) ) {
 
       // Make the following function UPDATE rather than INSERT.
-      if ( edit_event( $_POST['page_name'], $_POST['event_description'], $_POST['event_edit'] ) ) {
+      if ( edit_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'], $_POST['page_edit'] ) ) {
 
-        $_SESSION['alerts'][] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was updated successfully.' );
+        $_SESSION['alerts'][] = array( 'success' => 'The page &ldquo;' . $_POST['page_title'] . '&rdquo; was updated successfully.' );
         header( 'location: ' . $CFG['adminpage'] );
         exit(0);
 
       } else {
-        $_SESSION['alerts'][] = array( 'warning' => 'The event was not updated for some reason.' );
+        $_SESSION['alerts'][] = array( 'warning' => 'The page was not updated for some reason.' );
       }
 
-    // If we are inserting a new event.
+    // If we are inserting a new page.
     } else {
 
-      if ( add_event( $_POST['page_name'], $_POST['event_description'] ) ) {
+      if ( add_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'] ) ) {
 
-        $_SESSION['alerts'][] = array( 'success' => 'The event &ldquo;' . $_POST['event_description'] . '&rdquo; was created successfully.' );
+        $_SESSION['alerts'][] = array( 'success' => 'The page &ldquo;' . $_POST['page_title'] . '&rdquo; was created successfully.' );
         header( 'location: ' . $CFG['adminpage'] );
         exit(0);
 
       } else {
-        $_SESSION['alerts'][] = array( 'warning' => 'The event was not created for some reason.' );
+        $_SESSION['alerts'][] = array( 'warning' => 'The page was not created for some reason.' );
       }
 
     }
@@ -67,7 +71,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' ) {
   //$_SESSION['alerts'][] = array( 'warning' => 'The form was not complete.' );
 }
 
-adminlog('event');
+adminlog('addedit-page');
 
 // If we've received $_GET parameters, populate the form with them.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_edit' && isset( $_GET['page_id'] ) && !empty( $_GET['page_id'] ) && is_numeric( $_GET['page_id'] ) ) {
@@ -93,7 +97,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_edit' && isset( $_GET[
   <meta name="description" content="A content presentation system for SDC Computer Services.">
   <meta name="author" content="Mostly Paul Vaughan.">
 
-  <title><?php echo $CFG['lang']['title']; ?> :: Event edit page</title>
+  <title><?php echo $CFG['lang']['title']; ?> :: Page edit page</title>
 
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -158,7 +162,6 @@ if (
 }
 
 ?>
-
       </div>
     </div>
 
@@ -193,9 +196,9 @@ if ( isset( $_SESSION['alerts'] ) ) {
 <?php
 
 if ( isset( $row['id'] ) ) {
-  echo '          <input type="hidden" name="event_edit" value="' . $row['id'] . '">' . "\n";
-} else if ( isset( $_POST['event_edit'] ) ) {
-  echo '          <input type="hidden" name="event_edit" value="' . $_POST['event_edit'] . '">' . "\n";
+  echo '          <input type="hidden" name="page_edit" value="' . $row['id'] . '">' . "\n";
+} else if ( isset( $_POST['page_edit'] ) ) {
+  echo '          <input type="hidden" name="page_edit" value="' . $_POST['page_edit'] . '">' . "\n";
 }
 
 
@@ -247,7 +250,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' && ( !isset( $_
 }
 
 $page_description_value = '';
-if ( isset( $row['text'] ) ) {
+if ( isset( $row['description'] ) ) {
   $page_description_value = 'value="' . $row['description'] . '"';
 } elseif ( isset( $_POST['page_description'] ) && !empty( $_POST['page_description'] ) ) {
   $page_description_value = 'value="' . $_POST['page_description'] . '"';
@@ -347,10 +350,12 @@ foreach ( $days as $key => $value ) {
 <?php
 
 $page_schedule_start_value = '';
-if ( isset( $row['schedule_start'] ) ) {
+if ( isset( $row['schedule_start'] ) && !empty( $row['schedule_start'] ) ) {
   $page_schedule_start_value = $row['schedule_start'];
 } elseif ( isset( $_POST['page_schedule_start'] ) && !empty( $_POST['page_schedule_start'] ) ) {
   $page_schedule_start_value = $_POST['page_schedule_start'];
+} else {
+  $page_schedule_start_value = '10:00';
 }
 
 ?>
@@ -385,10 +390,12 @@ foreach ( $times as $time ) {
 <?php
 
 $page_schedule_end_value = '';
-if ( isset( $row['schedule_end'] ) ) {
+if ( isset( $row['schedule_end'] ) && !empty( $row['schedule_end'] ) ) {
   $page_schedule_end_value = $row['schedule_end'];
 } elseif ( isset( $_POST['page_schedule_end'] ) && !empty( $_POST['page_schedule_end'] ) ) {
   $page_schedule_end_value = $_POST['page_schedule_end'];
+} else {
+  $page_schedule_end_value = '14:00';
 }
 
 $page_schedule_end_error = '';

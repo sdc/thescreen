@@ -84,3 +84,54 @@ function get_page_background_thumb() {
   return $out;
 
 }
+
+/*
+// Adds an event.
+// DONE
+function add_event( $date, $text ) {
+
+    global $DB;
+
+    $text = $DB->real_escape_string( $text );
+
+    adminlog( 'add_event|' . $text );
+
+    $sql = "INSERT INTO events (start, text, created, modified) VALUES ('" . $date . "', '" . $text . "', '" . time() . "', '" . time() . "');";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+*/
+
+// Edits an existing page.
+// TODO: Check that this event id exists before we attempt to update it.
+function edit_page( $name, $title, $description, $id ) {
+
+    global $DB;
+
+    $name = $DB->real_escape_string( $name );
+    $title = $DB->real_escape_string( $title );
+    $description = $DB->real_escape_string( $description );
+
+    adminlog( 'edit_page|' . $id );
+
+    $sql = "UPDATE pages SET name = '" . $name . "', title = '" . $title . "', description = '" . $description . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+
+/*
+// Deletes an event completely.
+function delete_event( $id ) {
+
+    global $DB;
+
+    adminlog( 'delete_event|' . $id );
+
+    $sql = "DELETE FROM events WHERE id = " . $id . " LIMIT 1;";
+    $res = $DB->query( $sql );
+
+    return $res;
+}
+*/

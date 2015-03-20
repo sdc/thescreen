@@ -14,6 +14,7 @@ require_once( 'functions-admin-status.inc.php' );
 
 
 // Checks if the $type id being updated actually exists in the such-and-such table, and save it if so.
+// This is used when changing a page or a status from the admin screen (not when adding or updating).
 // DONE
 function update_check( $type, $id ) {
   global $DB;
@@ -295,7 +296,7 @@ function no_unhidden_events_warning() {
   return $out;
 }
 
-function logout() {
+function logout( $redirect = true ) {
   $_SESSION = array();
 
   if ( ini_get( 'session.use_cookies' ) ) {
@@ -310,9 +311,13 @@ function logout() {
         $params["httponly"]
     );
   }
+
   session_destroy();
-  header( 'location: login.php?logout' );
-  exit(0);
+
+  if ( $redirect ) {
+    header( 'location: login.php?logout' );
+    exit(0);
+  }
 }
 
 function force_default() {
