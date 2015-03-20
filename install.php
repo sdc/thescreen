@@ -298,7 +298,9 @@ $sql['tables']['pages'][] = "CREATE TABLE IF NOT EXISTS `pages` (
   `priority` tinyint(2) unsigned NOT NULL DEFAULT '10',
   `defaultpage` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `scheduled` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `scheduled_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `schedule_day` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `schedule_start` varchar(5) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `schedule_end` varchar(5) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `created` int(11) unsigned NOT NULL DEFAULT '0',
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -501,6 +503,7 @@ $sql['contents']['pages'][] = "INSERT INTO `pages` (`name`, `title`, `descriptio
 ('christmas', 'Christmas', 'Default Christmas template.', 'xmas.png', 300, 10, 0, " . $now . ", " . $now . "),
 ('communityday2015', 'Community Day 2015', 'Community day 2015 flyer.', 'events.png', 120, 20, 0, " . $now . ", " . $now . "),
 ('communityday2014', 'Community Day 2014', 'Community day 2014 poster.', 'communityday.png', 120, 20, 0, " . $now . ", " . $now . ");";
+$sql['contents']['pages'][] = "UPDATE `pages` SET `scheduled` =  '1', `schedule_day` =  'fri', `schedule_start` =  '15:00', `schedule_end` = '16:00' WHERE `name` = 'meeting3pmfriday';";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['pages'] as $query ) {
