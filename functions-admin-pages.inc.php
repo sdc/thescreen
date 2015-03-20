@@ -47,6 +47,7 @@ function make_page_change_menu() {
       $build .= ' <a href="page.php?action=page_edit&page_id=' . $row['id'] . '">' . get_icon( 'edit', 'Edit this page' ) . '</a>';
 
       // Delete button.
+      // TODO: Omit this button for the currently active page.
       $build .= ' <a href="' . $CFG['adminpage'] . '?action=page_del&page_id=' . $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete the page \\\'' . $row['title'] . '\\\' ?\');">' . get_icon( 'cross', 'Delete this page' ) . '</a>';
 
       $build .= "</li>\n";
