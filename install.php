@@ -171,7 +171,7 @@ $sql['tables']['aprilfools'][] = "CREATE TABLE IF NOT EXISTS `aprilfools` (
   `created` int(11) unsigned NOT NULL DEFAULT '0',
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['aprilfools'] as $query ) {
@@ -192,7 +192,7 @@ $sql['tables']['config'][] = "CREATE TABLE IF NOT EXISTS `config` (
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `item` (`item`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['config'] as $query ) {
@@ -213,7 +213,7 @@ $sql['tables']['events'][] = "CREATE TABLE IF NOT EXISTS `events` (
   `created` int(11) unsigned NOT NULL DEFAULT '0',
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['events'] as $query ) {
@@ -233,7 +233,7 @@ $sql['tables']['factoids'][] = "CREATE TABLE IF NOT EXISTS `factoids` (
   `created` int(11) unsigned NOT NULL DEFAULT '0',
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['factoids'] as $query ) {
@@ -255,7 +255,7 @@ $sql['tables']['help'][] = "CREATE TABLE IF NOT EXISTS `help` (
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['help'] as $query ) {
@@ -306,7 +306,7 @@ $sql['tables']['pages'][] = "CREATE TABLE IF NOT EXISTS `pages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['pages'] as $query ) {
@@ -332,7 +332,7 @@ $sql['tables']['status'][] = "CREATE TABLE IF NOT EXISTS `status` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['status'] as $query ) {
@@ -354,7 +354,7 @@ $sql['tables']['status_types'][] = "CREATE TABLE IF NOT EXISTS `status_types` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 
 echo '<p><pre>';
 foreach ( $sql['tables']['status_types'] as $query ) {
