@@ -73,6 +73,7 @@ if ( !require_once( 'defaults.inc.php' ) ) {
 
 // Check the database for defaults and if none found, add them in.
 // TODO: This assumes a config table is in place. It might not be!
+/*
 foreach ( $CFG['defaults'] as $setting => $value ) {
   if ( !get_config( $setting ) ) {
     if ( !set_config( $setting, $value, true ) ) {
@@ -81,6 +82,7 @@ foreach ( $CFG['defaults'] as $setting => $value ) {
     }
   }
 }
+*/
 
 // The current page's name.
 $CFG['page']    = get_config( 'page' );
@@ -194,6 +196,7 @@ function get_title( $type, $id ) {
   $type = $DB->real_escape_string( $type );
 
   $sql = "SELECT title FROM " . $type . " WHERE id = '" . $id . "' LIMIT 1;";
+
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {

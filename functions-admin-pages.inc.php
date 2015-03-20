@@ -104,7 +104,7 @@ function add_event( $date, $text ) {
 */
 
 // Edits an existing page.
-// TODO: Check that this event id exists before we attempt to update it.
+// TODO: Check that this page id exists before we attempt to update it.
 function edit_page( $name, $title, $description, $id ) {
 
     global $DB;
@@ -121,17 +121,16 @@ function edit_page( $name, $title, $description, $id ) {
     return $res;
 }
 
-/*
-// Deletes an event completely.
-function delete_event( $id ) {
+// Deletes a page completely.
+// TODO: Check that this page id exists before we attempt to delete it.
+function delete_page( $id ) {
 
     global $DB;
 
-    adminlog( 'delete_event|' . $id );
+    adminlog( 'delete_page|' . $id );
 
-    $sql = "DELETE FROM events WHERE id = " . $id . " LIMIT 1;";
+    $sql = "DELETE FROM pages WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;
 }
-*/

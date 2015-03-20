@@ -32,6 +32,17 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_change' && isset( $_GE
   exit(0);
 }
 
+// Deleting a page.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_del' && isset( $_GET['page_id'] ) && !empty( $_GET['page_id'] ) && is_numeric( $_GET['page_id'] ) ) {
+  if ( delete_page( $_GET['page_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The page with id <strong>' . $_GET['page_id'] . '</strong> was deleted.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The page with id <strong>' . $_GET['page_id'] . '</strong> was not deleted for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
 // Forcing a page refresh.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'refresh_main' ) {
   if ( set_change() ) {
