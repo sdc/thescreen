@@ -216,7 +216,7 @@ if ( isset( $row['fact'] ) ) {
             <span id="factoid_fact_help" class="help-block">Be concise! We don't have much space to work with.</span>
           </div>
 
-          <a class="btn btn-default" href="manage.php" role="button">Cancel</a>
+          <a class="btn btn-default" href="<?php echo $CFG['adminpage']; ?>" role="button">Cancel</a>
           <button type="submit" class="btn btn-info">Submit</button>
 
         </form>
