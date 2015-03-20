@@ -43,6 +43,12 @@ function make_page_change_menu() {
         $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '" title="' . $description . '">' . $row['title'] . '</a>' . $default . $scheduled;
       }
 
+      // Editing button.
+      $build .= ' <a href="page.php?action=page_edit&page_id=' . $row['id'] . '">' . get_icon( 'edit', 'Edit this page' ) . '</a>';
+
+      // Delete button.
+      $build .= ' <a href="' . $CFG['adminpage'] . '?action=page_del&page_id=' . $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete the page \\\'' . $row['title'] . '\\\' ?\');">' . get_icon( 'cross', 'Delete this page' ) . '</a>';
+
       $build .= "</li>\n";
     }
 
