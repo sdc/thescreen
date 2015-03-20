@@ -239,7 +239,7 @@ echo get_page_background_thumb();
 echo make_page_change_menu();
 
 ?>
-        <a class="btn btn-danger btn-block" href="page.php" role="button" disabled="disabled">Add a new page</a>
+        <a class="btn btn-primary btn-block" href="page.php" role="button">Add a new page</a>
 
       </div>
       <div class="col-md-4">
