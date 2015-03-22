@@ -146,11 +146,12 @@ adminlog('manage');
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#">event</a></li>
-              <li><a href="#">factoid</a></li>
-              <li><a href="#">page</a></li>
-              <li><a href="#">status</a></li>
-              <li><a href="#">figure</a></li>
+              <li><a href="event.php">Event</a></li>
+              <li><a href="factoid.php">Factoid</a></li>
+              <li><a href="page.php">Page</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Status</a></li>
+              <li><a href="#">Figure</a></li>
             </ul>
           </li>
 
