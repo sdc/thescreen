@@ -140,7 +140,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_edit' && isset( $_GET[
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><?php echo $CFG['lang']['title']; ?></a>
+        <a class="navbar-brand" href="<?php echo $CFG['adminpage']; ?>"><?php echo $CFG['lang']['title']; ?></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -225,7 +225,11 @@ if ( isset( $row['name'] ) ) {
 ?>
           <div class="form-group<?php echo $page_name_error; ?>">
             <label for="page_name">Page name</label>
-            <input type="text" class="form-control" id="page_name" name="page_name" placeholder="Enter page name" <?php echo $page_name_value; ?> aria-describedby="page_name_help">
+            <div class="row">
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="page_name" name="page_name" placeholder="enter-page-name" <?php echo $page_name_value; ?> aria-describedby="page_name_help">
+              </div>
+            </div>
             <span id="page_name_help" class="help-block">Enter an internal name for this page: all lowercase, no other characters except dash/minus '-', e.g. 'meeting-tuesday'.</span>
           </div>
 
@@ -246,7 +250,11 @@ if ( isset( $row['name'] ) ) {
 ?>
           <div class="form-group<?php echo $page_title_error; ?>">
             <label for="page_title">Page title</label>
-            <input type="text" class="form-control" id="page_title" name="page_title" placeholder="Enter page title" <?php echo $page_title_value; ?> aria-describedby="page_title_help">
+            <div class="row">
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="page_title" name="page_title" placeholder="Enter Page Title" <?php echo $page_title_value; ?> aria-describedby="page_title_help">
+              </div>
+            </div>
             <span id="page_title_help" class="help-block">Enter a title for this page, e.g. 'Tuesday Meeting'. Will appear on the admin screen.</span>
           </div>
 
@@ -308,9 +316,11 @@ if ( isset( $row['background'] ) ) {
 
 ?>
           <div class="form-group<?php echo $page_background_error; ?>">
-            <label for="page_background">Page background</label>
-            <select class="form-control" name="page_background" id="page_background" onChange="changeimage();">
-              <option value="">None</option>
+            <label for="page_background">Page background image</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <select class="form-control" name="page_background" id="page_background" onChange="changeimage();">
+                  <option value="">None</option>
 <?php
 
 // Scan the appropriate folder for appropriate images.
@@ -328,7 +338,7 @@ if ( $fh = opendir( $CFG['dir']['bg'] ) ) {
 sort( $backgrounds );
 
 foreach ( $backgrounds as $bg ) {
-  $out = '              <option value="' . $bg . '"';
+  $out = '                  <option value="' . $bg . '"';
   if ( $page_background_value == $bg ) {
     $out .= ' selected';
   }
@@ -337,8 +347,10 @@ foreach ( $backgrounds as $bg ) {
 }
 
 ?>
-            </select>
-            <span id="page_background_help" class="help-block">Choose a background image, if one is needed. Looks for <code>.jpg</code> and <code>.png</code> files in <code>/graphics/backgrounds</code>.</span>
+                </select>
+              </div>
+            </div>
+            <span id="page_background_help" class="help-block">Choose a background image, if one is needed. Choices taken from <code>.jpg</code> and <code>.png</code> files found in <code>/graphics/backgrounds</code>.</span>
           </div>
 
           <div class="row">
@@ -400,7 +412,7 @@ if ( isset( $row['scheduled'] ) ) {
           <div class="radio<?php echo $page_scheduled_error; ?>">
             <label>
               <input type="radio" name="page_scheduled" id="page_scheduled" value="yes"<?php echo $page_scheduled_checked_yes; ?> onclick="scheduleon();">
-              Yes, this page is scheduled (see below).
+              Yes - this page is scheduled (see below).
             </label>
             <span id="page_scheduled_help" class="help-block">Choose 'yes' to schedule the page to appear automatically.</span>
           </div>
@@ -415,13 +427,15 @@ if ( isset( $row['schedule_day'] ) ) {
 }
 
 ?>
-          <div class="form-group">
-            <label for="page_schedule_day">Day to show page</label>
-            <select class="form-control" name="page_schedule_day" id="page_schedule_day">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="page_schedule_day">Day</label>
+                <select class="form-control" name="page_schedule_day" id="page_schedule_day">
 <?php
 
 foreach ( $CFG['days'] as $key => $value ) {
-  $out = '              <option value="' . $key . '"';
+  $out = '                  <option value="' . $key . '"';
   if ( $page_schedule_day_selected == $key ) {
     $out .= ' selected';
   }
@@ -430,8 +444,9 @@ foreach ( $CFG['days'] as $key => $value ) {
 }
 
 ?>
-            </select>
-            <span id="page_schedule_day" class="help-block">Choose which day you want the scheduled page to appear.</span>
+                </select>
+              <span id="page_schedule_day" class="help-block">Choose which day you want the scheduled page to appear.</span>
+            </div>
           </div>
 
 <?php
@@ -446,14 +461,15 @@ if ( isset( $row['schedule_start'] ) && !empty( $row['schedule_start'] ) ) {
 }
 
 ?>
-          <div class="form-group">
-            <label for="page_schedule_start">Time to start showing page</label>
-            <select class="form-control" name="page_schedule_start" id="page_schedule_start">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label for="page_schedule_start">Start time</label>
+                <select class="form-control" name="page_schedule_start" id="page_schedule_start">
 
 <?php
 
 foreach ( $CFG['times'] as $time ) {
-  $out = '              <option value="' . $time . '"';
+  $out = '                <option value="' . $time . '"';
   if ( $page_schedule_start_value == $time ) {
     $out .= ' selected';
   }
@@ -462,9 +478,9 @@ foreach ( $CFG['times'] as $time ) {
 }
 
 ?>
-            </select>
-            <span id="page_schedule_start" class="help-block">Choose what time you want the scheduled page to appear.</span>
-          </div>
+                </select>
+                <span id="page_schedule_start" class="help-block">Choose what time you want the scheduled page to appear.</span>
+              </div>
 
 <?php
 
@@ -483,9 +499,12 @@ if ( strtotime( $page_schedule_start_value ) >= strtotime( $page_schedule_end_va
 }
 
 ?>
-          <div class="form-group<?php echo $page_schedule_end_error; ?>">
-            <label for="page_schedule_end">Time to stop showing page</label>
-            <select class="form-control" name="page_schedule_end" id="page_schedule_end">
+            </div>
+
+            <div class="col-sm-4">
+              <div class="form-group<?php echo $page_schedule_end_error; ?>">
+                <label for="page_schedule_end">End time</label>
+                <select class="form-control" name="page_schedule_end" id="page_schedule_end">
 
 <?php
 
@@ -499,8 +518,10 @@ foreach ( $CFG['times'] as $time ) {
 }
 
 ?>
-            </select>
-            <span id="page_schedule_end" class="help-block">Choose what time you want the scheduled page to disappear.</span>
+                </select>
+                <span id="page_schedule_end" class="help-block">Choose what time you want the scheduled page to disappear.</span>
+              </div>
+            </div>
           </div>
 
 
