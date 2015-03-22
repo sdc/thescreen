@@ -48,7 +48,9 @@ function make_page_change_menu() {
 
       // Delete button.
       // TODO: Omit this button for the currently active page.
-      $build .= ' <a href="' . $CFG['adminpage'] . '?action=page_del&page_id=' . $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete the page \\\'' . $row['title'] . '\\\' ?\');">' . get_icon( 'cross', 'Delete this page' ) . '</a>';
+      if ( get_config( 'page' ) != $row['id'] ) {
+        $build .= ' <a href="' . $CFG['adminpage'] . '?action=page_del&page_id=' . $row['id'] . '" onclick="return confirm(\'Are you sure you want to delete the page \\\'' . $row['title'] . '\\\' ?\');">' . get_icon( 'cross', 'Delete this page' ) . '</a>';
+      }
 
       $build .= "</li>\n";
     }
@@ -86,37 +88,41 @@ function get_page_background_thumb() {
 
 }
 
-/*
-// Adds an event.
+// Adds a page.
 // DONE
-function add_event( $date, $text ) {
+function add_page( $name, $title, $description, $scheduled ) {
 
     global $DB;
 
-    $text = $DB->real_escape_string( $text );
+    $name = to_slug( $name );
 
-    adminlog( 'add_event|' . $text );
+    $name         = $DB->real_escape_string( $name );
+    $title        = $DB->real_escape_string( $title );
+    $description  = $DB->real_escape_string( $description );
 
-    $sql = "INSERT INTO events (start, text, created, modified) VALUES ('" . $date . "', '" . $text . "', '" . time() . "', '" . time() . "');";
+    adminlog( 'add_page|' . $name );
+
+    $sql = "INSERT INTO pages (name, title, description, scheduled, created, modified) VALUES ('" . $name . "', '" . $title . "', '" . $description . "', '" . $scheduled . "', '" . time() . "', '" . time() . "');";
     $res = $DB->query( $sql );
 
     return $res;
 }
-*/
 
 // Edits an existing page.
 // TODO: Check that this page id exists before we attempt to update it.
-function edit_page( $name, $title, $description, $id ) {
+function edit_page( $name, $title, $description, $scheduled, $id ) {
 
     global $DB;
 
-    $name = $DB->real_escape_string( $name );
-    $title = $DB->real_escape_string( $title );
-    $description = $DB->real_escape_string( $description );
+    $name = to_slug( $name );
+
+    $name         = $DB->real_escape_string( $name );
+    $title        = $DB->real_escape_string( $title );
+    $description  = $DB->real_escape_string( $description );
 
     adminlog( 'edit_page|' . $id );
 
-    $sql = "UPDATE pages SET name = '" . $name . "', title = '" . $title . "', description = '" . $description . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+    $sql = "UPDATE pages SET name = '" . $name . "', title = '" . $title . "', description = '" . $description . "', scheduled = '" . $description . "',modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;
@@ -127,6 +133,11 @@ function edit_page( $name, $title, $description, $id ) {
 function delete_page( $id ) {
 
     global $DB;
+
+    // Prevent deletion of an active page.
+    if ( get_config( 'page' ) == $id ) {
+      return false;
+    }
 
     adminlog( 'delete_page|' . $id );
 

@@ -31,13 +31,14 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' ) {
   if (
     isset( $_POST['page_name'] )        && !empty( $_POST['page_name'] ) &&
     isset( $_POST['page_title'] )       && !empty( $_POST['page_title'] ) &&
-    isset( $_POST['page_description'] ) && !empty( $_POST['page_description']
+    isset( $_POST['page_description'] ) && !empty( $_POST['page_description'] ) &&
+    isset( $_POST['page_scheduled'] )   && !empty( $_POST['page_scheduled']
   ) ) {
 
     if ( isset( $_POST['page_edit'] ) && !empty( $_POST['page_edit'] ) && is_numeric( $_POST['page_edit'] ) ) {
 
       // Make the following function UPDATE rather than INSERT.
-      if ( edit_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'], $_POST['page_edit'] ) ) {
+      if ( edit_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'], $_POST['page_scheduled'], $_POST['page_edit'] ) ) {
 
         $_SESSION['alerts'][] = array( 'success' => 'The page &ldquo;' . $_POST['page_title'] . '&rdquo; was updated successfully.' );
         header( 'location: ' . $CFG['adminpage'] );
