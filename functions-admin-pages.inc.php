@@ -33,7 +33,7 @@ function make_page_change_menu() {
 
       $scheduled = '';
       if ( $row['scheduled'] ) {
-        $scheduled = ' <span class="glyphicon glyphicon-time scheduled" title="This is a scheduled page." aria-hidden="true"></span>';
+        $scheduled = ' <span class="glyphicon glyphicon-time scheduled" title="This is a scheduled page: ' . $CFG['days'][$row['schedule_day']] . ' ' . $row['schedule_start'] . '-' . $row['schedule_end'] . '." aria-hidden="true"></span>';
       }
 
       if ( $row['id'] == $CFG['page'] ) {
@@ -66,15 +66,12 @@ function get_page_background_thumb() {
   global $CFG;
 
   $out = '          <div class="row">' . "\n";
-  $out .= '            <div class="col-sm-10 col-sm-offset-1">' . "\n";
 
   if ( $img = get_page_background_image() ) {
-    $out = '          <div class="row">' . "\n";
     $out .= '            <div class="col-sm-10 col-sm-offset-1">' . "\n";
-    $out .= '              <p><img src="' . $CFG['dir']['bg'] . '/' . $img . '" alt="Current page in use" class="img-thumbnail"></p>' . "\n";
+    $out .= '              <p><img src="' . $CFG['dir']['bg'] . $img . '" alt="Current page in use" class="img-thumbnail"></p>' . "\n";
 
   } else {
-    $out = '          <div class="row">' . "\n";
     $out .= '            <div class="col-sm-12">' . "\n";
     $out .= '              <div class="alert alert-info" role="alert">' . "\n";
     $out .= '                <strong>Info:</strong> This page doesn\'t appear to have a background image associated with it. This may or may not be a problem.' . "\n";
@@ -90,7 +87,7 @@ function get_page_background_thumb() {
 
 // Adds a page.
 // DONE
-function add_page( $name, $title, $description, $scheduled ) {
+function add_page( $name, $title, $description, $background, $scheduled ) {
 
     global $DB;
 
@@ -99,10 +96,11 @@ function add_page( $name, $title, $description, $scheduled ) {
     $name         = $DB->real_escape_string( $name );
     $title        = $DB->real_escape_string( $title );
     $description  = $DB->real_escape_string( $description );
+    $background   = $DB->real_escape_string( $background );
 
     adminlog( 'add_page|' . $name );
 
-    $sql = "INSERT INTO pages (name, title, description, scheduled, created, modified) VALUES ('" . $name . "', '" . $title . "', '" . $description . "', '" . $scheduled . "', '" . time() . "', '" . time() . "');";
+    $sql = "INSERT INTO pages (name, title, description, background, scheduled, created, modified) VALUES ('" . $name . "', '" . $title . "', '" . $description . "', '" . $background . "', '" . $scheduled . "', '" . time() . "', '" . time() . "');";
     $res = $DB->query( $sql );
 
     return $res;
@@ -110,7 +108,7 @@ function add_page( $name, $title, $description, $scheduled ) {
 
 // Edits an existing page.
 // TODO: Check that this page id exists before we attempt to update it.
-function edit_page( $name, $title, $description, $scheduled, $id ) {
+function edit_page( $name, $title, $description, $background, $scheduled, $id ) {
 
     global $DB;
 
@@ -119,10 +117,11 @@ function edit_page( $name, $title, $description, $scheduled, $id ) {
     $name         = $DB->real_escape_string( $name );
     $title        = $DB->real_escape_string( $title );
     $description  = $DB->real_escape_string( $description );
+    $background   = $DB->real_escape_string( $background );
 
     adminlog( 'edit_page|' . $id );
 
-    $sql = "UPDATE pages SET name = '" . $name . "', title = '" . $title . "', description = '" . $description . "', scheduled = '" . $description . "',modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+    $sql = "UPDATE pages SET name = '" . $name . "', title = '" . $title . "', description = '" . $description . "', scheduled = '" . $description . "', background = '" . $background . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
     $res = $DB->query( $sql );
 
     return $res;

@@ -32,15 +32,22 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' ) {
     isset( $_POST['page_name'] )        && !empty( $_POST['page_name'] ) &&
     isset( $_POST['page_title'] )       && !empty( $_POST['page_title'] ) &&
     isset( $_POST['page_description'] ) && !empty( $_POST['page_description'] ) &&
+    //isset( $_POST['page_background'] )  && !empty( $_POST['page_background'] ) &&
     isset( $_POST['page_scheduled'] )   && !empty( $_POST['page_scheduled']
   ) ) {
 
     if ( isset( $_POST['page_edit'] ) && !empty( $_POST['page_edit'] ) && is_numeric( $_POST['page_edit'] ) ) {
 
       // Make the following function UPDATE rather than INSERT.
-      if ( edit_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'], $_POST['page_scheduled'], $_POST['page_edit'] ) ) {
+      if ( edit_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'], $_POST['page_background'], $_POST['page_scheduled'], $_POST['page_edit'] ) ) {
 
         $_SESSION['alerts'][] = array( 'success' => 'The page &ldquo;' . $_POST['page_title'] . '&rdquo; was updated successfully.' );
+
+        // If the page edited and saved is the current page, force a reload.
+        if ( $_POST['page_edit'] == get_config( 'page' ) ) {
+          set_change();
+        }
+
         header( 'location: ' . $CFG['adminpage'] );
         exit(0);
 
@@ -51,7 +58,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' ) {
     // If we are inserting a new page.
     } else {
 
-      if ( add_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'] ) ) {
+      if ( add_page( $_POST['page_name'], $_POST['page_title'], $_POST['page_description'], $_POST['page_background'] ) ) {
 
         $_SESSION['alerts'][] = array( 'success' => 'The page &ldquo;' . $_POST['page_title'] . '&rdquo; was created successfully.' );
         header( 'location: ' . $CFG['adminpage'] );
@@ -259,12 +266,101 @@ if ( isset( $row['description'] ) ) {
 
 ?>
           <div class="form-group<?php echo $page_description_error; ?>">
-            <label for="page_description">Event description</label>
+            <label for="page_description">Page description</label>
             <input type="text" class="form-control" id="page_description" name="page_description" placeholder="Enter page description" <?php echo $page_description_value; ?>aria-describedby="page_description_help">
             <span id="page_description_help" class="help-block">For descriptive purposes only; doesn't appear on the page itself.</span>
           </div>
 
 <?php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Might not be necessary: do pages need a background image?
+// TODO: thumbnails? Load onChange with JS?
+$page_background_error = '';
+if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' && ( !isset( $_POST['page_background'] ) || empty( $_POST['page_background'] ) ) ) {
+  $page_background_error = ' has-error';
+}
+
+$page_background_value = '';
+if ( isset( $row['background'] ) ) {
+  //$page_background_value = 'value="' . $row['background'] . '"';
+  $page_background_value = $row['background'];
+} elseif ( isset( $_POST['page_background'] ) && !empty( $_POST['page_background'] ) ) {
+  $page_background_value = $_POST['page_background'];
+}
+
+?>
+          <div class="form-group<?php echo $page_background_error; ?>">
+            <label for="page_background">Page background</label>
+            <select class="form-control" name="page_background" id="page_background" onChange="changeimage();">
+              <option value="">None</option>
+<?php
+
+// Scan the appropriate folder for appropriate images.
+$backgrounds = array();
+
+if ( $fh = opendir( $CFG['dir']['bg'] ) ) {
+  while ( false !== ( $entry = readdir( $fh ) ) ) {
+    if ( $entry != '.' && $entry != '..' ) {
+      $backgrounds[] = $entry;
+    }
+  }
+  closedir( $fh );
+}
+
+sort( $backgrounds );
+
+foreach ( $backgrounds as $bg ) {
+  $out = '              <option value="' . $bg . '"';
+  if ( $page_background_value == $bg ) {
+    $out .= ' selected';
+  }
+  $out .= '>' . $bg . '</option>' . "\n";
+  echo $out;
+}
+
+?>
+            </select>
+            <span id="page_background_help" class="help-block">Choose a background image, if one is needed. Looks for <code>.jpg</code> and <code>.png</code> files in <code>/graphics/backgrounds</code>.</span>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+              <img id="chosen_thumb">
+            </div>
+          </div>
+
+<?php
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 $page_scheduled_error = '';
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' && ( !isset( $_POST['page_scheduled'] ) || empty( $_POST['page_scheduled'] ) ) ) {
@@ -304,7 +400,7 @@ if ( isset( $row['scheduled'] ) ) {
           <div class="radio<?php echo $page_scheduled_error; ?>">
             <label>
               <input type="radio" name="page_scheduled" id="page_scheduled" value="yes"<?php echo $page_scheduled_checked_yes; ?> onclick="scheduleon();">
-              Yes, this page is scheduled.
+              Yes, this page is scheduled (see below).
             </label>
             <span id="page_scheduled_help" class="help-block">Choose 'yes' to schedule the page to appear automatically.</span>
           </div>
@@ -324,17 +420,7 @@ if ( isset( $row['schedule_day'] ) ) {
             <select class="form-control" name="page_schedule_day" id="page_schedule_day">
 <?php
 
-$days = array(
-  'mon' => 'Monday',
-  'tue' => 'Tuesday',
-  'wed' => 'Wednesday',
-  'thu' => 'Thursday',
-  'fri' => 'Friday',
-  'sat' => 'Saturday',
-  'sun' => 'Sunday'
-);
-
-foreach ( $days as $key => $value ) {
+foreach ( $CFG['days'] as $key => $value ) {
   $out = '              <option value="' . $key . '"';
   if ( $page_schedule_day_selected == $key ) {
     $out .= ' selected';
@@ -366,15 +452,7 @@ if ( isset( $row['schedule_start'] ) && !empty( $row['schedule_start'] ) ) {
 
 <?php
 
-$times = array();
-
-for ( $h = 8; $h <= 21; $h++ ) {
-  for ( $m = 0; $m <= 55; $m += 15 ) {
-    $times[] = $h . ':' . str_pad( $m, 2, 0, STR_PAD_LEFT );
-  }
-}
-
-foreach ( $times as $time ) {
+foreach ( $CFG['times'] as $time ) {
   $out = '              <option value="' . $time . '"';
   if ( $page_schedule_start_value == $time ) {
     $out .= ' selected';
@@ -411,7 +489,7 @@ if ( strtotime( $page_schedule_start_value ) >= strtotime( $page_schedule_end_va
 
 <?php
 
-foreach ( $times as $time ) {
+foreach ( $CFG['times'] as $time ) {
   $out = '              <option value="' . $time . '"';
   if ( $page_schedule_end_value == $time ) {
     $out .= ' selected';
@@ -476,11 +554,23 @@ echo footer_content();
     $("#page_schedule_end").prop( "disabled", false );
   }
 
+  function changeimage() {
+    if ( $("#page_background").val() != '' ) {
+      $("#chosen_thumb").attr( "src", "<?php echo $CFG['dir']['bg']; ?>" + $( "#page_background" ).val() );
+      $("#chosen_thumb").addClass( "img-thumbnail" );
+    } else {
+      $("#chosen_thumb").attr( "src", "" );
+      $("#chosen_thumb").removeClass( "img-thumbnail" );
+    }
+  }
+
   $(document).ready(function() {
 
     if ( $('#page_scheduled').prop('checked') ) {
       scheduleoff();
     }
+
+    changeimage();
 
     window.setTimeout(function() { 
       $(".alert-success-fade").fadeTo(800, 0).slideUp(500);

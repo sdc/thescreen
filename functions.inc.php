@@ -51,6 +51,24 @@ $now = time();
 //$now = 1427878800; // 9am, April 1st 2015 (for testing).
 $CFG['aprilfool']       = ( date( 'n', $now ) == 4 && date ( 'j', $now ) == 1 ) ? true : false;
 
+// PHP's date ('n').
+$CFG['days'] = array(
+  '1' => 'Monday',
+  '2' => 'Tuesday',
+  '3' => 'Wednesday',
+  '4' => 'Thursday',
+  '5' => 'Friday',
+  '6' => 'Saturday',
+  '7' => 'Sunday'
+);
+
+$CFG['times'] = array();
+for ( $h = 8; $h <= 21; $h++ ) {
+  for ( $m = 0; $m <= 55; $m += 15 ) {
+    $CFG['times'][] = $h . ':' . str_pad( $m, 2, 0, STR_PAD_LEFT );
+  }
+}
+
 
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {
@@ -109,7 +127,7 @@ function get_config( $item ) {
   global $DB;
 
   $res = $DB->query( "SELECT value FROM config WHERE item = '" . $item . "' LIMIT 1;" );
-  if ( $res->num_rows == 0 ) {
+  if ( !$res || $res->num_rows == 0 ) {
     return false;
   } else {
     $row = $res->fetch_assoc();

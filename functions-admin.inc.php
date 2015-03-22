@@ -449,3 +449,8 @@ function count_rows( $table = 'log', $where = '' ) {
   return $row['rowcount'];
 
 }
+
+// Sluggifies (that's a word) a string.
+function to_slug( $in ){
+    return strtolower( trim( preg_replace( '/[^A-Za-z0-9-]+/', '-', $in ) ) );
+}
