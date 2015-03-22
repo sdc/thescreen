@@ -496,6 +496,7 @@ $sql['contents']['pages'][] = "INSERT INTO `pages` (`name`, `title`, `descriptio
 ('meeting3pmfriday', 'Friday 3pm Meeting', 'We''re attending our regular Friday 3pm meeting and will be back about 4pm.', 'meeting_fri3pm.png', 60, 2, 0, " . $now . ", " . $now . "),
 ('helpdeskclosed', 'Helpdesk Closed', 'The Technician has popped out and will be back shortly.', 'helpdeskclosed.png', 60, 3, 0, " . $now . ", " . $now . "),
 ('showstopper', 'Showstopper!', 'For big messages!', 'showstopper.jpg', 60, 4, 0, " . $now . ", " . $now . "),
+('qrcodes', 'QR Codes', 'Useful QR codes for mobile users to connect to various College systems.', '', 60, 6, 0, " . $now . ", " . $now . "),
 ('christmasparty', 'Christmas Party', 'We''re having fun at our Christmas lunch. Back soon.', 'xmasparty.png', 60, 5, 0, " . $now . ", " . $now . "),
 ('byebyejoy', 'Bye bye Joy!', 'Joy''s leaving! :(', 'byejoy.png', 60, 6, 0, " . $now . ", " . $now . "),
 ('meeting', 'General Meeting', 'We''re away at a meeting and will be back soon.', 'meeting_general.png', 15, 7, 0, " . $now . ", " . $now . "),
