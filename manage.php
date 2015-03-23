@@ -145,7 +145,7 @@ adminlog('manage');
           <!-- li class="active"><a href="#">Home</a></li -->
 
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <?php echo get_icon( 'help' ); ?> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="event.php">Event</a></li>
               <li><a href="factoid.php">Factoid</a></li>
@@ -157,7 +157,7 @@ adminlog('manage');
           </li>
 
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <?php echo get_icon( 'help' ); ?> <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="#">About (modal)</a></li>
               <li><a href="help.php">Edit Help text</a></li>
@@ -226,7 +226,7 @@ echo display_alerts();
     <!-- Row two. -->
     <div class="row">
       <div class="col-md-4">
-        <h2>Page Type <small><a href="#" data-toggle="modal" data-target="#pagetype-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Page Type <small><a href="#" data-toggle="modal" data-target="#pagetype-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 
 <?php
 
@@ -245,7 +245,7 @@ echo make_page_change_menu();
 
       </div>
       <div class="col-md-4">
-        <h2>Current Status <small><a href="#" data-toggle="modal" data-target="#status-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Current Status <small><a href="#" data-toggle="modal" data-target="#status-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 <?php
 
 echo default_page_warning_status();
@@ -264,7 +264,7 @@ echo make_status_change_menu();
       </div>
 
       <div class="col-md-4">
-        <h2>Events <small><a href="#" data-toggle="modal" data-target="#events-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Events <small><a href="#" data-toggle="modal" data-target="#events-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 <?php
 
 echo no_unhidden_events_warning();
@@ -294,7 +294,7 @@ echo make_events_menu();
     <!-- Row three. -->
     <div class="row">
       <div class="col-md-6">
-        <h2>Showstopper Text <small><a href="#" data-toggle="modal" data-target="#showstopper-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Showstopper Text <small><a href="#" data-toggle="modal" data-target="#showstopper-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 
 <?php
 
@@ -319,7 +319,7 @@ echo showstopper_page_warning();
       </div>
 
       <div class="col-md-6">
-        <h2>RSS Feed <small><a href="#" data-toggle="modal" data-target="#rssfeed-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>RSS Feed <small><a href="#" data-toggle="modal" data-target="#rssfeed-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 
         <p>URL of the RSS feed for the scroller.</p>
 
@@ -335,7 +335,7 @@ echo showstopper_page_warning();
           <button type="submit" class="btn btn-info">Submit</button>
         </form>
 
-        <h3>Choose a preset <small><a href="#" data-toggle="modal" data-target="#rssfeedpreset-modal"><i class="fa fa-question-circle"></i></a></small></h3>
+        <h3>Choose a preset <small><a href="#" data-toggle="modal" data-target="#rssfeedpreset-modal"><?php echo get_icon( 'help' ); ?></a></small></h3>
         <ul>
             <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
             <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
@@ -358,7 +358,7 @@ echo showstopper_page_warning();
     <!-- Row four. -->
     <div class="row">
       <div class="col-md-12">
-        <h2>Factoids <small><a href="#" data-toggle="modal" data-target="#factoids-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Factoids <small><a href="#" data-toggle="modal" data-target="#factoids-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 <?php
 
 echo no_unhidden_factoids_warning();
@@ -386,7 +386,7 @@ echo make_factoids_menu();
     <!-- Row five. -->
     <div class="row">
       <div class="col-md-12">
-        <h2>Specific Person <small><a href="#" data-toggle="modal" data-target="#person-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+        <h2>Specific Person <small><a href="#" data-toggle="modal" data-target="#person-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
         <p>Click on the person whose face you want to show, or choose 'random' for a random person each time.</p>
       </div>
     </div>
@@ -447,7 +447,7 @@ echo get_figures_thumbnails();
 
 
 
-                    <h2>Refresh <small><a href="#" data-toggle="modal" data-target="#refresh-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+                    <h2>Refresh <small><a href="#" data-toggle="modal" data-target="#refresh-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
                     <p>Number of seconds between page refreshes.</p>
                     <form action="refresh_edit.php" method="get">
                         Seconds:
@@ -469,14 +469,14 @@ echo get_figures_thumbnails();
                     </ul>
                     <hr>
 
-                    <h2>Stats <small><a href="#" data-toggle="modal" data-target="#stats-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+                    <h2>Stats <small><a href="#" data-toggle="modal" data-target="#stats-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
                     <p>Change the details and click the update button:</p>
                     <table id="stats">
                         <?php //echo get_stats_form(); ?>
                     </table>
                     <hr>
 
-                    <h2>Logs <small><a href="#" data-toggle="modal" data-target="#logs-modal"><i class="fa fa-question-circle"></i></a></small></h2>
+                    <h2>Logs <small><a href="#" data-toggle="modal" data-target="#logs-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
                     <p>Last few log entries.</p>
                     <p>The log table has <?php echo count_rows( 'log' ); ?> rows.</p>
                     <?php echo get_last_log(15); ?>

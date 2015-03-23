@@ -422,6 +422,10 @@ function get_icon( $type = 'check', $title = '' ) {
 
   } else if ( strtolower( $type ) == 'scheduled-active' ) {
     $out .= 'cog fa-lg fa-spin ts-scheduled-active';
+
+  } else if ( strtolower( $type ) == 'help' ) {
+    $out .= 'question-circle';
+
   }
 
   $out .= '" title="' . $title . '"></span> ';
