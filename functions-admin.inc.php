@@ -218,7 +218,7 @@ function default_page_warning_page() {
   $out = '';
   if ( !default_check( 'pages', $CFG['page'] ) ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default page <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default page ' . get_icon( 'default' , 'This star indicates the default option.' ) . ' is not set for some reason, which may be intentional. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to reset the page to default</a>.' . "\n";
     $out .=  "</div>\n";
   }
 
@@ -233,7 +233,7 @@ function default_page_warning_status() {
   $out = '';
   if ( !default_check( 'pages', $CFG['page'] ) ) {
     $out .= '<div class="alert alert-warning" role="alert">' . "\n";
-    $out .= '  <strong>Note!</strong> These status options are only shown on the default page <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> which is not currently set.' . "\n";
+    $out .= '  <strong>Note!</strong> These status options are only shown on the default page ' . get_icon( 'default' , 'This star indicates the default option.' ) . ' which is not currently set.' . "\n";
     $out .= "</div>\n";
   }
 
@@ -247,7 +247,7 @@ function default_status_warning() {
   $out = '';
   if ( !default_check( 'status', $CFG['status'] ) ) {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The default status <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> is not set for some reason, which may be intentional. <a href="' . $CFG['adminpage'] . '?action=status_change&status=' . get_default( 'status' ) . '" class="alert-link">Click here to reset the status to default</a>.' . "\n";
+    $out .= '  <strong>Info:</strong> The default status ' . get_icon( 'default' , 'This star indicates the default option.' ) . ' is not set for some reason, which may be intentional. <a href="' . $CFG['adminpage'] . '?action=status_change&status=' . get_default( 'status' ) . '" class="alert-link">Click here to reset the status to default</a>.' . "\n";
     $out .= "</div>\n";
   }
 
@@ -265,7 +265,7 @@ function showstopper_page_warning() {
     $out .= "</div>\n";
   } else {
     $out .= '<div class="alert alert-info" role="alert">' . "\n";
-    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default <span class="glyphicon glyphicon-star default" title="This star indicates the default option." aria-hidden="true"></span> page.' . "\n";
+    $out .= '  <strong>Info:</strong> The <strong>Showstopper</strong> page is active, and the below text is live. <a href="' . $CFG['adminpage'] . '?action=page_change&page=' . get_default( 'pages' ) . '" class="alert-link">Click here to turn the Showstopper off</a> and replace with the default ' . get_icon( 'default' , 'This star indicates the default option.' ) . ' page.' . "\n";
     $out .= "</div>\n";
   }
 
@@ -376,36 +376,55 @@ function help_modals() {
   </div>
 <?php
 
-
-
-
     }
   }
 }
 
 // Generates the icons used around the admin interface.
-function get_icon( $type = 'tick', $title = '' ) {
+function get_icon( $type = 'check', $title = '' ) {
   global $CFG;
 
   if ( empty( $title ) ) {
     $title = $type;
   }
 
-  $out = ' <span class="glyphicon glyphicon-';
+  $out = ' <span class="fa fa-';
 
-  if ( strtolower( $type ) == 'tick' ) {
-    $out .= 'ok tick';
+  if ( strtolower( $type ) == 'check' ) {
+    $out .= 'check ts-check';
+
   } else if ( strtolower( $type ) == 'cross' ) {
-    $out .= 'remove cross';
+    $out .= 'times ts-cross';
+
   } else if ( strtolower( $type ) == 'edit' ) {
-    $out .= 'pencil edit';
+    $out .= 'pencil ts-edit';
+
   } else if ( strtolower( $type ) == 'show' ) {
-    $out .= 'eye-open factoid-show';
+    $out .= 'eye ts-show';
+
   } else if ( strtolower( $type ) == 'hide' ) {
-    $out .= 'eye-close factoid-hide';
+    $out .= 'eye-slash ts-hide';
+
+  } else if ( strtolower( $type ) == 'external' ) {
+    $out .= 'desktop';
+
+  } else if ( strtolower( $type ) == 'refresh' ) {
+    $out .= 'refresh fa-spin';
+
+  } else if ( strtolower( $type ) == 'logout' ) {
+    $out .= 'external-link';
+
+  } else if ( strtolower( $type ) == 'default' ) {
+    $out .= 'star ts-default';
+
+  } else if ( strtolower( $type ) == 'scheduled' ) {
+    $out .= 'clock-o ts-default';
+
+  } else if ( strtolower( $type ) == 'scheduled-active' ) {
+    $out .= 'cog fa-lg fa-spin ts-scheduled-active';
   }
 
-  $out .= '" title="' . $title . '" aria-hidden="true"></span> ';
+  $out .= '" title="' . $title . '"></span> ';
 
   return $out;
 }

@@ -8,9 +8,8 @@
 // TODO: Split these into options which can be changed (move into config[.dist].inc.php) or not (leave here).
 $CFG = array();
 
-// Version stuff.
-$CFG['version']['date']   = '20150306';
-$CFG['version']['build']  = '0.2.0.2';
+// Store version info seperately.
+require_once( 'version.php' );
 
 $CFG['dir']['graphics'] = 'graphics/';
 $CFG['dir']['ppl']      = $CFG['dir']['graphics'] . 'people/';

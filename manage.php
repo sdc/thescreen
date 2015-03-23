@@ -8,7 +8,6 @@
 
 // TODO: check to ensure there is precisely one row in 'pages' and 'status' tables and complain if otherwise.
 // TODO: check for no factoids and no shown factoids and warn if otherwise.
-// TODO: Replace Glyphicons with Font Awesome everywhere (use only one framework, and one with spinning icons).
 // TODO: jQuery jGrowl: https://github.com/stanlemon/jGrowl
 
 session_name( 'sdc-thescreen' );
@@ -66,18 +65,21 @@ adminlog('manage');
   body {
     padding-top: 70px;
   }
+  /* Using the 'ts-' namespace.
   /* Green. */
-  .tick, .scheduled-active { color: #0b0; }
+  .ts-check { color: #0b0; }
   /* Red. */
-  .cross, .factoid-delete, .event-delete, .ts-warning { color: #d00; }
+  .ts-cross, .ts-warning { color: #d00; }
   /* Light blue. */
-  .edit, .factoid-edit, .event-edit, .ts-info { color: #38b; }
+  .ts-edit, .ts-info { color: #38b; }
   /* Grey. */
-  .default { color: #777; }
+  .ts-default { color: #777; }
   /* Light grey. */
-  .factoid-hide, .event-hide, .factoid-hide, .scheduled { color: #bbb; }
+  .ts-hide, .ts-scheduled { color: #bbb; }
+  /* Active (orange). */
+  .ts-scheduled-active { color: #f90; }
   /* Dark grey. */
-  .factoid-show, .event-show, .factoid-show  { color: #333; }
+  .ts-show { color: #444; }
 
   #showstopper_counter { display: inline; }
 
@@ -141,7 +143,6 @@ adminlog('manage');
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <!-- li class="active"><a href="#">Home</a></li -->
-          <!-- li><a href="<?php echo $CFG['adminpage']; ?>">Reload <span class="glyphicon glyphicon-refresh" aria-hidden="true"></a></li -->
 
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Add new <i class="fa fa-question-circle"></i> <span class="caret"></span></a>
@@ -175,11 +176,10 @@ adminlog('manage');
           </li>
 
         </ul>
-        <!-- button type="button" class="btn btn-danger navbar-btn navbar-right btn-sm">Log Out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button -->
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="index.php" target="_blank">See the main screen <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li>
-          <li><a href="<?php echo $CFG['adminpage']; ?>?action=refresh_main">Refresh main screen <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
-          <li><a href="<?php echo $CFG['adminpage']; ?>?action=logout">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+          <li><a href="index.php" target="_blank">See the main screen <?php echo get_icon( 'external' ); ?></a></li>
+          <li><a href="<?php echo $CFG['adminpage']; ?>?action=refresh_main">Refresh main screen <?php echo get_icon( 'refresh' ); ?></a></li>
+          <li><a href="<?php echo $CFG['adminpage']; ?>?action=logout">Log out <?php echo get_icon( 'logout' ); ?></a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>

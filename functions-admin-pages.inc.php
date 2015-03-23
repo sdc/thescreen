@@ -28,16 +28,16 @@ function make_page_change_menu() {
       // Add in a flag for default if it's the default choice.
       $default = '';
       if ( $row['defaultpage'] ) {
-        $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>';
+        $default = get_icon( 'default' , 'This star indicates the default option.' );
       }
 
       $scheduled = '';
       if ( $row['scheduled'] ) {
-        $scheduled = ' <span class="glyphicon glyphicon-time scheduled" title="This is a scheduled page: ' . $CFG['days'][$row['schedule_day']] . ' ' . $row['schedule_start'] . '-' . $row['schedule_end'] . '." aria-hidden="true"></span>';
+        $scheduled = get_icon( 'scheduled', $CFG['days'][$row['schedule_day']] . ' ' . $row['schedule_start'] . '-' . $row['schedule_end'] );
       }
 
       if ( $row['id'] == $CFG['page'] ) {
-        $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . $scheduled . get_icon( 'tick', 'This page is active.' );
+        $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . $scheduled . get_icon( 'check', 'This page is active.' );
 
       } else {
         $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=page_change&page=' . $row['id'] . '" title="' . $description . '">' . $row['title'] . '</a>' . $default . $scheduled;

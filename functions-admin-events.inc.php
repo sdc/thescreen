@@ -57,9 +57,9 @@ function make_events_menu( $num = 20 ) {
 
             // Extra styling for hidden events
             if ( $row['hidden'] == 0 ) {
-                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_hide&event_id=' . $row['id'] . '"><span class="glyphicon glyphicon-eye-close event-hide" aria-hidden="true"></span></a>';
+                $build .= '<li>' . $disp_date . ': ' . $row['text'] . ' <a href="' . $CFG['adminpage'] . '?action=event_hide&event_id=' . $row['id'] . '">' . get_icon( 'hide', 'Hide this event' ) . '</a>';
             } else {
-                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_show&event_id=' . $row['id'] . '"><span class="glyphicon glyphicon-eye-open event-show" aria-hidden="true"></span></a>';
+                $build .= '<li class="text-muted"><del>' . $disp_date . ': ' . $row['text'] . '</del> <a href="' . $CFG['adminpage'] . '?action=event_show&event_id=' . $row['id'] . '">' . get_icon( 'show', 'Show this event' ) . '</a>';
             }
 
             // Editing button.

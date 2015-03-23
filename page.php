@@ -144,7 +144,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'page_edit' && isset( $_GET[
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="<?php echo $CFG['adminpage']; ?>?action=logout">Log out <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+          <li><a href="<?php echo $CFG['adminpage']; ?>?action=logout">Log out <?php echo get_icon( 'logout' ); ?></a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>

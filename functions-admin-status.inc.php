@@ -42,11 +42,11 @@ function make_status_change_menu() {
         // Add in a flag for default if it's the default choice.
         $default = '';
         if ( $row['defaultstatus'] ) {
-          $default = ' <span class="glyphicon glyphicon-star default" title="This is the default option." aria-hidden="true"></span>' ;
+          $default = get_icon( 'default' , 'This star indicates the default option.' );
         }
 
         if ( $row['id'] == $CFG['status'] ) {
-          $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . get_icon( 'tick', 'This option is active.' );
+          $build .= '<strong><span title="' . $description . '">' . $row['title'] . '</span></strong> ' . $default . get_icon( 'check', 'This option is active.' );
 
         } else {
           $build .= '<a class="hvr-sweep-to-right" href="' . $CFG['adminpage'] . '?action=status_change&status=' . $row['id'] . '" title="' . $description . '">' . $row['title'] . '</a>' . $default;
