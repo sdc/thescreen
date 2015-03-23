@@ -318,6 +318,31 @@ ob_flush();
 flush();
 
 
+$sql['tables']['rss'][] = "DROP TABLE IF EXISTS `rss`;";
+$sql['tables']['rss'][] = "CREATE TABLE IF NOT EXISTS `rss` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `url` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `priority` tinyint(2) unsigned NOT NULL DEFAULT '5',
+  `defaultpage` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+
+echo '<p><pre>';
+foreach ( $sql['tables']['rss'] as $query ) {
+  run( $query );
+}
+echo '</pre></p>';
+
+ob_flush();
+flush();
+
+
 $sql['tables']['status'][] = "DROP TABLE IF EXISTS `status`;";
 $sql['tables']['status'][] = "CREATE TABLE IF NOT EXISTS `status` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -508,6 +533,23 @@ $sql['contents']['pages'][] = "UPDATE `pages` SET `scheduled` =  '1', `schedule_
 
 echo '<p><pre>';
 foreach ( $sql['contents']['pages'] as $query ) {
+  run( $query );
+}
+echo '</pre></p>';
+
+ob_flush();
+flush();
+
+
+$sql['contents']['rss'][] = "INSERT INTO `rss` (`title`, `description`, `url`, `priority`, `defaultpage`, `created`, `modified`) VALUES
+('BBC UK Technology', 'BBC UK technology news',             'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',  1, 1, " . $now . ", " . $now . "),
+('BBC UK',            'BBC UK news',                        'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml',          2, 0, " . $now . ", " . $now . "),
+('BBC England',       'BBC England news',                   'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml',     3, 0, " . $now . ", " . $now . "),
+('BBC Sci/Env',       'BBC UK Science & Environment news',  'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml',    4, 0, " . $now . ", " . $now . "),
+('Slashdot',          'News for nerds, stuff that matters', 'http://rss.slashdot.org/Slashdot/slashdot',                              5, 0, " . $now . ", " . $now . ");";
+
+echo '<p><pre>';
+foreach ( $sql['contents']['rss'] as $query ) {
   run( $query );
 }
 echo '</pre></p>';
