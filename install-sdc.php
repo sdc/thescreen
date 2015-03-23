@@ -97,6 +97,52 @@ ob_flush();
 flush();
 
 
+echo "<h3>Populating the factoids table</h3>";
+
+$sql['sdc']['factoids'][] = "INSERT INTO `factoids` (`fact`, `created`, `modified`) VALUES 
+('In Computer Services we are constantly working hard to improve your I.T. experience.',                                                                                " . $now . ", " . $now . "),
+('By the year 2020 there will be approximately 50 billion devices connected to the Internet.',                                                                          " . $now . ", " . $now . "),
+('Don\'t forget about those fluffy bunny rabbits. Only print if you really need to!',                                                                                   " . $now . ", " . $now . "),
+('If using Works or Open Office at home, save your files in RTF (Rich Text) format to ensure that you will be able to open them in college.',                           " . $now . ", " . $now . "),
+('If your computer is stuck on the \'loading personalised settings\' page, press Control, Alt and Delete keys together, log out and then log straight back in again.',  " . $now . ", " . $now . "),
+('In January we disallowed 20,800 printed pages, saving &pound;1,240!',                                                                                                 " . $now . ", " . $now . "),
+('Never open an unknown email or piece of software: it might contain a virus, malware, spyware or phishing scam.',                                                      " . $now . ", " . $now . "),
+('New members of staff need to be on the Human Resources system in order to get a computer account.',                                                                   " . $now . ", " . $now . "),
+('Only print if you really need to!',                                                                                                                                   " . $now . ", " . $now . "),
+('Over summer 2014 we added over 35 kilometres of hgh-speed ethernet cable to the network: that\'s from here to Exeter!',                                               " . $now . ", " . $now . "),
+('Over summer 2014 we replaced 260 PCs with brand-new machines.',                                                                                                       " . $now . ", " . $now . "),
+('Over summer 2014 we spent... a *lot* of money on IT systems and infrastructure!',                                                                                     " . $now . ", " . $now . "),
+('Over summer 2014 we upgraded our state-of-the-art ILP system Leap.',                                                                                                  " . $now . ", " . $now . "),
+('Over summer 2014 we upgraded to Moodle 2.7!',                                                                                                                         " . $now . ", " . $now . "),
+('Please keep your data area (N drive) as clear as possible.',                                                                                                          " . $now . ", " . $now . "),
+('Please make sure your anti-virus software is up to date.',                                                                                                            " . $now . ", " . $now . "),
+('Please make your requests for software in a timely manner, not immediately before you need to teach with it!',                                                        " . $now . ", " . $now . "),
+('Please remember to archive or delete your old emails.',                                                                                                               " . $now . ", " . $now . "),
+('Please return all equipment ready for the next person to use and alert Computer Services to broken or missing hardware.',                                             " . $now . ", " . $now . "),
+('South Devon College\'s Vantage Point campus contains approximately 120 miles of networking cable.',                                                                   " . $now . ", " . $now . "),
+('Students need to be enrolled on an active course in order to get a computer account.',                                                                                " . $now . ", " . $now . "),
+('The size limit for sending or receiving emails using your college email account is 5Mb.',                                                                             " . $now . ", " . $now . "),
+('To change your password, press Control-Alt-Delete and choose \'Change Password\'.',                                                                                   " . $now . ", " . $now . "),
+('To keep the email system running smoothly, please archive or delete your old emails.',                                                                                " . $now . ", " . $now . "),
+('We have at least 75 interactive whiteboards to aid teaching and learning.',                                                                                           " . $now . ", " . $now . "),
+('We manage over 130 Apple Macs.',                                                                                                                                      " . $now . ", " . $now . "),
+('We manage over 1,800 Windows PCs.',                                                                                                                                   " . $now . ", " . $now . "),
+('We strongly recommend you change your default password.',                                                                                                             " . $now . ", " . $now . "),
+('We strongly suggest you have anti-virus and anti-malware software installed on your wireless device.',                                                                " . $now . ", " . $now . "),
+('When using a Mac DO NOT save to HD1: you may lose your work.',                                                                                                        " . $now . ", " . $now . "),
+('When using a Mac, if working from an external drive, ensure that the file is saved to HD2 first, work on the file and then copy it back.',                            " . $now . ", " . $now . "),
+('When using your own laptop connect it up to the \'Wireless Guest\' network.',                                                                                         " . $now . ", " . $now . "),
+('You can buy printer credits from Essentials, the LTRS and Cashiers.',                                                                                                  " . $now . ", " . $now . ");";
+
+echo '<p><pre>';
+foreach ( $sql['sdc']['factoids'] as $query ) {
+  run( $query );
+}
+echo '</pre></p>';
+
+ob_flush();
+flush();
+
 
 echo "<p>Done.</p>";
 
