@@ -300,7 +300,6 @@ if ( isset( $row['description'] ) ) {
 
 
 // Might not be necessary: do pages need a background image?
-// TODO: thumbnails? Load onChange with JS?
 $page_background_error = '';
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'page_add' && ( !isset( $_POST['page_background'] ) || empty( $_POST['page_background'] ) ) ) {
   $page_background_error = ' has-error';

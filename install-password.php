@@ -16,24 +16,11 @@ if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) && isset( $_POS
 
   // Both passwords were set and identical, so hash it and save it.
 
-  $has_sha256 = false;
-  $algos = hash_algos();
-  foreach ( $algos as $algo ) {
-    if ( strtolower( $algo ) == 'sha256' ) {
-      $has_sha256 = true;
-      break;
-    }
-  }
+  // We're using http://www.openwall.com/phpass/
+  require_once( 'passwordhash.php' );
 
-  // TODO: Fall back to using different algorithm(s) if we can't find SHA-256. MD5, anyone?
-  // TODO: phpass? http://www.openwall.com/phpass/ Might have to include in the code?
-  if ( !$has_sha256 ) {
-    echo "<p>Problem: this computer doesn't seem to have the SHA-256 hashing algorithm, so I can't hash your password or log you in using a hashed string.</p>";
-    exit(1);
-  }
-
-  // TODO: consider generating a salt at installation and and storing it?
-  $hash = hash( 'sha256', $_POST['password'] );
+  $hashing = new PasswordHash( $CFG['phpass']['base2log'], false );
+  $hash = $hashing->HashPassword( $_POST['password'] );
 
   if ( $epwd ) {
     // Update, not insert, if it already exists.

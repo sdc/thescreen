@@ -316,9 +316,8 @@ if ( file_exists( 'install.php' ) || file_exists( 'install-password.php' ) ) {
 
 
 // No factoids.
-// TODO: Complete the 'add one' link.
 if ( count_rows( 'factoids' ) == 0 ) {
-  $_SESSION['alerts'][] = array( 'danger' => 'There are no factoids in the database. <a href="#" class="alert-link">Add one?</a>' );
+  $_SESSION['alerts'][] = array( 'danger' => 'There are no factoids in the database. <a href="factoid.php" class="alert-link">Add one?</a>' );
 } else {
   // No un-hidden factoids.
   if ( count_rows( 'factoids', 'hidden = 0' ) == 0 ) {
@@ -327,9 +326,8 @@ if ( count_rows( 'factoids' ) == 0 ) {
 }
 
 // No events.
-// TODO: Complete the 'add one' link.
 if ( count_rows( 'events' ) == 0 ) {
-  $_SESSION['alerts'][] = array( 'danger' => 'There are no events in the database. <a href="#" class="alert-link">Add one?</a>' );
+  $_SESSION['alerts'][] = array( 'danger' => 'There are no events in the database. <a href="event.php" class="alert-link">Add one?</a>' );
 } else {
   // No un-hidden events.
   if ( count_rows( 'events', 'hidden = 0' ) == 0 ) {

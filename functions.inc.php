@@ -45,6 +45,9 @@ $CFG['poll']            = 5;
 // Set to true to ignore the installation files warning.
 $CFG['ignoreinstallfiles']  = true;
 
+// "Base-2 logarithm of the iteration count used for password stretching".
+$CFG['phpass']['base2log']  = 10;
+
 // For teh lulz.
 $now = time();
 //$now = 1427878800; // 9am, April 1st 2015 (for testing).

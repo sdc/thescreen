@@ -14,8 +14,14 @@ require_once( 'functions.inc.php' );
 
 if ( isset( $_POST['password'] ) && !empty( $_POST['password'] ) ) {
 
-  if ( hash( 'sha256', $_POST['password'] ) == get_config( 'admin_password' ) ) {
+  // We're using http://www.openwall.com/phpass/
+  require_once( 'passwordhash.php' );
+  $hashing = new PasswordHash( $CFG['phpass']['base2log'], false );
+
+  if ( $hashing->CheckPassword( $_POST['password'], get_config( 'admin_password' ) ) ) {
+
     // They got the right password, let them in.
+
     $_SESSION['loggedin'] = true;
     // TODO: change this to 'logintime'?
     $_SESSION['loggedin.time'] = time();
