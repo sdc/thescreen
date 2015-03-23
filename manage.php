@@ -69,7 +69,7 @@ adminlog('manage');
   /* Green. */
   .ts-check { color: #0b0; }
   /* Red. */
-  .ts-cross, .ts-warning { color: #d00; }
+  .ts-cross, .ts-danger { color: #d00; }
   /* Light blue. */
   .ts-edit, .ts-info { color: #38b; }
   /* Grey. */
@@ -168,10 +168,10 @@ adminlog('manage');
               <li class="divider"></li>
               <li class="dropdown-header">Site Operations</li>
               <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=truncate_log" onclick="return confirm('Are you sure?');">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
-              <li><a id="truncate_log" href="#">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <li><a id="truncate_log" href="#">Truncate the log table <?php echo get_icon( 'danger' ); ?></a></li>
               <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
-              <li><a id="full_reset" href="#">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
-              <li><a href="install.php">Reinstall <i class="fa fa-exclamation-circle ts-warning"></i></a></li>
+              <li><a id="full_reset" href="#">Reset everything! <?php echo get_icon( 'danger' ); ?></a></li>
+              <li><a href="install.php">Reinstall <?php echo get_icon( 'danger' ); ?></a></li>
             </ul>
           </li>
 
