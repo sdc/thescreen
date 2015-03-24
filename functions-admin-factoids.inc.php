@@ -6,11 +6,16 @@
 
 // Builds the Factoids menu, for editing, hiding and deleting.
 // TODO: A check that at least one factoid exists should probably be done at the top of the management page.
-function make_factoids_menu() {
+function make_factoids_menu( $sort = 'alpha') {
 
   global $CFG, $DB;
 
-  $sql = "SELECT id, fact, hidden, created, modified FROM factoids ORDER BY fact ASC, id ASC;";
+  $sql = "SELECT id, fact, hidden, created, modified FROM factoids ORDER BY ";
+  if ( $sort == 'alpha' ) {
+    $sql .= "fact ASC;";
+  } else {
+    $sql .= "id ASC;";
+  }
   $res = $DB->query( $sql );
 
   if ( !$res || $res->num_rows == 0) {
