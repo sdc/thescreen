@@ -29,13 +29,13 @@ function make_status_change_menu() {
 
     } else {
 
-      //$build .= '<p class="status-type-title">' . ucfirst( $row2['type'] ) . ' statuses:</p>'."\n";
       $build .= '<ul><li>' . $row2['title'] . ' statuses:'."\n";
 
       $build .= '<ul>';
       while ( $row = $res->fetch_assoc() ) {
 
-        $description = str_replace( array( '<br>', '<br />' ), ' ', $row['description'] );
+        //$description = str_replace( array( '<br>', '<br />' ), ' ', $row['description'] );
+        $description = strip_tags( $row['description'] );
 
         $build .= '<li>';
 

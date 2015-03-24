@@ -561,7 +561,7 @@ flush();
 $sql['contents']['status'][] = "INSERT INTO `status` (`name`, `title`, `description`, `type`, `priority`, `defaultstatus`, `created`, `modified`) VALUES
 ('ok',            'Okay',                 'Everything is awesome.',                                                                                     'green',      1,    1,  " . $now . ",  " . $now . "),
 ('minorproblem',  'Problems',             'We''re experiencing problems with the server, which we are looking in to at the moment',                     'amber',      10,   0,  " . $now . ",  " . $now . "),
-('epicfail',      'Epic fail',            'Something has gone horribly, terribly wrong. It may even involve a zombie apocalypse.',                      'red',        20,   0,  " . $now . ",  " . $now . "),
+('epicfail',      'Epic fail',            '<span style=\"color:#f00;font-size:200%;font-weight:bold;\">EPIC FAIL</span><br><br>Something has gone horribly, terribly wrong. It may even involve a zombie apocalypse.',                      'red',        20,   0,  " . $now . ",  " . $now . "),
 ('maintenance',   'Planned maintenance',  'We are performing planned maintenance on some systems.<br><br>There may be brief periods of interruption.',  'blue',       50,   0,  " . $now . ",  " . $now . "),
 ('xmas',          'Merry Christmas!',     'Merry Christmas and Happy New Year!<br><br>(Everything is awesome, by the way.)',                            'christmas',  99,   0,  " . $now . ",  " . $now . ");";
 

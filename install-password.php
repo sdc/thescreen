@@ -51,7 +51,7 @@ if ( $epwd ) {
 }
 
 ?>
-<form action="install-password.php" method="post">
+<form action="install-password.php" method="post" name="set_password">
   <label for="password">Password:</label>
   <input type="password" id="password" name="password">
   <br>
@@ -60,3 +60,7 @@ if ( $epwd ) {
   <br>
   <button type="submit">Submit</button>
 </form>
+
+<script type="text/javascript">
+  document.set_password.password.focus();
+</script>
