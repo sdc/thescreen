@@ -321,7 +321,7 @@ echo showstopper_page_warning();
       <div class="col-md-6">
         <h2>RSS Feed <small><a href="#" data-toggle="modal" data-target="#rssfeed-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 
-        <p>URL of the RSS feed for the scroller.</p>
+        <p>Paste in a valid URL of an RSS feed, or choose from the presets, below.</p>
 
         <form action="<?php echo $CFG['adminpage']; ?>" method="post">
           <input type="hidden" name="action" value="rssfeed_url_edit">
@@ -332,18 +332,16 @@ echo showstopper_page_warning();
             <span id="rssfeed_url_help" class="help-block">Enter the full URL of the RSS feed you want to show.</span>
           </div>
 
-          <button type="submit" class="btn btn-info">Submit</button>
+          <button type="submit" class="btn btn-info">Update</button>
         </form>
 
         <h3>Choose a preset <small><a href="#" data-toggle="modal" data-target="#rssfeedpreset-modal"><?php echo get_icon( 'help' ); ?></a></small></h3>
-        <ul>
-            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml">BBC Technology, UK Edition</a> (This is the default)</li>
-            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml">BBC UK, UK Edition</a></li>
-            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml">BBC England, UK Edition</a></li>
-            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml">BBC Science &amp; Environment, UK Edition</a></li>
-            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://rss.slashdot.org/Slashdot/slashdot">Slashdot: News for nerds, stuff that matters</a></li>
-            <li><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=rssfeed_preset&rssfeed_preset_url=http://news.southdevon.ac.uk/items.atom?body=txt">South Devon College News</a></li>
-        </ul>
+<?php
+
+echo make_rss_preset_menu();
+
+?>
+        <a class="btn btn-danger btn-block" href="rss.php" role="button" disabled="disabled">Add a new RSS feed</a>
 
       </div>
 

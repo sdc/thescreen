@@ -10,6 +10,7 @@ require_once( 'functions-admin-factoids.inc.php' );
 require_once( 'functions-admin-general.inc.php' );
 require_once( 'functions-admin-help.inc.php' );
 require_once( 'functions-admin-pages.inc.php' );
+require_once( 'functions-admin-rss.inc.php' );
 require_once( 'functions-admin-status.inc.php' );
 
 

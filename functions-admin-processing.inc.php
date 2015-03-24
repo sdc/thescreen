@@ -167,11 +167,10 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'showstopper_edit' && isse
 
 // Updating the RSS feed URL.
 if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isset( $_POST['rssfeed_url'] ) && !empty( $_POST['rssfeed_url'] ) ) {
-  if ( set_config( 'rssfeed', $_POST['rssfeed_url'] ) ) {
+  if ( set_config( 'rssfeed', trim( $_POST['rssfeed_url'] ) ) ) {
     $_SESSION['alerts'][] = array( 'success' => 'RSS feed URL &ldquo;' . $_POST['rssfeed_url'] . '&rdquo; was updated successfully.' );
-    // If the default page is set when the rss feed URL is changed, update the page.
-    //if ( get_config( 'page' ) == get_default( 'pages' ) ) {
-    if ( get_config( 'page' ) == get_id( 'pages', 'standard' ) ) {
+    // If the default page is set when the RSS feed URL is changed, update the page.
+    if ( get_config( 'page' ) == get_default( 'pages' ) ) {
       set_change();
     }
   } else {
@@ -181,16 +180,28 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'rssfeed_url_edit' && isse
   exit(0);
 }
 
-// Updating the RSS feed URL from a preset.
-if ( isset( $_GET['action'] ) && $_GET['action'] == 'rssfeed_preset' && isset( $_GET['rssfeed_preset_url'] ) && !empty( $_GET['rssfeed_preset_url'] ) ) {
-  if ( set_config( 'rssfeed', $_GET['rssfeed_preset_url'] ) ) {
-    $_SESSION['alerts'][] = array( 'success' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was updated successfully.' );
-    // If the default page is set when the rss feed URL preset is changed, update the page.
+// NEW Updating the RSS feed URL from a preset.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'rss_preset' && isset( $_GET['rss_id'] ) && !empty( $_GET['rss_id'] ) && is_numeric( $_GET['rss_id'] ) ) {
+  $rss = get_rss_details_from_id( $_GET['rss_id'] );
+  if ( set_config( 'rssfeed', $rss['url'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'RSS feed preset &ldquo;' . $rss['description'] . '&rdquo; was updated successfully.' );
+    // If the default page is set when the RSS feed preset is changed, update the page.
     if ( get_config( 'page' ) == get_default( 'pages' ) ) {
       set_change();
     }
   } else {
-    $_SESSION['alerts'][] = array( 'danger' => 'RSS feed preset &ldquo;' . $_GET['rssfeed_preset_url'] . '&rdquo; was not updated for some reason.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'RSS feed preset &ldquo;' . $rss['description'] . '&rdquo; was not updated for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Deleting a RSS feed.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'rss_del' && isset( $_GET['rss_id'] ) && !empty( $_GET['rss_id'] ) && is_numeric( $_GET['rss_id'] ) ) {
+  if ( delete_rss( $_GET['rss_id'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The RSS feed with id <strong>' . $_GET['rss_id'] . '</strong> was deleted.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The RSS feed with id <strong>' . $_GET['rss_id'] . '</strong> was not deleted for some reason.' );
   }
   header( 'location: ' . $CFG['adminpage'] );
   exit(0);
