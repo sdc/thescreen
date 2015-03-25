@@ -11,6 +11,6 @@ $CFG['defaults'] = array(
   'rssfeed'       => 'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',
   'showstopper'   => 'error!',
   'specific_fig'  => 'aaa-random.png',
-  'changes'       => 'no',
+  'changes'       => $now,
   'installed'     => date( 'c', $now ),
 );

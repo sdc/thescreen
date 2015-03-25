@@ -132,7 +132,7 @@ $sql['sdc']['factoids'][] = "INSERT INTO `factoids` (`fact`, `created`, `modifie
 ('When using a Mac DO NOT save to HD1: you may lose your work.',                                                                                                        " . $now . ", " . $now . "),
 ('When using a Mac, if working from an external drive, ensure that the file is saved to HD2 first, work on the file and then copy it back.',                            " . $now . ", " . $now . "),
 ('When using your own laptop connect it up to the \'Wireless Guest\' network.',                                                                                         " . $now . ", " . $now . "),
-('You can buy printer credits from Essentials, the LTRS and Cashiers.',                                                                                                  " . $now . ", " . $now . ");";
+('You can buy printer credits from Essentials, the LTRS and Cashiers.',                                                                                                 " . $now . ", " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['sdc']['factoids'] as $query ) {
