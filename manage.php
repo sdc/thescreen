@@ -402,49 +402,6 @@ echo get_figures_thumbnails();
       </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <h2>Refresh <small><a href="#" data-toggle="modal" data-target="#refresh-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
                     <p>Number of seconds between page refreshes.</p>
                     <form action="refresh_edit.php" method="get">
@@ -465,13 +422,6 @@ echo get_figures_thumbnails();
                         <li><a href="refresh_edit.php?seconds=900">15 mins</a></li>
                         <li><a href="refresh_edit.php?seconds=1800">30 mins</a></li>
                     </ul>
-                    <hr>
-
-                    <h2>Stats <small><a href="#" data-toggle="modal" data-target="#stats-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
-                    <p>Change the details and click the update button:</p>
-                    <table id="stats">
-                        <?php //echo get_stats_form(); ?>
-                    </table>
                     <hr>
 
                     <h2>Logs <small><a href="#" data-toggle="modal" data-target="#logs-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
