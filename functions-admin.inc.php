@@ -340,7 +340,8 @@ function force_default() {
 // Set the config settings 'changes' to yes.
 function set_change() {
   $_SESSION['alerts'][] = array( 'info' => 'The main page will refresh in a moment.' );
-  return set_config( 'changes', 'yes' );
+  //return set_config( 'changes', 'yes' );
+  return set_config( 'changes', time() );
 }
 
 function help_modals() {
