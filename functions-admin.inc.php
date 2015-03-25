@@ -337,11 +337,10 @@ function force_default() {
   return $out;
 }
 
-// Set the config settings 'changes' to yes.
+// Set the config setting 'updated' to the Unix epoch time of the update.
 function set_change() {
   $_SESSION['alerts'][] = array( 'info' => 'The main page will refresh in a moment.' );
-  //return set_config( 'changes', 'yes' );
-  return set_config( 'changes', time() );
+  return set_config( 'updated', time() );
 }
 
 function help_modals() {

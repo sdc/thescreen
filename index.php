@@ -21,6 +21,9 @@
 // Do some including.
 require_once( 'functions.inc.php' );
 
+// The last updated time from the database.
+$last_refresh = get_config( 'updated' );
+
 // The 'root' folder for this page. This folder may or may not exist!
 $CFG['dir']['pageroot'] = $CFG['dir']['pages'] . get_name( 'pages', $CFG['page'] ) . '/';
 
@@ -95,7 +98,9 @@ if ( file_exists( $pagename ) ) {
   // Poll the database to change the screen automatically.
   function doPoll(){
     $.post('refresh.php', function(data) {
-      if (data === "yes") {
+      last_refresh = String(<?php echo $last_refresh; ?>);
+      //console.log("data: " + data + " (" + typeof data + "), last_refresh: " + last_refresh + " (" + typeof last_refresh + ")" )
+      if (data !== last_refresh) {
         location.reload();
       }
     });

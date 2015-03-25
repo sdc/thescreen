@@ -167,7 +167,7 @@ $sql['tables']['aprilfools'][] = "DROP TABLE IF EXISTS `aprilfools`;";
 $sql['tables']['aprilfools'][] = "CREATE TABLE IF NOT EXISTS `aprilfools` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `fact` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `created` int(11) unsigned NOT NULL DEFAULT '0',
   `modified` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -399,7 +399,7 @@ flush();
 
 echo "<h3>Populating the tables</h3>";
 
-$sql['contents']['aprilfools'][] = "INSERT INTO `aprilfools` (`fact`, `deleted`, `created`, `modified`) VALUES
+$sql['contents']['aprilfools'][] = "INSERT INTO `aprilfools` (`fact`, `hidden`, `created`, `modified`) VALUES
 ('Meerkats like the colour purple more than any other colour.', 0, " . $now . ",  " . $now . "),
 ('Meerkats are the only quadruped mammals who make and sell their own cheese.', 0, " . $now . ",  " . $now . "),
 ('Meerkats have an odd number of teeth.', 0, " . $now . ",  " . $now . "),
