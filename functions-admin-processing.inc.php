@@ -315,6 +315,22 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_hide_all' ) {
 
 
 /**
+ * Page refresh stuff.
+ */
+
+// Updating the page refresh setting.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'refresh_edit' && isset( $_GET['refresh_seconds'] ) && !empty( $_GET['refresh_seconds'] ) && is_numeric( $_GET['refresh_seconds'] ) ) {
+  if ( set_config( 'refresh', $_GET['refresh_seconds'] ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'The page refresh setting was changed to &ldquo;' . $_GET['refresh_seconds'] . '&rdquo; seconds successfully.' );
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'The page refresh setting was not set to &ldquo;' . get_title( 'pages', $_GET['refresh_seconds'] ) . '&rdquo; seconds for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+
+/**
  * General checks.
  */
 

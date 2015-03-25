@@ -64,6 +64,7 @@ $CFG['days'] = array(
   '7' => 'Sunday'
 );
 
+// The times the screen can be scheduled from and to. 8am to 9pm in 15 minute increments.
 $CFG['times'] = array();
 for ( $h = 8; $h <= 21; $h++ ) {
   for ( $m = 0; $m <= 55; $m += 15 ) {
@@ -71,6 +72,18 @@ for ( $h = 8; $h <= 21; $h++ ) {
   }
 }
 
+// Refresh times.
+$CFG['refresh'] = array(
+  5   => '5 seconds',
+  10  => '10 seconds',
+  15  => '15 seconds',
+  30  => '30 seconds',
+  60  => '1 minute',
+  120 => '2 minutes',
+  300 => '5 minutes',
+  600 => '10 minutes',
+  900 => '15 minutes'
+);
 
 // Include config.inc.php
 if ( !require_once( 'config.inc.php' ) ) {

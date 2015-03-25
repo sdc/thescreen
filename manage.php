@@ -293,7 +293,7 @@ echo make_events_menu();
 
     <!-- Row three. -->
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h2>Showstopper Text <small><a href="#" data-toggle="modal" data-target="#showstopper-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 
 <?php
@@ -318,7 +318,7 @@ echo showstopper_page_warning();
 
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h2>RSS Feed <small><a href="#" data-toggle="modal" data-target="#rssfeed-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 
         <p>Paste in a valid URL of an RSS feed, or choose from the presets, below.</p>
@@ -345,6 +345,43 @@ echo make_rss_preset_menu();
 
       </div>
 
+      <div class="col-md-4">
+        <h2>Refresh <small><a href="#" data-toggle="modal" data-target="#refresh-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
+
+        <p>Number of seconds between page refreshes. <!--This is not wholly necessary, as some pages poll the server for changes, but some pages are so
+        simple that they are only an image, and therefore cannot poll.--></p>
+
+        <form class="form-group" action="<?php echo $CFG['adminpage']; ?>" method="get">
+          <input type="hidden" name="action" value="refresh_edit">
+
+          <div class="form-group">
+            <label for="refresh_seconds">Refresh</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <select class="form-control" name="refresh_seconds" id="refresh_seconds">
+<?php
+
+foreach ( $CFG['refresh'] as $secs => $desc ) {
+  $out = '              <option value="' . $secs . '"';
+  if ( get_config( 'refresh' ) == $secs ) {
+    $out .= ' selected';
+  }
+  $out .= '>' . $desc . '</option>' . "\n";
+  echo $out;
+}
+
+?>
+                </select>
+
+              </div>
+            </div>
+            <span id="refresh_seconds_help" class="help-block">The number of seconds after which a page will definitely reload. This is the 'global' setting and can be overridden by an individual page's settings.</span>
+          </div>
+          <button type="submit" class="btn btn-info">Update</button>
+
+        </form>
+
+      </div>
     </div>
 
     <div class="row">
@@ -402,27 +439,7 @@ echo get_figures_thumbnails();
       </div>
     </div>
 
-                    <h2>Refresh <small><a href="#" data-toggle="modal" data-target="#refresh-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
-                    <p>Number of seconds between page refreshes.</p>
-                    <form action="refresh_edit.php" method="get">
-                        Seconds:
-                        <input type="text" value="<?php echo get_config('refresh'); ?>" name="seconds" size="4" maxlength="4">
-                        <input type="submit" value="Set">
-                    </form>
-                    <ul>
-                        <li>(Testing: <a href="refresh_edit.php?seconds=1">1</a> 
-                        <a href="refresh_edit.php?seconds=5">5</a> 
-                        <a href="refresh_edit.php?seconds=10">10</a> 
-                        <a href="refresh_edit.php?seconds=15">15</a> 
-                        <a href="refresh_edit.php?seconds=30">30</a> 
-                        <a href="refresh_edit.php?seconds=45">45</a> 
-                        <a href="refresh_edit.php?seconds=60">60</a> secs)</li>
-                        <li><a href="refresh_edit.php?seconds=300">5 mins</a> (Default)</li>
-                        <li><a href="refresh_edit.php?seconds=600">10 mins</a></li>
-                        <li><a href="refresh_edit.php?seconds=900">15 mins</a></li>
-                        <li><a href="refresh_edit.php?seconds=1800">30 mins</a></li>
-                    </ul>
-                    <hr>
+
 
                     <h2>Logs <small><a href="#" data-toggle="modal" data-target="#logs-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
                     <p>Last few log entries.</p>
@@ -439,24 +456,6 @@ echo get_figures_thumbnails();
 echo help_modals();
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   <footer class="bs-docs-footer" role="contentinfo">
     <div class="container">
