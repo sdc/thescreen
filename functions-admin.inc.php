@@ -481,3 +481,116 @@ function count_rows( $table = 'log', $where = '' ) {
 function to_slug( $in ){
     return strtolower( trim( preg_replace( '/[^A-Za-z0-9-]+/', '-', $in ) ) );
 }
+
+
+// Create admin pages' common css header.
+function admin_header( $title = 'This space unintentionally left blank' ) {
+  global $CFG;
+
+?>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A content presentation system for SDC Computer Services.">
+  <meta name="author" content="Mostly Paul Vaughan.">
+
+  <title><?php echo $CFG['lang']['title']; ?> :: <?php echo $title; ?></title>
+
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="css/bs-docs.css" rel="stylesheet">
+
+  <link href="http://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" type="text/css">
+
+  <style type="text/css">
+  body {
+    padding-top: 70px;
+  }
+  </style>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+
+<?php
+
+}
+
+// Create admin pages' common javascript footer.
+function admin_footer() {
+  global $CFG;
+
+?>
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/browserdetection/src/browser-detection.js"></script>
+
+  <script type="text/javascript">
+  $(document).ready(function(){
+
+    window.setTimeout(function() {
+      $(".alert-success-fade").fadeTo(800, 0).slideUp(500);
+    }, 5000);
+    window.setTimeout(function() {
+      $(".alert-info-fade").fadeTo(800, 0).slideUp(500);
+    }, 2000);
+
+    // Will log you out after x milliseconds.
+    // TODO: use setInterval here instead?
+    setTimeout(function() {
+      location.href = '<?php echo $CFG['adminpage']; ?>?action=logout';
+    }, <?php echo $CFG['admintimeout']; ?> * 60 * 1000);
+
+    var browserdata = browserDetection({
+      addClasses: true
+    });
+    //console.log(browserdata.browser + " " + browserdata.version + " " + browserdata.os);   // e.g. chrome 41 linux
+    if (browserdata.browser == 'chrome') {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>Well done for using Chrome.</li>";
+    } else if (browserdata.browser == 'firefox') {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>Well done for using Firefox. You should probably use Chrome though.</li>";
+    } else {
+      document.getElementById("browserdata").innerHTML = "<li>&middot;</li>\n<li>I see you're not using Chrome. You should use a better browser, like Chrome.</li>";
+    }
+
+  });
+  </script>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="js/ie10-viewport-bug-workaround.js"></script>
+<?php
+
+}
+
+// Light navbar for add/edit pages.
+function navbar_light() {
+  global $CFG;
+
+?>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="<?php echo $CFG['adminpage']; ?>"><?php echo $CFG['lang']['title']; ?></a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="<?php echo $CFG['adminpage']; ?>?action=logout">Log out <?php echo get_icon( 'logout' ); ?></a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav><!-- END fixed navbar. -->
+<?php
+
+}
