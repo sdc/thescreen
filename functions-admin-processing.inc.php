@@ -331,6 +331,35 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'refresh_edit' && isset( $_G
 
 
 /**
+ * April Fools' Day toggling.
+ */
+
+// Force today to be April Fools' Day.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'aprilfool_on' ) {
+  if ( set_config( 'forceaprilfool', 1 ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'We have forced today to be April Fools\' day successfully. Don\'t forget to change this setting back.' );
+    set_change();
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'We have not forced today to be April Fools\' day for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+// Turn off the above.
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'aprilfool_off' ) {
+  if ( set_config( 'forceaprilfool', 0 ) ) {
+    $_SESSION['alerts'][] = array( 'success' => 'We have stopped forcing today to be April Fools\' day successfully.' );
+    set_change();
+  } else {
+    $_SESSION['alerts'][] = array( 'danger' => 'We have not stopped forcing today to be April Fools\' day for some reason.' );
+  }
+  header( 'location: ' . $CFG['adminpage'] );
+  exit(0);
+}
+
+
+/**
  * General checks.
  */
 
@@ -343,7 +372,7 @@ if ( file_exists( 'install.php' ) || file_exists( 'install-password.php' ) ) {
 
 // It is April 1st!
 if ( $CFG['aprilfool'] ) {
-  $_SESSION['alerts'][] = array( 'danger' => 'Just so you know: it\'s April Fools Day! There are different Factoids in place and Aleksander the meerkat is on the screen too.' );
+  $_SESSION['alerts'][] = array( 'danger' => 'Just so you know: it\'s April Fools Day! There are different Factoids in place and Aleksandr the meerkat is on the screen too.' );
 }
 
 // No factoids.

@@ -300,6 +300,20 @@ function no_unhidden_events_warning() {
   return $out;
 }
 
+// April Fools' Day warning.
+function april_fools_warning() {
+  global $CFG;
+
+  $out = '';
+  if ( $CFG['aprilfool'] ) {
+    $out .= '<div class="alert alert-warning" role="alert">' . "\n";
+    $out .= '  <strong>Note!</strong> All adding, editing and deleting of factoids will happen for April Fools\' day factoids, not the usual ones.' . "\n";
+    $out .= "</div>\n";
+  }
+
+  return $out;
+}
+
 function logout( $redirect = true ) {
   $_SESSION = array();
 

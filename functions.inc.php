@@ -108,6 +108,8 @@ if ( !require_once( 'defaults.inc.php' ) ) {
 $CFG['page']    = get_config( 'page' );
 $CFG['status']  = get_config( 'status' );
 
+// If we want to force April Fools' Day for some reason (testing, or editing of the factoids for that day).
+$CFG['aprilfool'] = ( get_config( 'forceaprilfool' ) ) ? true : false;
 
 
 /**

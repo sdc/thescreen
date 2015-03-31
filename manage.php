@@ -146,6 +146,15 @@ echo admin_header( $CFG['lang']['title'] );
               <li><a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Font Awesome icons</a></li>
               <li class="divider"></li>
               <li class="dropdown-header">Site Operations</li>
+<?php
+
+if ( get_config( 'forceaprilfool' ) ) {
+  echo '              <li><a href="' . $CFG['adminpage'] . '?action=aprilfool_off">Turn off April Fools\' Day ' . get_icon( 'check' ) . '</a></li>';
+} else {
+  echo '              <li><a href="' . $CFG['adminpage'] . '?action=aprilfool_on" onclick="return confirm(\'Are you sure?\');">Turn on April Fools\' Day ' . get_icon( 'danger' ) . '</a></li>';
+}
+
+?>
               <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=truncate_log" onclick="return confirm('Are you sure?');">Truncate the log table <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
               <li><a id="truncate_log" href="#">Truncate the log table <?php echo get_icon( 'danger' ); ?></a></li>
               <!-- <li><a href="<?php echo $CFG['adminpage']; ?>?action=full_reset" onclick="return confirm('Are you sure you want to reset everything?');">Reset everything! <i class="fa fa-exclamation-circle ts-warning"></i></a></li> -->
@@ -381,6 +390,8 @@ foreach ( $CFG['refresh'] as $secs => $desc ) {
 <?php
 
 echo no_unhidden_factoids_warning();
+
+echo april_fools_warning();
 
 ?>
         <p>We have <?php echo count_rows( $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids' ); ?> factoids (<?php echo count_rows( $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids', 'hidden = 1' ); ?> hidden).</p>
