@@ -67,16 +67,18 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'factoid_add' ) {
   //$_SESSION['alerts'][] = array( 'warning' => 'The form was not complete.' );
 }
 
-adminlog('factoid');
+$table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+
+adminlog( $table );
 
 // If we've received $_GET parameters, populate the form with them.
 if ( isset( $_GET['action'] ) && $_GET['action'] == 'factoid_edit' && isset( $_GET['factoid_id'] ) && !empty( $_GET['factoid_id'] ) && is_numeric( $_GET['factoid_id'] ) ) {
 
-  $sql = "SELECT id, fact FROM factoids WHERE id = " . $_GET['factoid_id'] . " LIMIT 1;";
+  $sql = "SELECT id, fact FROM " . $table . " WHERE id = " . $_GET['factoid_id'] . " LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( $res->num_rows == 0 ) {
-    $_SESSION['alerts'][] = array( 'danger' => 'Could not get the factoid with id ' . $_GET['factoid_id'] . '.' );
+    $_SESSION['alerts'][] = array( 'danger' => 'Could not get the ' . $table . ' with id ' . $_GET['factoid_id'] . '.' );
   } else {
     $row = $res->fetch_assoc();
   }

@@ -372,13 +372,18 @@ foreach ( $CFG['refresh'] as $secs => $desc ) {
     <!-- Row four. -->
     <div class="row">
       <div class="col-md-12">
-        <h2>Factoids <small><a href="#" data-toggle="modal" data-target="#factoids-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
+<?php
+
+  $additionaltitle = ( $CFG['aprilfool'] ) ? ' (for April Fools\' Day!)' : '';
+
+?>
+        <h2>Factoids <?php echo $additionaltitle; ?><small><a href="#" data-toggle="modal" data-target="#factoids-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
 <?php
 
 echo no_unhidden_factoids_warning();
 
 ?>
-        <p>We have <?php echo count_rows( 'factoids' ); ?> factoids (<?php echo count_rows( 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( 'factoids', 'hidden = 1' ); ?> hidden).</p>
+        <p>We have <?php echo count_rows( $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids' ); ?> factoids (<?php echo count_rows( $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids', 'hidden = 0' ); ?> visible, <?php echo count_rows( $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids', 'hidden = 1' ); ?> hidden).</p>
         <p><a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=factoid_hide_all"><?php echo get_icon( 'hide', 'Hide all Factoids!' ); ?> Hide all Factoids</a> or <a class="hvr-sweep-to-right" href="<?php echo $CFG['adminpage']; ?>?action=factoid_show_all"><?php echo get_icon( 'show', 'Show all Factoids!' ); ?> show all Factoids</a>.</p>
         <p>Click <?php echo get_icon( 'edit', 'Edit' ); ?> to edit, <?php echo get_icon( 'hide', 'Hide' ); ?> to hide, <?php echo get_icon( 'show', 'Show' ); ?> to show, and <?php echo get_icon( 'cross', 'Delete' ); ?> to delete a factoid.</p>
 <?php
@@ -386,7 +391,7 @@ echo no_unhidden_factoids_warning();
 echo make_factoids_menu();
 
 ?>
-        <a class="btn btn-primary" href="factoid.php" role="button">Add a new factoid</a>
+        <a class="btn btn-primary" href="factoid.php" role="button">Add a new factoid <?php echo $additionaltitle; ?></a>
 
       </div>
     </div>

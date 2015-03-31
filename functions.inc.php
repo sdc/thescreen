@@ -42,10 +42,10 @@ $CFG['admintimeout']    = 15;
 // Main page refresh poll time in seconds.
 $CFG['poll']            = 5;
 
-// Set to true to ignore the installation files warning.
+// Set to true to ignore the installation files warning. Not recommended.
 $CFG['ignoreinstallfiles']  = true;
 
-// "Base-2 logarithm of the iteration count used for password stretching".
+// "Base-2 logarithm of the iteration count used for password stretching" in phPASS.
 $CFG['phpass']['base2log']  = 10;
 
 // For teh lulz.
@@ -103,19 +103,6 @@ if ( !require_once( 'defaults.inc.php' ) ) {
   echo 'Could not open the default configuration file.';
   exit(1);
 }
-
-// Check the database for defaults and if none found, add them in.
-// TODO: This assumes a config table is in place. It might not be!
-/*
-foreach ( $CFG['defaults'] as $setting => $value ) {
-  if ( !get_config( $setting ) ) {
-    if ( !set_config( $setting, $value, true ) ) {
-      echo 'Could not set a default "' . $setting . '" of "' . $value . '".';
-      exit(1);
-    }
-  }
-}
-*/
 
 // The current page's name.
 $CFG['page']    = get_config( 'page' );
@@ -301,8 +288,8 @@ function get_random_factoid( $prettify = true ) {
 
   global $CFG, $DB;
 
-  $db = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
-  $sql = "SELECT `id` FROM `" . $db . "` WHERE `hidden` = '0';";
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+  $sql = "SELECT `id` FROM `" . $table . "` WHERE `hidden` = '0';";
 
   $res = $DB->query( $sql );
 
@@ -332,8 +319,8 @@ function get_factoid( $id = 1 ) {
 
   global $CFG, $DB;
 
-  $db = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
-  $sql = "SELECT `fact` FROM `" . $db . "` WHERE `id` = '" . $id . "' LIMIT 1;";
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+  $sql = "SELECT `fact` FROM `" . $table . "` WHERE `id` = '" . $id . "' LIMIT 1;";
 
   $res = $DB->query( $sql );
 

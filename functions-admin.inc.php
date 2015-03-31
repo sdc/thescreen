@@ -275,8 +275,11 @@ function showstopper_page_warning() {
 
 // Checks to see if there are any un-hidden factoids, and shows a warning if not.
 function no_unhidden_factoids_warning() {
+  global $CFG;
+
   $out = '';
-  if ( count_rows( 'factoids', 'hidden = 0' ) == 0 ) {
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+  if ( count_rows( $table, 'hidden = 0' ) == 0 ) {
     $out .= '<div class="alert alert-danger" role="alert">' . "\n";
     $out .= '  <strong>Warning!</strong> There are no un-hidden factoids. You should show at least one.' . "\n";
     $out .= "</div>\n";

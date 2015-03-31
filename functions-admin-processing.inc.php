@@ -341,6 +341,10 @@ if ( file_exists( 'install.php' ) || file_exists( 'install-password.php' ) ) {
   }
 }
 
+// It is April 1st!
+if ( $CFG['aprilfool'] ) {
+  $_SESSION['alerts'][] = array( 'danger' => 'Just so you know: it\'s April Fools Day! There are different Factoids in place and Aleksander the meerkat is on the screen too.' );
+}
 
 // No factoids.
 if ( count_rows( 'factoids' ) == 0 ) {

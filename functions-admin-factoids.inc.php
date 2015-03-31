@@ -10,7 +10,9 @@ function make_factoids_menu( $sort = 'alpha') {
 
   global $CFG, $DB;
 
-  $sql = "SELECT id, fact, hidden, created, modified FROM factoids ORDER BY ";
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
+  $sql = "SELECT id, fact, hidden, created, modified FROM " . $table . " ORDER BY ";
+
   if ( $sort == 'alpha' ) {
     $sql .= "fact ASC;";
   } else {
@@ -56,18 +58,20 @@ function make_factoids_menu( $sort = 'alpha') {
 // Shows (un-hides) a factoid.
 function factoid_show( $id ) {
 
-  adminlog( 'factoid_show|' . $id );
+  global $CFG, $DB;
 
-  global $DB;
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-  $sql = "SELECT * FROM factoids WHERE id = " . $id . " LIMIT 1;";
+  adminlog( $table . '_show|' . $id );
+
+  $sql = "SELECT * FROM " . $table . " WHERE id = " . $id . " LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( !$res || $res->num_rows == 0) {
     return false;
   }
 
-  $sql = "UPDATE factoids SET hidden = 0, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+  $sql = "UPDATE " . $table . " SET hidden = 0, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
   $res = $DB->query( $sql );
 
   return $res;
@@ -76,18 +80,20 @@ function factoid_show( $id ) {
 // Hides a factoid.
 function factoid_hide( $id ) {
 
-  adminlog( 'factoid_hide|' . $id );
+  global $CFG, $DB;
 
-  global $DB;
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-  $sql = "SELECT * FROM factoids WHERE id = " . $id . " LIMIT 1;";
+  adminlog( $table . '_hide|' . $id );
+
+  $sql = "SELECT * FROM " . $table . " WHERE id = " . $id . " LIMIT 1;";
   $res = $DB->query( $sql );
 
   if ( !$res || $res->num_rows == 0) {
     return false;
   }
 
-  $sql = "UPDATE factoids SET hidden = 1, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+  $sql = "UPDATE " . $table . " SET hidden = 1, modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
   $res = $DB->query( $sql );
 
   return $res;
@@ -96,11 +102,13 @@ function factoid_hide( $id ) {
 // Shows all factoids.
 function factoid_show_all() {
 
-  adminlog( 'factoid_show_all|' );
+  global $CFG, $DB;
 
-  global $DB;
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-  $sql = "UPDATE factoids SET hidden = 0, modified = '" . time() . "';";
+  adminlog( $table . '_show_all|' );
+
+  $sql = "UPDATE " . $table . " SET hidden = 0, modified = '" . time() . "';";
   $res = $DB->query( $sql );
 
   return $res;
@@ -109,11 +117,13 @@ function factoid_show_all() {
 // Hides all factoids.
 function factoid_hide_all() {
 
-  adminlog( 'factoid_hide_all|' );
+  global $CFG, $DB;
 
-  global $DB;
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-  $sql = "UPDATE factoids SET hidden = 1, modified = '" . time() . "';";
+  adminlog( $table . '_hide_all|' );
+
+  $sql = "UPDATE " . $table . " SET hidden = 1, modified = '" . time() . "';";
   $res = $DB->query( $sql );
 
   return $res;
@@ -123,16 +133,18 @@ function factoid_hide_all() {
 // DONE
 function add_factoid( $text ) {
 
-    global $DB;
+  global $CFG, $DB;
 
-    $text = $DB->real_escape_string( $text );
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-    adminlog( 'add_factoid|' . $text );
+  $text = $DB->real_escape_string( $text );
 
-    $sql = "INSERT INTO factoids (fact, created, modified) VALUES ('" . $text . "', '" . time() . "', '" . time() . "');";
-    $res = $DB->query( $sql );
+  adminlog( $table . '_add|' . $text );
 
-    return $res;
+  $sql = "INSERT INTO " . $table . " (fact, created, modified) VALUES ('" . $text . "', '" . time() . "', '" . time() . "');";
+  $res = $DB->query( $sql );
+
+  return $res;
 }
 
 // Edits an existing factoid.
@@ -140,27 +152,31 @@ function add_factoid( $text ) {
 // TODO: Check that this factoid id exists before we attempt to update it.
 function edit_factoid( $text, $id ) {
 
-    global $DB;
+  global $CFG, $DB;
 
-    $text = $DB->real_escape_string( $text );
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-    adminlog( 'edit_factoid|' . $id );
+  $text = $DB->real_escape_string( $text );
 
-    $sql = "UPDATE factoids SET fact = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
-    $res = $DB->query( $sql );
+  adminlog( $table . '_edit|' . $id );
 
-    return $res;
+  $sql = "UPDATE " . $table . " SET fact = '" . $text . "', modified = '" . time() . "' WHERE id = " . $id . " LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  return $res;
 }
 
 // Deletes a factoid completely.
 function delete_factoid( $id ) {
 
-    global $DB;
+  global $CFG, $DB;
 
-    adminlog( 'delete_factoid|' . $id );
+  $table = ( $CFG['aprilfool'] ) ? 'aprilfools' : 'factoids';
 
-    $sql = "DELETE FROM factoids WHERE id = " . $id . " LIMIT 1;";
-    $res = $DB->query( $sql );
+  adminlog( $table . '_delete|' . $id );
 
-    return $res;
+  $sql = "DELETE FROM " . $table . " WHERE id = " . $id . " LIMIT 1;";
+  $res = $DB->query( $sql );
+
+  return $res;
 }
