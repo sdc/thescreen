@@ -400,29 +400,29 @@ flush();
 echo "<h3>Populating the tables</h3>";
 
 $sql['contents']['aprilfools'][] = "INSERT INTO `aprilfools` (`fact`, `hidden`, `created`, `modified`) VALUES
-('Meerkats like the colour purple more than any other colour.', 0, " . $now . ",  " . $now . "),
-('Meerkats are the only quadruped mammals who make and sell their own cheese.', 0, " . $now . ",  " . $now . "),
-('Meerkats have an odd number of teeth.', 0, " . $now . ",  " . $now . "),
-('Meerkats have ears but choose not to wear them.', 0, " . $now . ",  " . $now . "),
-('Meerkat fur is a natural source of nylon.', 0, " . $now . ",  " . $now . "),
-('Meerkats produce more methane than cows.', 0, " . $now . ",  " . $now . "),
-('Meerkats provide car insurance on behalf of weasels.', 0, " . $now . ",  " . $now . "),
-('Meerkats live in all parts of the Calamari Desert in Botswana.', 0, " . $now . ",  " . $now . "),
-('Meerkats hold the world record for the longest manned paper aeroplane flight.', 0, " . $now . ",  " . $now . "),
-('Meerkats have individual cries for ''taxi'', ''hold the door, please'' and ''Yellow army!''.', 0, " . $now . ",  " . $now . "),
-('A meerkat scored the winning goal in the 1970 World Cup.', 0, " . $now . ",  " . $now . "),
-('Aleksandr Orlov from comparethemeerkat.com lives in a riverside mansion in Stoke Gabriel.', 0, " . $now . ",  " . $now . "),
-('If you see a meerkat go by, and then another identical meerkat goes by, it''s a glitch in the Matrix.', 0, " . $now . ",  " . $now . "),
-('Meerkats collect irrational numbers.', 0, " . $now . ",  " . $now . "),
-('In the 2015 budget, there was a 10% increase in duty on meerkats.', 0, " . $now . ",  " . $now . "),
-('South Devon College owns five and a half meerkats.', 0, " . $now . ",  " . $now . "),
-('Meerkats have already found the Higgs Boson in a much smaller hadron collider under the University Centre and Automotive, but are not telling.', 0, " . $now . ",  " . $now . "),
-('Baby Oleg''s aspiration is to work for confused.com. Aleksandr is not happy about this.', 0, " . $now . ",  " . $now . "),
-('Type \"do a barrel roll\" into Google.', 0, " . $now . ",  " . $now . "),
-('Meerkats are bioluminescent, but only on their birthdays.', 0, " . $now . ",  " . $now . "),
-('Meerkats despise poor spelling, grammar and punctuation more than expensive car insurance.', 0, " . $now . ",  " . $now . "),
-('comparethemeerkat.com has more computational power than the NSA, but they use it for good, not evil.', 0, " . $now . ",  " . $now . "),
-('Meerkats prefer the Android operating system on their mobile devices.', 0, " . $now . ",  " . $now . ");";
+  ('Meerkats like the colour purple more than any other colour.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats are the only quadruped mammals who make and sell their own cheese.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats have an odd number of teeth.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats have ears but choose not to wear them.', 0, " . $now . ",  " . $now . "),
+  ('Meerkat fur is a natural source of nylon.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats produce more methane than cows.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats provide car insurance on behalf of weasels.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats live in all parts of the Calamari Desert in Botswana.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats hold the world record for the longest manned paper aeroplane flight.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats have individual cries for ''taxi'', ''hold the door, please'' and ''Yellow army!''.', 0, " . $now . ",  " . $now . "),
+  ('A meerkat scored the winning goal in the 1970 World Cup.', 0, " . $now . ",  " . $now . "),
+  ('Aleksandr Orlov from comparethemeerkat.com lives in a riverside mansion in Stoke Gabriel.', 0, " . $now . ",  " . $now . "),
+  ('If you see a meerkat go by, and then another identical meerkat goes by, it''s a glitch in the Matrix.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats collect irrational numbers.', 0, " . $now . ",  " . $now . "),
+  ('In the 2015 budget, there was a 10% increase in duty on meerkats.', 0, " . $now . ",  " . $now . "),
+  ('South Devon College owns five and a half meerkats.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats have already found the Higgs Boson in a much smaller hadron collider under the University Centre and Automotive, but are not telling.', 0, " . $now . ",  " . $now . "),
+  ('Baby Oleg''s aspiration is to work for confused.com. Aleksandr is not happy about this.', 0, " . $now . ",  " . $now . "),
+  ('Type \"do a barrel roll\" into Google.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats are bioluminescent, but only on their birthdays.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats despise poor spelling, grammar and punctuation more than expensive car insurance.', 0, " . $now . ",  " . $now . "),
+  ('comparethemeerkat.com has more computational power than the NSA, but they use it for good, not evil.', 0, " . $now . ",  " . $now . "),
+  ('Meerkats prefer the Android operating system on their mobile devices.', 0, " . $now . ",  " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['aprilfools'] as $query ) {
@@ -447,11 +447,11 @@ flush();
 
 
 $sql['contents']['events'][] = "INSERT INTO `events` (`start`, `text`, `hidden`, `created`, `modified`) VALUES
-('" . date( 'Y-m-d', $now ) . "', 'Disaster recovery testing.',       0,  " . $now . ",  " . $now . "),
-('" . date( 'Y-m-d', $now + ( 60*60*24 ) ) . "', 'Disaster!.',                       0,  " . $now . ",  " . $now . "),
-('" . date( 'Y-m-d', $now + ( 60*60*24*2) ) . "', 'Recovery.',                        0,  " . $now . ",  " . $now . "),
-('" . date( 'Y-m-d', $now + ( 60*60*24*3 ) ) . "', 'Recovered disaster celebration.',  0,  " . $now . ",  " . $now . "),
-('" . date( 'Y-m-d', $now + ( 60*60*24*4 ) ) . "', 'Hangover.',                        1,  " . $now . ",  " . $now . ");";
+  ('" . date( 'Y-m-d', $now ) . "', 'Disaster recovery testing.',       0,  " . $now . ",  " . $now . "),
+  ('" . date( 'Y-m-d', $now + ( 60*60*24 ) ) . "', 'Disaster!',                        0,  " . $now . ",  " . $now . "),
+  ('" . date( 'Y-m-d', $now + ( 60*60*24*2) ) . "', 'Recovery.',                        0,  " . $now . ",  " . $now . "),
+  ('" . date( 'Y-m-d', $now + ( 60*60*24*3 ) ) . "', 'Recovered disaster celebration.',  0,  " . $now . ",  " . $now . "),
+  ('" . date( 'Y-m-d', $now + ( 60*60*24*4 ) ) . "', 'Hangover.',                        1,  " . $now . ",  " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['events'] as $query ) {
@@ -464,9 +464,9 @@ flush();
 
 
 $sql['contents']['factoids'][] = "INSERT INTO `factoids` (`fact`, `hidden`, `created`, `modified`) VALUES
-('Default Factoid - edit or delete to say something witty or informative.',   0,  " . $now . ",  " . $now . "),
-('10 PRINT ''Second Factoid'' / 20 GOTO 10 / RUN.',                           0,  " . $now . ",  " . $now . "),
-('Third, hidden Factoid. Will not appear unless un-hidden.',                  1,  " . $now . ",  " . $now . ");";
+  ('Default Factoid - edit or delete to say something witty or informative.',   0,  " . $now . ",  " . $now . "),
+  ('10 PRINT ''Second Factoid'' / 20 GOTO 10 / RUN.',                           0,  " . $now . ",  " . $now . "),
+  ('Third, hidden Factoid. Will not appear unless un-hidden.',                  1,  " . $now . ",  " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['factoids'] as $query ) {
@@ -479,17 +479,17 @@ flush();
 
 
 $sql['contents']['help'][] = "INSERT INTO `help` (`name`, `title`, `content`, `created`, `modified`) VALUES
-('pagetype', 'Page Type', 'All page types are equal, but some page types are more equal than others.', " . $now . ", " . $now . "),
-('status', 'Current Status', 'If there''s a problem, change this and it will display on the main page.', " . $now . ", " . $now . "),
-('events', 'Events', 'Help with events.', " . $now . ", " . $now . "),
-('showstopper', 'Showstopper', 'Help with Showstopper.', " . $now . ", " . $now . "),
-('rssfeed', 'RSS Feed', 'Help with RSS feed.', " . $now . ", " . $now . "),
-('rssfeedpreset', 'RSS Feed Presets', 'Help with the RSS feed presets.', " . $now . ", " . $now . "),
-('factoids', 'Factoids', 'Help with factoids.', " . $now . ", " . $now . "),
-('person', 'Specific Person', 'Help with choosing a person.', " . $now . ", " . $now . "),
-('refresh', 'Refresh', 'Help with the refresh rate setting.', " . $now . ", " . $now . "),
-('stats', 'Stats', 'Help with stats (deprecated).', " . $now . ", " . $now . "),
-('logs', 'Logs', 'Logs help (really?).', " . $now . ", " . $now . ");";
+  ('pagetype', 'Page Type', 'All page types are equal, but some page types are more equal than others.', " . $now . ", " . $now . "),
+  ('status', 'Current Status', 'If there''s a problem, change this and it will display on the main page.', " . $now . ", " . $now . "),
+  ('events', 'Events', 'Help with events.', " . $now . ", " . $now . "),
+  ('showstopper', 'Showstopper', 'Help with Showstopper.', " . $now . ", " . $now . "),
+  ('rssfeed', 'RSS Feed', 'Help with RSS feed.', " . $now . ", " . $now . "),
+  ('rssfeedpreset', 'RSS Feed Presets', 'Help with the RSS feed presets.', " . $now . ", " . $now . "),
+  ('factoids', 'Factoids', 'Help with factoids.', " . $now . ", " . $now . "),
+  ('person', 'Specific Person', 'Help with choosing a person.', " . $now . ", " . $now . "),
+  ('refresh', 'Refresh', 'Help with the refresh rate setting.', " . $now . ", " . $now . "),
+  ('stats', 'Stats', 'Help with stats (deprecated).', " . $now . ", " . $now . "),
+  ('logs', 'Logs', 'Logs help (really?).', " . $now . ", " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['help'] as $query ) {
@@ -502,7 +502,7 @@ flush();
 
 
 $sql['contents']['log'][] = "INSERT INTO `log` (`date`, `data`) VALUES
-('2015-03-03 16:47:53', 'site_installed');";
+  ('2015-03-03 16:47:53', 'site_installed');";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['log'] as $query ) {
@@ -515,18 +515,18 @@ flush();
 
 
 $sql['contents']['pages'][] = "INSERT INTO `pages` (`name`, `title`, `description`, `background`, `refresh`, `priority`, `defaultpage`, `created`, `modified`) VALUES
-('standard', 'Standard', 'The standard page used 99% of the time.', 'standard.png', 0, 1, 1, " . $now . ", " . $now . "),
-('meeting3pmfriday', 'Friday 3pm Meeting', 'We''re attending our regular Friday 3pm meeting and will be back about 4pm.', 'meeting_fri3pm.png', 60, 2, 0, " . $now . ", " . $now . "),
-('helpdeskclosed', 'Helpdesk Closed', 'The Technician has popped out and will be back shortly.', 'helpdeskclosed.png', 60, 3, 0, " . $now . ", " . $now . "),
-('showstopper', 'Showstopper!', 'For big messages!', 'showstopper.jpg', 60, 4, 0, " . $now . ", " . $now . "),
-('qrcodes', 'QR Codes', 'Useful QR codes for mobile users to connect to various College systems.', '', 60, 6, 0, " . $now . ", " . $now . "),
-('christmasparty', 'Christmas Party', 'We''re having fun at our Christmas lunch. Back soon.', 'xmasparty.png', 60, 5, 0, " . $now . ", " . $now . "),
-('byebyejoy', 'Bye bye Joy!', 'Joy''s leaving! :(', 'byejoy.png', 60, 6, 0, " . $now . ", " . $now . "),
-('meeting', 'General Meeting', 'We''re away at a meeting and will be back soon.', 'meeting_general.png', 15, 7, 0, " . $now . ", " . $now . "),
-('training', 'Training', 'Generic ''training'' screen.', 'training.png', 15, 9, 0, " . $now . ", " . $now . "),
-('christmas', 'Christmas', 'Default Christmas template.', 'xmas.png', 300, 10, 0, " . $now . ", " . $now . "),
-('communityday2015', 'Community Day 2015', 'Community day 2015 flyer.', 'events.png', 120, 20, 0, " . $now . ", " . $now . "),
-('communityday2014', 'Community Day 2014', 'Community day 2014 poster.', 'communityday.png', 120, 20, 0, " . $now . ", " . $now . ");";
+  ('standard', 'Standard', 'The standard page used 99% of the time.', 'standard.png', 0, 1, 1, " . $now . ", " . $now . "),
+  ('meeting3pmfriday', 'Friday 3pm Meeting', 'We''re attending our regular Friday 3pm meeting and will be back about 4pm.', 'meeting_fri3pm.png', 60, 2, 0, " . $now . ", " . $now . "),
+  ('helpdeskclosed', 'Helpdesk Closed', 'The Technician has popped out and will be back shortly.', 'helpdeskclosed.png', 60, 3, 0, " . $now . ", " . $now . "),
+  ('showstopper', 'Showstopper!', 'For big messages!', 'showstopper.jpg', 60, 4, 0, " . $now . ", " . $now . "),
+  ('qrcodes', 'QR Codes', 'Useful QR codes for mobile users to connect to various College systems.', '', 60, 6, 0, " . $now . ", " . $now . "),
+  ('christmasparty', 'Christmas Party', 'We''re having fun at our Christmas lunch. Back soon.', 'xmasparty.png', 60, 5, 0, " . $now . ", " . $now . "),
+  ('byebyejoy', 'Bye bye Joy!', 'Joy''s leaving! :(', 'byejoy.png', 60, 6, 0, " . $now . ", " . $now . "),
+  ('meeting', 'General Meeting', 'We''re away at a meeting and will be back soon.', 'meeting_general.png', 15, 7, 0, " . $now . ", " . $now . "),
+  ('training', 'Training', 'Generic ''training'' screen.', 'training.png', 15, 9, 0, " . $now . ", " . $now . "),
+  ( 'christmas', 'Christmas', 'Default Christmas template.', 'xmas.png', 300, 10, 0, " . $now . ", " . $now . "),
+  ('communityday2015', 'Community Day 2015', 'Community day 2015 flyer.', 'events.png', 120, 20, 0, " . $now . ", " . $now . "),
+  ('communityday2014', 'Community Day 2014', 'Community day 2014 poster.', 'communityday.png', 120, 20, 0, " . $now . ", " . $now . ");";
 $sql['contents']['pages'][] = "UPDATE `pages` SET `scheduled` =  '1', `schedule_day` =  '5', `schedule_start` =  '15:00', `schedule_end` = '16:00' WHERE `name` = 'meeting3pmfriday';";
 
 echo '<p><pre>';
@@ -540,11 +540,11 @@ flush();
 
 
 $sql['contents']['rss'][] = "INSERT INTO `rss` (`title`, `description`, `url`, `priority`, `defaultpage`, `created`, `modified`) VALUES
-('BBC UK Technology', 'BBC UK technology news',             'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',  1, 1, " . $now . ", " . $now . "),
-('BBC UK',            'BBC UK news',                        'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml',          2, 0, " . $now . ", " . $now . "),
-('BBC England',       'BBC England news',                   'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml',     3, 0, " . $now . ", " . $now . "),
-('BBC Sci/Env',       'BBC UK Science & Environment news',  'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml',    4, 0, " . $now . ", " . $now . "),
-('Slashdot',          'News for nerds, stuff that matters', 'http://rss.slashdot.org/Slashdot/slashdot',                              5, 0, " . $now . ", " . $now . ");";
+  ('BBC UK Technology', 'BBC UK technology news',             'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/technology/rss.xml',  1, 1, " . $now . ", " . $now . "),
+  ('BBC UK',            'BBC UK news',                        'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/uk/rss.xml',          2, 0, " . $now . ", " . $now . "),
+  ('BBC England',       'BBC England news',                   'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/england/rss.xml',     3, 0, " . $now . ", " . $now . "),
+  ('BBC Sci/Env',       'BBC UK Science & Environment news',  'http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/sci/tech/rss.xml',    4, 0, " . $now . ", " . $now . "),
+  ('Slashdot',          'News for nerds, stuff that matters', 'http://rss.slashdot.org/Slashdot/slashdot',                              5, 0, " . $now . ", " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['rss'] as $query ) {
@@ -557,11 +557,11 @@ flush();
 
 
 $sql['contents']['status'][] = "INSERT INTO `status` (`name`, `title`, `description`, `type`, `priority`, `defaultstatus`, `created`, `modified`) VALUES
-('ok',            'Okay',                 'Everything is awesome.',                                                                                     'green',      1,    1,  " . $now . ",  " . $now . "),
-('minorproblem',  'Problems',             'We''re experiencing problems with the server, which we are looking in to at the moment',                     'amber',      10,   0,  " . $now . ",  " . $now . "),
-('epicfail',      'Epic fail',            '<span style=\"color:#f00;font-size:200%;font-weight:bold;\">EPIC FAIL</span><br><br>Something has gone horribly, terribly wrong. It may even involve a zombie apocalypse.',                      'red',        20,   0,  " . $now . ",  " . $now . "),
-('maintenance',   'Planned maintenance',  'We are performing planned maintenance on some systems.<br><br>There may be brief periods of interruption.',  'blue',       50,   0,  " . $now . ",  " . $now . "),
-('xmas',          'Merry Christmas!',     'Merry Christmas and Happy New Year!<br><br>(Everything is awesome, by the way.)',                            'christmas',  99,   0,  " . $now . ",  " . $now . ");";
+  ('ok',            'Okay',                 'Everything is awesome.',                                                                                     'green',      1,    1,  " . $now . ",  " . $now . "),
+  ('minorproblem',  'Problems',             'We''re experiencing problems with the server, which we are looking in to at the moment',                     'amber',      10,   0,  " . $now . ",  " . $now . "),
+  ('epicfail',      'Epic fail',            '<span style=\"color:#f00;font-size:200%;font-weight:bold;\">EPIC FAIL</span><br><br>Something has gone horribly, terribly wrong. It may even involve a zombie apocalypse.',                      'red',        20,   0,  " . $now . ",  " . $now . "),
+  ('maintenance',   'Planned maintenance',  'We are performing planned maintenance on some systems.<br><br>There may be brief periods of interruption.',  'blue',       50,   0,  " . $now . ",  " . $now . "),
+  ('xmas',          'Merry Christmas!',     'Merry Christmas and Happy New Year!<br><br>(Everything is awesome, by the way.)',                            'christmas',  99,   0,  " . $now . ",  " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['status'] as $query ) {
@@ -574,11 +574,11 @@ flush();
 
 
 $sql['contents']['status_types'][] = "INSERT INTO `status_types` (`name`, `title`, `created`, `modified`) VALUES
-('green', 'Green (OK)', " . $now . ", " . $now . "),
-('amber', 'Amber (Alert)', " . $now . ", " . $now . "),
-('red', 'Red (Warning)', " . $now . ", " . $now . "),
-('blue', 'Blue (Information)', " . $now . ", " . $now . "),
-('christmas', 'Christmas', " . $now . ", " . $now . ");";
+  ('green',     'Green (OK)',         " . $now . ", " . $now . "),
+  ('amber',     'Amber (Alert)',      " . $now . ", " . $now . "),
+  ('red',       'Red (Warning)',      " . $now . ", " . $now . "),
+  ('blue',      'Blue (Information)', " . $now . ", " . $now . "),
+  ('christmas', 'Christmas',          " . $now . ", " . $now . ");";
 
 echo '<p><pre>';
 foreach ( $sql['contents']['status_types'] as $query ) {
