@@ -438,7 +438,7 @@ echo get_figures_thumbnails();
 
                     <h2>Logs <small><a href="#" data-toggle="modal" data-target="#logs-modal"><?php echo get_icon( 'help' ); ?></a></small></h2>
                     <p>Last few log entries.</p>
-                    <p>The log table has <?php echo count_rows( 'log' ); ?> rows.</p>
+                    <p>The log table has <?php echo number_format( count_rows( 'log' ) ); ?> rows.</p>
                     <?php echo get_last_log(15); ?>
                     <hr>
 
